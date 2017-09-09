@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="ddlProductSqlMap">
+	<select id="getDdlProductVOListCount" parameterClass="ddlProductVO" resultClass="int">
+		SELECT COUNT(ID) count			
+		FROM PRODUCTS
+		WHERE 1=1
+		<isNotNull property="id">
+			<isGreaterThan property="id" compareValue="0">
+				AND ID = #id#
+			</isGreaterThan>
+		</isNotNull>
+		 <isNotNull property="name">
+				  <isNotEmpty property="name">
+					AND Name like concat('%',#name#,'%')
+				</isNotEmpty>
+		</isNotNull>
+		<isNotNull property="status">
+			<isGreaterThan property="status" compareValue="0">
+				AND Status = #status#
+			</isGreaterThan>
+		</isNotNull>
+	</select>
+	<select id="getDdlProductVOList" parameterClass="ddlProductVO" resultClass="ddlProductVO">
+		SELECT ID id,
+				Name name,
+				IFNULL(Status,3201) status,
+				version version,
+				price price,
+				country country,
+				category category,
+				CreateDate CreateDate
+		FROM PRODUCTS
+		WHERE 1=1
+		<isNotNull property="id">
+			<isGreaterThan property="id" compareValue="0">
+				AND ID = #id#
+			</isGreaterThan>
+		</isNotNull>
+		 <isNotNull property="name">
+				  <isNotEmpty property="name">
+					AND Name like concat('%',#name#,'%')
+				</isNotEmpty>
+		</isNotNull>
+		<isNotNull property="status">
+			<isGreaterThan property="status" compareValue="0">
+				AND Status = #status#
+			</isGreaterThan>
+		</isNotNull>
+		ORDER BY ID DESC
+		<![CDATA[ LIMIT  #page.index#, #page.pageSize# ]]>
+	</select>
+	<select id="getDdlProductVO" parameterClass="ddlProductVO" resultClass="ddlProductVO">
+		SELECT ID id,
+				Name name,
+				IFNULL(Status,3201) status,
+				version version,
+				price price,
+				country country,
+				category category,
+				CreateDate CreateDate
+		FROM PRODUCTS
+		WHERE ID = #id#	
+	</select>
+	<insert id="insert" parameterClass="ddlProductVO">
+		INSERT IGNORE INTO PRODUCTS(Id,Name,price,Status,version,country,category,CreateDate)
+		VALUES(#id#,#name#,#price#,#status#,#version#,#country#,#category#,now())
+		<selectKey keyProperty="id" resultClass="int">
+			SELECT LAST_INSERT_ID() AS ID FROM PRODUCTS LIMIT 1
+		</selectKey>
+	</insert>
+	<update id="update" parameterClass="ddlProductVO">
+		UPDATE PRODUCTS 
+		SET	Name = #name#,
+			version = #version#,
+			country=#country#,
+			category=#category#,
+			price = #price#,
+			status = #status#
+		WHERE ID = #id#
+	</update>
+	<update id="updateStatus" parameterClass="ddlProductVO">
+		UPDATE PRODUCTS 
+		SET	Status=#status#
+		WHERE ID = #id#
+	</update>
+	<select id="getAllDdlProduct" parameterClass="ddlProductVO" resultClass="ddlProductVO">
+		SELECT ID id,
+				Name name,
+				IFNULL(Status,3201) status,
+				version version,
+				price price,
+				country country,
+				category category,
+				CreateDate CreateDate
+		FROM PRODUCTS
+		WHERE 1=1
+		<isNotNull property="id">
+			<isGreaterThan property="id" compareValue="0">
+				AND ID = #id#
+			</isGreaterThan>
+		</isNotNull>
+		<isNotNull property="name">
+				  <isNotEmpty property="name">
+					AND Name like concat('%',#name#,'%')
+				</isNotEmpty>
+		</isNotNull>
+		<isNotNull property="status">
+			<isGreaterThan property="status" compareValue="0">
+				AND Status = #status#
+			</isGreaterThan>
+		</isNotNull>
+		ORDER BY ID DESC
+	</select>
+	<select id="getDdlCountryList" parameterClass="string" resultClass="countryVO">
+		select id id,
+			   description	name
+		from EnumerationValue
+		WHERE enumeration=200100 AND ValueCode=#valueCode#
+		ORDER BY name
+	</select>
+</sqlMap>

@@ -1,0 +1,32 @@
+<!DOCTYPE struts PUBLIC 
+	"-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+	"http://struts.apache.org/dtds/struts-2.0.dtd">
+<struts>
+	<constant name="struts.multipart.maxSize" value="1000000000" />
+	<include file="struts-default.xml"></include>
+	
+	<package name="ddl" namespace="/ddl" extends="abroad-default">
+		<default-interceptor-ref name="crudStack"/>
+		
+		<action name="DdlProduct" class="com.kkgame.feeop.ddl.action.DdlProductAction" method="do{1}">
+			<result name="query">/pages/ddl/ddlproduct_query.jsp</result>
+			<result name="list">/pages/ddl/ddlproduct_list.jsp</result>
+			<result name="create">/pages/ddl/ddlproduct_create.jsp</result>
+		</action>
+		
+		<action name="DdlProject" class="com.kkgame.feeop.ddl.action.DdlProjectAction" method="do{1}">
+			<result name="query">/pages/ddl/ddlproject_query.jsp</result>
+			<result name="list">/pages/ddl/ddlproject_list.jsp</result>
+			<result name="create">/pages/ddl/ddlproject_create.jsp</result>
+			<result name="domainlist">/pages/ddl/domain_list.jsp</result>
+			<result name="domaincreate">/pages/ddl/domain_create.jsp</result>
+		</action>
+		
+		<action name="DdlChannel" class="com.kkgame.feeop.ddl.action.DdlChannelAction" method="do{1}">
+			<result name="query">/pages/ddl/ddlchannel_query.jsp</result>
+			<result name="list">/pages/ddl/ddlchannel_list.jsp</result>
+			<result name="create">/pages/ddl/ddlchannel_create.jsp</result>
+		</action>
+		
+	</package>
+</struts>

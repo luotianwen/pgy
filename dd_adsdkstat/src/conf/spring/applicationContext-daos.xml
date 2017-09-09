@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+<beans>
+	<!-- 动态选择服务器 -->
+	<bean id="feeDao" class="com.kkgame.pay.stat.dao.impl.FeeDaoImpl">
+		<property name="sqlMapClient" ref="sqlMapClient_fee" />
+		<property name="dataSource" ref="dataSource_fee"></property>
+	</bean>
+	<bean id="masterDao" class="com.kkgame.pay.stat.dao.impl.MasterDaoImpl">
+		<property name="sqlMapClient" ref="sqlMapClient_master" />
+		<property name="dataSource" ref="dataSource_master"></property>
+	</bean>
+	<bean id="statisticsDao" class="com.kkgame.pay.stat.dao.impl.StatisticsDaoImpl">
+		<property name="dataSource" ref="dataSource_data"></property>
+		<property name="sqlMapClient" ref="sqlMapClient_data" />
+	</bean>
+	<!-- 
+	<bean id="ddlFeeDao" class="com.kkgame.pay.stat.dao.impl.DdlFeeDaoImpl">
+		<property name="sqlMapClient" ref="sqlMapClient_ddl_fee" />
+		<property name="dataSource" ref="dataSource_ddl_fee"></property>
+	</bean>
+	<bean id="ddlMasterFeeDao" class="com.kkgame.pay.stat.dao.impl.DdlFeeDaoImpl">
+		<property name="sqlMapClient" ref="sqlMapClient_ddl_master" />
+		<property name="dataSource" ref="dataSource_ddl_master"></property>
+	</bean>
+	<bean id="ddlStatisticsDao" class="com.kkgame.pay.stat.dao.impl.DdlStatisticsDaoImpl">
+		<property name="dataSource" ref="dataSource_data"></property>
+		<property name="sqlMapClient" ref="sqlMapClient_data" />
+	</bean>
+	 -->
+</beans>

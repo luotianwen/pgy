@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="promotionCustomerSqlMap">
+    <typeAlias alias="promotionCustomerVO" type="com.kkgame.feeop.adver.bean.PromotionCustomerVO"/>
+    <select id="getPromotionCustomerVOListCount" parameterClass="promotionCustomerVO" resultClass="int">
+        SELECT
+        count(id)
+        FROM promotion_customer
+        <dynamic prepend="WHERE">
+
+            <isNotEmpty prepend="AND" property="id">
+                id = #id#
+            </isNotEmpty>
+
+
+            <isNotEmpty prepend="AND" property="name">
+                name = #name#
+            </isNotEmpty>
+
+
+            <isNotEmpty prepend="AND" property="cdate">
+                cdate = #cdate#
+            </isNotEmpty>
+
+
+            <isNotEmpty prepend="AND" property="notes">
+                notes = #notes#
+            </isNotEmpty>
+
+        </dynamic>
+    </select>
+    <select id="getPromotionCustomerVOList" parameterClass="promotionCustomerVO" resultClass="promotionCustomerVO">
+        SELECT
+
+        id ,name ,cdate ,notes,email,contact
+
+        FROM promotion_customer
+
+
+        <dynamic prepend="WHERE">
+
+            <isNotEmpty prepend="AND" property="id">
+                id = #id#
+            </isNotEmpty>
+
+
+            <isNotEmpty prepend="AND" property="name">
+                name = #name#
+            </isNotEmpty>
+
+
+            <isNotEmpty prepend="AND" property="cdate">
+                cdate = #cdate#
+            </isNotEmpty>
+
+
+            <isNotEmpty prepend="AND" property="notes">
+                notes = #notes#
+            </isNotEmpty>
+
+        </dynamic>
+
+        <![CDATA[ LIMIT  #page.index#, #page.pageSize# ]]>
+    </select>
+
+    <select id="getPromotionCustomerVO" parameterClass="promotionCustomerVO" resultClass="promotionCustomerVO">
+		SELECT
+
+        id ,name ,cdate ,notes ,email,contact
+	    
+	        FROM promotion_customer 
+	        WHERE 
+		        id = #id# 
+
+	</select>
+    <insert id="create" parameterClass="promotionCustomerVO">
+
+        INSERT INTO promotion_customer (
+        id ,
+        name ,
+        cdate ,
+        notes
+        ,email
+        ,contact
+        ) VALUES (
+        #id# ,
+        #name# ,
+        now() ,
+        #notes#
+        ,#email#
+        ,#contact#
+        )
+
+        <selectKey keyProperty="id" resultClass="int">
+            SELECT LAST_INSERT_ID() AS ID
+        </selectKey>
+    </insert>
+    <update id="update" parameterClass="promotionCustomerVO">
+
+        UPDATE promotion_customer SET
+	        name = #name# ,
+	        notes = #notes#
+	        	,email  = #email#
+			,contact = #contact#
+        WHERE 
+	        id = #id# 
+
+	</update>
+
+</sqlMap>

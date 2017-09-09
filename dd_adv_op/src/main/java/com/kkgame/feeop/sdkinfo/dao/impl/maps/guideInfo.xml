@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="guideInfoSqlMap">
+	<select id="getGuideInfoVOListCount" parameterClass="guideInfoVO" resultClass="int">
+		SELECT COUNT(ID) count			
+		FROM A_ydp
+		WHERE 1=1
+		<isNotNull property="id">
+			<isGreaterThan property="id" compareValue="0">
+				AND ID = #id#
+			</isGreaterThan>
+		</isNotNull>
+	</select>
+	<select id="getGuideInfoVOList" parameterClass="guideInfoVO" resultClass="guideInfoVO">
+		SELECT ID id,
+				version version,
+				ydcs ydcs,
+				ydjg ydjg,
+				creator creator
+		FROM A_ydp
+		WHERE 1=1
+		<isNotNull property="id">
+			<isGreaterThan property="id" compareValue="0">
+				AND ID = #id#
+			</isGreaterThan>
+		</isNotNull>
+		ORDER BY ID DESC
+		<![CDATA[ LIMIT  #page.index#, #page.pageSize# ]]>
+	</select>
+	<select id="getGuideInfoVO" parameterClass="guideInfoVO" resultClass="guideInfoVO">
+		SELECT ID id,
+				version version,
+				ydcs ydcs,
+				ydjg ydjg,
+				creator creator
+		FROM A_ydp
+		WHERE ID = #id#	
+	</select>
+	<insert id="insert" parameterClass="guideInfoVO">
+		INSERT INTO A_ydp(version,ydjg,ydcs,creator)
+		VALUES(#version#,#ydjg#,#ydcs#,#creator#)
+		<selectKey keyProperty="id" resultClass="int">
+			SELECT LAST_INSERT_ID() AS ID FROM A_ydp LIMIT 1
+		</selectKey>
+	</insert>
+	<update id="update" parameterClass="guideInfoVO">
+		UPDATE A_ydp 
+		SET	version = #version#,
+			creator=#creator#,
+			ydjg=#ydjg#,
+			ydcs=#ydcs#
+		WHERE ID = #id#
+	</update>
+	<select id="getAllGuideInfoVOList" parameterClass="guideInfoVO" resultClass="guideInfoVO">
+		SELECT ID id,
+				version version,
+				ydcs ydcs,
+				ydjg ydjg,
+				creator creator
+		FROM A_ydp
+		WHERE 1=1
+		<isNotNull property="id">
+			<isGreaterThan property="id" compareValue="0">
+				AND ID = #id#
+			</isGreaterThan>
+		</isNotNull>
+		ORDER BY ID DESC
+	</select>
+	<delete id="delete" parameterClass="guideInfoVO" >
+	    delete from A_ydp where Id = #id#
+	</delete>
+</sqlMap>

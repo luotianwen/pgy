@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop" 
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:p="http://www.springframework.org/schema/p" 
+       xsi:schemaLocation="http://www.springframework.org/schema/beans 
+       		http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+       		http://www.springframework.org/schema/aop
+       		http://www.springframework.org/schema/aop/spring-aop-2.5.xsd 
+		    http://www.springframework.org/schema/tx  
+    	    http://www.springframework.org/schema/tx/spring-tx-2.5.xsd 
+            http://www.springframework.org/schema/context
+            http://www.springframework.org/schema/context/spring-context-2.5.xsd">
+ 	
+ 	<bean id="offlineapkService" class="com.kkgame.feeop.offline.service.impl.OfflineapkServiceImpl">
+ 		<property name="offlineapkDAO" ref="offlineapkDAO"></property>
+ 	</bean>
+ 	<bean id="offlineapkDAO" class="com.kkgame.feeop.offline.dao.impl.OfflineapkDAOImpl">
+ 		<property name="sqlMapClient" ref="sqlMapClient_kkpay_data"></property>
+ 		<property name="dataSource" ref="dataSource_kkpay_data"></property>
+ 	</bean>
+ 	
+ 	<bean id="offlinejarService" class="com.kkgame.feeop.offline.service.impl.OfflinejarServiceImpl">
+ 		<property name="offlinejarDAO" ref="offlinejarDAO"></property>
+ 	</bean>
+ 	<bean id="offlinejarDAO" class="com.kkgame.feeop.offline.dao.impl.OfflinejarDAOImpl">
+ 		<property name="sqlMapClient" ref="sqlMapClient_kkpay_data"></property>
+ 		<property name="dataSource" ref="dataSource_kkpay_data"></property>
+ 	</bean>
+ 	
+ 	<bean id="offlinesdkService" class="com.kkgame.feeop.offline.service.impl.OfflinesdkServiceImpl">
+ 		<property name="offlinesdkDAO" ref="offlinesdkDAO"></property>
+ 	</bean>
+ 	<bean id="offlinesdkDAO" class="com.kkgame.feeop.offline.dao.impl.OfflinesdkDAOImpl">
+ 		<property name="sqlMapClient" ref="sqlMapClient_kkpay_data"></property>
+ 		<property name="dataSource" ref="dataSource_kkpay_data"></property>
+ 	</bean>
+</beans>

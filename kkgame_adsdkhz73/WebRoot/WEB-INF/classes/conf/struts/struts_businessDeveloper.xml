@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+    <package name="businessDeveloper" namespace="/businessDeveloper"  extends="default">	
+      		<default-interceptor-ref name="crudStack"/>
+		<global-results>
+			<result name="plainMessage">/pages/user/common/plainMessage.jsp</result>		
+    	</global-results>		
+		<action name="getAllBdList" method="getAllBdList" class="com.kkgame.hz.action.BdAction">
+			<result name="success">/pages/user/bd/getAllBdList.jsp</result>
+		</action>
+    </package>
+</struts>

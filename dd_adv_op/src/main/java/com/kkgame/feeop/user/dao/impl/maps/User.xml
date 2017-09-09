@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="userSqlMap">
+	<select id="getUserVOByLoginId" parameterClass="java.lang.String" resultClass="userVO">
+		SELECT 	L.ID id, 
+				L.LoginId loginId, 
+				L.Passwd passwd, 
+				L.RealName realName,
+				L.Status status,
+				DATE_FORMAT(L.CreateTime,'%Y-%m-%d %H:%i:%S') createTime,
+				DATE_FORMAT(L.LastLogin,'%Y-%m-%d %H:%i:%S') lastLogin
+		FROM LOGIN_USER  L
+		WHERE L.LoginId=#loginId#
+	</select>
+	<update id="updateUserLastLogin" parameterClass="userVO">
+		UPDATE LOGIN_USER SET Lastlogin = now() WHERE ID = #id#	
+	</update>	
+	<select id="getUserVOListCount" parameterClass="userVO" resultClass="int">
+		SELECT COUNT(ID) FROM
+		LOGIN_USER
+		WHERE 1=1
+		<isNotNull property="loginId">
+			<isNotEmpty property="loginId">
+				AND LoginId like  concat('%',#loginId#,'%')
+			</isNotEmpty>
+		</isNotNull>
+	</select>
+	<select id="getUserVOList" parameterClass="userVO" resultClass="userVO">
+		SELECT ID id,
+				LoginId loginId,
+				Passwd passwd,
+				RealName realName,
+				Status status,
+				DATE_FORMAT(CreateTime,'%Y-%m-%d %H:%i:%S') createTime,
+				DATE_FORMAT(LastLogin,'%Y-%m-%d %H:%i:%S') lastLogin
+		FROM LOGIN_USER
+		WHERE 1=1
+		<isNotNull property="loginId">
+			<isNotEmpty property="loginId">
+				AND LoginId like  concat('%',#loginId#,'%')
+			</isNotEmpty>
+		</isNotNull>
+		ORDER BY #sortIndex#
+		<isEqual property="sortType" compareValue="desc"> DESC </isEqual>
+    	<![CDATA[ LIMIT  #page.index#, #page.pageSize# ]]>
+	</select>
+	<select id="getUserVOById" parameterClass="int" resultClass="userVO">
+		SELECT 	ID id, 
+				LoginId loginId, 
+				Passwd passwd, 
+				Status status,
+				RealName realName
+		FROM LOGIN_USER  
+		WHERE ID=#id#	
+	</select>
+	<!-- 增加所有用户 -->
+	<insert id="create" parameterClass="userVO">
+		INSERT INTO LOGIN_USER(RealName,LoginId,Passwd,CreateTime)
+		VALUES(#realName#,#loginId#,#passwd#, now())
+		<selectKey keyProperty="id" resultClass="int">
+			SELECT LAST_INSERT_ID() AS ID FROM LOGIN_USER LIMIT 1
+		</selectKey>
+	</insert>
+	<update id="update" parameterClass="userVO">
+		UPDATE LOGIN_USER 
+		SET LoginId = #loginId#,
+			Passwd = #passwd#,
+			RealName = #realName#
+ 		WHERE ID = #id#	
+	</update>
+	<delete id="delete" parameterClass="int">
+		DELETE FROM LOGIN_USER WHERE ID =#id#
+	</delete>
+	<update id="updateStatus" parameterClass="userVO">
+		UPDATE LOGIN_USER SET Status = #status# WHERE ID = #id#	
+	</update>
+	<update id="updatePasswd" parameterClass="userVO">
+		UPDATE LOGIN_USER SET Passwd = #passwd# WHERE ID = #id#	
+	</update>
+</sqlMap>

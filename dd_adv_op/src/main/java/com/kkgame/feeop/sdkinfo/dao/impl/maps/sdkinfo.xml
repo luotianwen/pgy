@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="sdkInfoSqlMap">
+	<select id="getSdkInfoVOListCount" parameterClass="sdkInfoVO" resultClass="int">
+		SELECT COUNT(ID) count			
+		FROM NET_SDK_INFO
+		WHERE 1=1
+		<isNotNull property="id">
+			<isGreaterThan property="id" compareValue="0">
+				AND ID = #id#
+			</isGreaterThan>
+		</isNotNull>
+		 <isNotNull property="name">
+				  <isNotEmpty property="name">
+					AND Name like concat('%',#name#,'%')
+				</isNotEmpty>
+		</isNotNull>
+		<isNotNull property="sdkVersion">
+			<isGreaterThan property="sdkVersion" compareValue="0">
+				AND SdkVersion = #sdkVersion#
+			</isGreaterThan>
+		</isNotNull>
+		<isNotNull property="status">
+			<isGreaterThan property="status" compareValue="0">
+				AND Status = #status#
+			</isGreaterThan>
+		</isNotNull>
+	</select>
+	<select id="getSdkInfoVOList" parameterClass="sdkInfoVO" resultClass="sdkInfoVO">
+		SELECT ID id,
+				SdkId sdkId,
+				Name name,
+				Status status,
+				SdkVersion sdkVersion,
+				DescInfo descInfo,
+				Url url,
+				CreateTime createTime,
+		        startClass,
+				md5,
+				startArgu startArg,
+				IFNULL(type,0) classType,
+				IFNULL(rank,0) rank
+		FROM NET_SDK_INFO
+		WHERE 1=1
+		<isNotNull property="id">
+			<isGreaterThan property="id" compareValue="0">
+				AND ID = #id#
+			</isGreaterThan>
+		</isNotNull>
+		 <isNotNull property="name">
+				  <isNotEmpty property="name">
+					AND Name like concat('%',#name#,'%')
+				</isNotEmpty>
+		</isNotNull>
+		<isNotNull property="sdkVersion">
+			<isGreaterThan property="sdkVersion" compareValue="0">
+				AND SdkVersion = #sdkVersion#
+			</isGreaterThan>
+		</isNotNull>
+		<isNotNull property="status">
+			<isGreaterThan property="status" compareValue="0">
+				AND Status = #status#
+			</isGreaterThan>
+		</isNotNull>
+		ORDER BY ID DESC
+		<![CDATA[ LIMIT  #page.index#, #page.pageSize# ]]>
+	</select>
+	<select id="getSdkInfoVO" parameterClass="sdkInfoVO" resultClass="sdkInfoVO">
+		SELECT ID id,
+				SdkId sdkId,
+				Name name,
+				Status status,
+				SdkVersion sdkVersion,
+				DescInfo descInfo,
+				Url url,
+				CreateTime createTime,
+		        startClass,
+				startArgu startArg,
+		        IFNULL(type,0) classType,
+				IFNULL(rank,0) rank
+		FROM NET_SDK_INFO
+		WHERE ID = #id#	
+	</select>
+	<insert id="insert" parameterClass="sdkInfoVO">
+		INSERT INTO NET_SDK_INFO(SdkId,Name,DescInfo,Status,SdkVersion,Url,CreateTime,startClass,startArgu,type,rank,md5)
+		VALUES(#sdkId#,#name#,#descInfo#,#status#,#sdkVersion#,#url#,now(),#startClass#,#startArg#,#classType#,#rank#,#md5#)
+		<selectKey keyProperty="id" resultClass="int">
+			SELECT LAST_INSERT_ID() AS ID FROM NET_SDK_INFO LIMIT 1
+		</selectKey>
+	</insert>
+	<update id="update" parameterClass="sdkInfoVO">
+		UPDATE NET_SDK_INFO 
+		SET	Name = #name#,
+			SdkId = #sdkId#,
+			SdkVersion = #sdkVersion#,
+			DescInfo=#descInfo#,
+			Status=#status#,
+			startClass=#startClass#,
+			startArgu=#startArg#,
+			type=#classType#,
+			rank=#rank#,
+			md5=#md5#
+			<isNotNull property="url">
+				<isNotEmpty property="url">
+					,Url=#url#
+				</isNotEmpty>
+			</isNotNull>
+		WHERE ID = #id#
+	</update>
+	<update id="updateStatus" parameterClass="sdkInfoVO">
+		UPDATE NET_SDK_INFO 
+		SET	Status=#status#
+		WHERE ID = #id#
+	</update>
+	<select id="getAllSdkInfoVOList" parameterClass="sdkInfoVO" resultClass="sdkInfoVO">
+		SELECT ID id,
+				SdkId sdkId,
+				Name name,
+				Status status,
+				SdkVersion sdkVersion,
+				DescInfo descInfo,
+				Url url,
+				CreateTime createTime,
+				startClass,
+				startArgu startArg,
+				md5 md5,
+				IFNULL(type,0) classType,
+				IFNULL(rank,0) rank
+		FROM NET_SDK_INFO
+		WHERE 1=1
+		<isNotNull property="id">
+			<isGreaterThan property="id" compareValue="0">
+				AND ID = #id#
+			</isGreaterThan>
+		</isNotNull>
+		<isNotNull property="name">
+				  <isNotEmpty property="name">
+					AND Name like concat('%',#name#,'%')
+				</isNotEmpty>
+		</isNotNull>
+		<isNotNull property="sdkVersion">
+			<isGreaterThan property="sdkVersion" compareValue="0">
+				AND SdkVersion = #sdkVersion#
+			</isGreaterThan>
+		</isNotNull>
+		<isNotNull property="status">
+			<isGreaterThan property="status" compareValue="0">
+				AND Status = #status#
+			</isGreaterThan>
+		</isNotNull>
+		ORDER BY ID DESC
+	</select>
+</sqlMap>

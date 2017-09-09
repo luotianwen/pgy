@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="adverSqlMap">
+	<select id="getAdverVOListCount" parameterClass="adverVO" resultClass="int">
+		SELECT COUNT(ID) count			
+		FROM ADVER
+		WHERE 1=1
+		<isNotNull property="id">
+			<isGreaterThan property="id" compareValue="0">
+				AND ID = #id#
+			</isGreaterThan>
+		</isNotNull>
+		 <isNotNull property="name">
+				  <isNotEmpty property="name">
+					AND Name like concat('%',#name#,'%')
+				</isNotEmpty>
+		</isNotNull>
+		<isNotNull property="status">
+			<isGreaterThan property="status" compareValue="0">
+				AND Status = #status#
+			</isGreaterThan>
+		</isNotNull>
+	</select>
+	<select id="getAdverVOList" parameterClass="adverVO" resultClass="adverVO">
+		SELECT ID id,
+				Name name,
+				Status status,
+				Type type,
+				PostValue postValue,
+				Url url,
+				CreateTime createTime,
+				ImplementClass implementClass,
+				linkmanName,
+				linkmanPhone,
+				linkmanQQ,
+				linkmanAddress
+		FROM ADVER
+		WHERE 1=1
+		<isNotNull property="id">
+			<isGreaterThan property="id" compareValue="0">
+				AND ID = #id#
+			</isGreaterThan>
+		</isNotNull>
+		 <isNotNull property="name">
+				  <isNotEmpty property="name">
+					AND Name like concat('%',#name#,'%')
+				</isNotEmpty>
+		</isNotNull>
+		<isNotNull property="status">
+			<isGreaterThan property="status" compareValue="0">
+				AND Status = #status#
+			</isGreaterThan>
+		</isNotNull>
+		ORDER BY ID DESC
+		<![CDATA[ LIMIT  #page.index#, #page.pageSize# ]]>
+	</select>
+	<select id="getAdverVO" parameterClass="adverVO" resultClass="adverVO">
+		SELECT ID id,
+				Name name,
+				Status status,
+				Type type,
+				PostValue postValue,
+				Url url,
+				CreateTime createTime,
+				ImplementClass implementClass,
+				linkmanName,
+				linkmanPhone,
+				linkmanQQ,
+				linkmanAddress
+		FROM ADVER
+		WHERE ID = #id#	
+	</select>
+	<insert id="insert" parameterClass="adverVO">
+		INSERT INTO ADVER(Name,ImplementClass,Status,Type,Url,PostValue,CreateTime,linkmanName,linkmanPhone,linkmanQQ,linkmanAddress)
+		VALUES(#name#,#implementClass#,#status#,#type#,#url#,#postValue#,now(),#linkmanName#,#linkmanPhone#,#linkmanQQ#,#linkmanAddress#)
+		<selectKey keyProperty="id" resultClass="int">
+			SELECT LAST_INSERT_ID() AS ID FROM ADVER LIMIT 1
+		</selectKey>
+	</insert>
+	<update id="update" parameterClass="adverVO">
+		UPDATE ADVER 
+		SET	Name = #name#,
+			Type=#type#,
+			Status=#status#,
+			linkmanName=#linkmanName#,
+			linkmanPhone=#linkmanPhone#,
+			linkmanQQ=#linkmanQQ#,
+			linkmanAddress=#linkmanAddress#
+		WHERE ID = #id#
+	</update>
+	<update id="updateStatus" parameterClass="adverVO">
+		UPDATE ADVER 
+		SET	Status=#status#
+		WHERE ID = #id#
+	</update>
+	<select id="getAllAdver" parameterClass="adverVO" resultClass="adverVO">
+		SELECT ID id,
+				Name name,
+				Status status,
+				Type type,
+				PostValue postValue,
+				Url url,
+				CreateTime createTime,
+				ImplementClass implementClass,
+				linkmanName,
+				linkmanPhone,
+				linkmanQQ,
+				linkmanAddress
+		FROM ADVER
+		WHERE 1=1
+		<isNotNull property="id">
+			<isGreaterThan property="id" compareValue="0">
+				AND ID = #id#
+			</isGreaterThan>
+		</isNotNull>
+		<isNotNull property="name">
+				  <isNotEmpty property="name">
+					AND Name like concat('%',#name#,'%')
+				</isNotEmpty>
+		</isNotNull>
+		<isNotNull property="status">
+			<isGreaterThan property="status" compareValue="0">
+				AND Status = #status#
+			</isGreaterThan>
+		</isNotNull>
+		ORDER BY ID DESC
+	</select>
+</sqlMap>

@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+    xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+	xsi:schemaLocation="
+  http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+  http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.5.xsd
+  http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.5.xsd
+  http://code.alibabatech.com/schema/dubbo http://code.alibabatech.com/schema/dubbo/dubbo.xsd" default-autowire="byName">
+
+	<dubbo:service ref="sdkService"   interface="com.kokmobi.server.service.SdkService"  protocol="dubbo"/>
+	<dubbo:service ref="disListService" interface="com.kokmobi.server.protocol.service.DisListService" protocol="dubbo"/>
+	<dubbo:service ref="redisService" interface="com.kokmobi.server.service.RedisService" protocol="dubbo"/>
+	<dubbo:service ref="adUsersProcessService" interface="com.kokmobi.server.protocol.service.AdUsersProcessService" protocol="dubbo"/>
+	<dubbo:service ref="areaService" interface="com.kokmobi.server.service.AreaService" protocol="dubbo"/>
+	<dubbo:service ref="getAdListFeebackService" interface="com.kokmobi.server.protocol.service.GetAdListFeebackService" protocol="dubbo"/>
+	<dubbo:service ref="adLogDataProcessService" interface="com.kokmobi.server.protocol.service.AdLogDataProcessService" protocol="dubbo"/>
+	<dubbo:service ref="getPluginInfoProcessService" interface="com.kokmobi.server.protocol.service.GetCommonInfoProcessService" protocol="dubbo"/>
+	<dubbo:service ref="getAdjustKeyService" interface="com.kokmobi.server.protocol.service.GetAdjustKeyService" protocol="dubbo"/>
+
+	<dubbo:service ref="getAdListProcessService" group="getAdList" interface="com.kokmobi.server.protocol.service.GetAdListProcessService"   protocol="dubbo"/>
+	<dubbo:service ref="getSilentAdListProcessService" group="getSilentAdList"  interface="com.kokmobi.server.protocol.service.GetAdListProcessService"  protocol="dubbo"/>
+	<dubbo:service ref="getWebAdListProcessService" group="getWebAdList"  interface="com.kokmobi.server.protocol.service.GetAdListProcessService" protocol="dubbo"/>
+	<dubbo:service ref="webAdListProcessService" group="webAdList"  interface="com.kokmobi.server.protocol.service.WebAdListProcessService" protocol="dubbo"/>
+    <dubbo:service ref="getSubProcessService" group="getSubAd" interface="com.kokmobi.server.protocol.service.SubAdProcessService" protocol="dubbo"/>
+
+
+	<bean id="sdkService" class="com.kokmobi.server.service.impl.SdkServiceImpl">
+		<property name="sdkDao" ref="sdkDao"></property>
+		<property name="sdkDataDao" ref="sdkDataDao"></property>
+		<property name="offlineSdkDao" ref="offlineSdkDao"></property>
+	</bean>
+	<bean id="disListService" class="com.kokmobi.server.protocol.service.impl.DisListServiceImpl">
+		<property name="projectDao" ref="projectDao"></property>
+		<property name="apkInfoDao" ref="apkInfoDao"></property>
+		<property name="areaService" ref="areaService"></property>
+	</bean>
+
+	
+	<bean id="adUsersProcessService" class="com.kokmobi.server.protocol.service.impl.AdUsersProcessServiceImpl">
+		<property name="sdkService" ref="sdkService"/>
+		<property name="areaService" ref="areaService"/>
+	</bean>
+	
+	<bean id="areaService" class="com.kokmobi.server.service.impl.AreaServiceImpl" init-method="loadCountryMap">
+		<property name="sdkDao" ref="sdkDao"></property>
+	</bean>
+	
+	<bean id="getAdListProcessService" class="com.kokmobi.server.protocol.service.impl.GetAdListProcessServiceImpl">
+	</bean>
+	<bean id="getAdListFeebackService" class="com.kokmobi.server.protocol.service.impl.GetAdListFeebackServiceImpl">
+	</bean>
+	<bean id="adLogDataProcessService" class="com.kokmobi.server.protocol.service.impl.AdLogDataProcessServiceImpl">
+		<property name="sdkService" ref="sdkService"/>
+		<property name="areaService" ref="areaService"/>
+	</bean>
+	<bean id="getSilentAdListProcessService" class="com.kokmobi.server.protocol.service.impl.GetSilentAdListProcessServiceImpl">
+	</bean>
+	<bean id="getWebAdListProcessService" class="com.kokmobi.server.protocol.service.impl.GetWebAdListProcessServiceImpl">
+	</bean>
+	<bean id="webAdListProcessService" class="com.kokmobi.server.protocol.service.impl.WebAdListProcessServiceImpl">
+		<property name="sdkService" ref="sdkService"/>
+		<property name="areaService" ref="areaService"/>
+	</bean>
+	<bean id="getPluginInfoProcessService" class="com.kokmobi.server.protocol.service.impl.GetPluginInfoProcessServiceImpl">
+		<property name="sdkService" ref="sdkService"/>
+		<property name="areaService" ref="areaService"/>
+	</bean>
+	<bean id="getAdjustKeyService" class="com.kokmobi.server.protocol.service.impl.GetAdjustKeyServiceImpl">
+	</bean>
+	<bean id="getSubProcessService" class="com.kokmobi.server.protocol.service.impl.SubAdProcessServiceImpl">
+		<property name="sdkService" ref="sdkService"/>
+		<property name="areaService" ref="areaService"/>
+	</bean>
+
+	<bean id="redisService" class="com.kokmobi.server.service.impl.RedistServiceImpl" init-method="initPool">
+
+	</bean>
+</beans>

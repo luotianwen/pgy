@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="alias">
+	<typeAlias alias="userVO" type="com.kkgame.feeop.user.bean.UserVO"/>
+	<typeAlias alias="userRoleVO" type="com.kkgame.feeop.user.bean.UserRoleVO"/>
+	<typeAlias alias="roleVO" type="com.kkgame.feeop.user.bean.RoleVO"/>
+	<typeAlias alias="resVO" type="com.kkgame.feeop.user.bean.ResVO"/>
+	<typeAlias alias="roleResVO" type="com.kkgame.feeop.user.bean.RoleResVO"/>
+	<typeAlias alias="operateLogVO" type="com.kkgame.feeop.tag.bean.OperateLogVO"/>
+	<typeAlias alias="provinceVO" type="com.kkgame.feeop.tag.bean.ProvinceVO"/>
+	<typeAlias alias="adVO" type="com.kkgame.feeop.tag.bean.AdVO"/>
+	<typeAlias alias="countryVO" type="com.kkgame.feeop.tag.bean.CountryVO"/>
+	
+	<typeAlias alias="ddlProductVO" type="com.kkgame.feeop.ddl.bean.DdlProductVO"/>
+	<typeAlias alias="ddlProjectVO" type="com.kkgame.feeop.ddl.bean.DdlProjectVO"/>
+	<typeAlias alias="ddlChannelVO" type="com.kkgame.feeop.ddl.bean.DdlChannelVO"/>
+	<typeAlias alias="domainVO" type="com.kkgame.feeop.ddl.bean.DomainVO"/>
+
+	<typeAlias alias="versionVO" type="com.kkgame.feeop.tag.bean.VersionVO"/>
+	<typeAlias alias="operatorVO" type="com.kkgame.feeop.record.bean.OperatorVO"/>
+	<typeAlias alias="projectDataVO" type="com.kkgame.feeop.data.bean.ProjectDataVO"/>
+	<typeAlias alias="adDataVO" type="com.kkgame.feeop.data.bean.AdDataVO"/>
+	<typeAlias alias="adLinkDataVO" type="com.kkgame.feeop.data.bean.AdLinkDataVO"/>
+	<typeAlias alias="projectIncomeVO" type="com.kkgame.feeop.data.bean.ProjectIncomeVO"/>
+	<typeAlias alias="adIncomeVO" type="com.kkgame.feeop.data.bean.AdIncomeVO"/>
+	<typeAlias alias="searchVO" type="com.kkgame.feeop.data.bean.SearchVO"/>
+	<typeAlias alias="dataVO" type="com.kkgame.feeop.data.bean.DataVO"/>
+	<typeAlias alias="ddlDataVO" type="com.kkgame.feeop.data.bean.DdlDataVO"/>
+	<typeAlias alias="retentionVO" type="com.kkgame.feeop.data.bean.RetentionVO"/>
+	<typeAlias alias="versionDataVO" type="com.kkgame.feeop.data.bean.VersionDataVO"/>
+	<typeAlias alias="sdkDataVO" type="com.kkgame.feeop.data.bean.SdkDataVO"/>
+	<typeAlias alias="subDataVO" type="com.kkgame.feeop.data.bean.SubDataVO"/>
+	<typeAlias alias="iframeDataVO" type="com.kkgame.feeop.detail.bean.IframeDetailVO" />
+	<typeAlias alias="userAdVO" type="com.kkgame.feeop.data.bean.UserAdVO"/>
+	<typeAlias alias="interVO" type="com.kkgame.feeop.inter.bean.InterVO"/>
+	<typeAlias alias="bdVO" type="com.kkgame.feeop.customer.bean.BdVO"/>
+	<typeAlias alias="customerVO" type="com.kkgame.feeop.customer.bean.CustomerVO"/>
+	<typeAlias alias="ddlVO" type="com.kkgame.feeop.customer.bean.DdlVO"/>
+	<typeAlias alias="agentVO" type="com.kkgame.feeop.customer.bean.AgentVO"/>
+	<typeAlias alias="projectVO" type="com.kkgame.feeop.customer.bean.ProjectVO"/>
+	<typeAlias alias="projectFileVO" type="com.kkgame.feeop.customer.bean.ProjectFileVO"/>
+	<typeAlias alias="productVO" type="com.kkgame.feeop.customer.bean.ProductVO"/>
+	<typeAlias alias="productSdkVO" type="com.kkgame.feeop.customer.bean.ProductSdkVO"/>
+	<typeAlias alias="ddlDetailVO" type="com.kkgame.feeop.detail.bean.DdlDetailVO" />
+	<typeAlias alias="adLinkDetailVO" type="com.kkgame.feeop.detail.bean.AdLinkDetailVO" />
+	<typeAlias alias="sdkInfoVO" type="com.kkgame.feeop.sdkinfo.bean.SdkInfoVO" />
+	<typeAlias alias="apkInfoVO" type="com.kkgame.feeop.sdkinfo.bean.ApkInfoVO" />
+	<typeAlias alias="silentPluginInfoVO" type="com.kkgame.feeop.sdkinfo.bean.SilentPluginInfoVO" />
+	<typeAlias alias="guideInfoVO" type="com.kkgame.feeop.sdkinfo.bean.GuideInfoVO" />
+	<typeAlias alias="silentInfoVO" type="com.kkgame.feeop.sdkinfo.bean.SilentInfoVO" />
+	<typeAlias alias="sdkProjectVO" type="com.kkgame.feeop.sdkinfo.bean.SdkProjectVO" />
+
+	<typeAlias alias="adverVO" type="com.kkgame.feeop.adver.bean.AdverVO" />
+	<typeAlias alias="advVO" type="com.kkgame.feeop.adver.bean.AdvVO" />
+	<typeAlias alias="advSdkVO" type="com.kkgame.feeop.adver.bean.AdvSdkVO" />
+
+
+	<typeAlias alias="video" type="com.kkgame.feeop.adver.bean.Video" />
+
+	<!--XJ-->
+	<typeAlias alias="advLinkmanVO" type="com.kkgame.feeop.adver.bean.AdvLinkmanVO"/>
+
+	<!--XJ-->
+	<typeAlias alias="threeSdkVO" type="com.kkgame.feeop.sdkinfo.bean.ThreeSdkVO"/>
+	<typeAlias alias="projectSdkVO" type="com.kkgame.feeop.sdkinfo.bean.ProjectSdkVO"/>
+	<typeAlias alias="projectThreeStatVO" type="com.kkgame.feeop.sdkinfo.bean.ProjectThreeStatVO"/>
+
+	<!--jack-->
+	<typeAlias alias="DesktopInfoVO" type="com.kkgame.feeop.sdkinfo.bean.DesktopInfoVO"/>
+	<typeAlias alias="SdkConfigVO" type="com.kkgame.feeop.sdkinfo.bean.SdkConfigVO"/>
+	<typeAlias alias="LinkAdverVO" type="com.kkgame.feeop.sdkinfo.bean.LinkAdverVO"/>
+	<typeAlias alias="SdkUpLimitVO" type="com.kkgame.feeop.sdkinfo.bean.SdkUpLimitVO"/>
+	<typeAlias alias="AppNameVO" type="com.kkgame.feeop.sdkinfo.bean.AppNameVO"/>
+
+	<typeAlias alias="OfflineapkVO" type="com.kkgame.feeop.offline.bean.OfflineapkVO"/>
+	<typeAlias alias="OfflinejarVO" type="com.kkgame.feeop.offline.bean.OfflinejarVO"/>
+	<typeAlias alias="OfflinesdkVO" type="com.kkgame.feeop.offline.bean.OfflinesdkVO"/>
+
+	<typeAlias alias="OfferSdk" type="com.kkgame.feeop.offerinfo.bean.OfferSdkVO"/>
+</sqlMap>

@@ -1,0 +1,577 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="customerSqlMap">
+	<resultMap id="cuCountOfBdMap" class="java.util.HashMap">
+  		<result property="id" column="BD.ID"  />
+		<result property="count" column="COUNT(CM.ID)" javaType="java.lang.Integer"/>
+ 	</resultMap>
+ 	
+ 	<resultMap id="cuCountOfAgentMap" class="java.util.HashMap">
+  		<result property="id" column="AG.ID" />
+		<result property="count" column="COUNT(CM.ID)"  javaType="java.lang.Integer"/>
+ 	</resultMap>
+ 	
+ 	<select id="getWholeCustomerList" parameterClass="customerVO" resultClass="customerVO">
+		SELECT DISTINCT CM.Name	NAME,
+				CM.ID  id
+		FROM CUSTOMER CM 
+		LEFT  JOIN   BUSINESS_DEVELOPER  BD ON   BD.ID = CM.BusinessDeveloperId
+		WHERE 1=1
+		<isNotNull property="searchBdId">
+			<isGreaterThan property="searchBdId" compareValue="0">
+				AND BD.ID = #searchBdId#
+			</isGreaterThan>
+		</isNotNull>
+		ORDER BY CM.Name ASC 
+	</select>
+
+	<select id="getCustomerList" parameterClass="customerVO" resultClass="customerVO">
+		SELECT 	CM.ID  id,
+				CM.Name	name,
+				AG.Name agentName,
+				BD.Name businessDeveloperName,
+				CM.City	city,
+				CM.Status	status,
+				DATE_FORMAT(CM.ConfirmTime,'%Y-%m-%d')  confirmTime,
+				DATE_FORMAT(CM.SubmitTime,'%Y-%m-%d')  submitTime,
+				DATE_FORMAT(PU.CreateTime,'%Y-%m-%d %H:%i:%S')  createTime,		
+				DATE_FORMAT(CM.AbandonTime,'%Y-%m-%d')  abandonTime,	
+				DATE_FORMAT(CM.SignupTime,'%Y-%m-%d')  signupTime,	
+				DATE_FORMAT(CM.CallBackTime ,'%Y-%m-%d')  callBackTime,																   
+	            IFNULL(PU.ID,0) portalUserId,           
+				CM.BusinessDeveloperId	businessDeveloperId ,
+				CM.RelayStatus  relayStatus ,
+				CM.RelayBdId    relayBdId,
+				CM.SalesViewPermit    salesViewPermit,
+				IFNULL(RBD.Name,'') relayBdName,
+				CM.ExpiryDate	expiryDate,
+				TO_DAYS(now()) - ifnull(TO_DAYS(CM.ConfirmTime),0)  leftDays,
+				TO_DAYS(now()) - ifnull(TO_DAYS(CM.callBackTime),0) callBackDays
+		FROM CUSTOMER CM  
+		LEFT  JOIN PORTAL_USER PU  ON (PU.RoleId = CM.ID  AND PU.RoleType = 'CM')
+		LEFT  JOIN   BUSINESS_DEVELOPER  BD 	ON   BD.ID = CM.BusinessDeveloperId
+		LEFT  JOIN   BUSINESS_DEVELOPER  RBD 	ON   RBD.ID = CM.RelayBdId
+		LEFT  JOIN   AGENT AG   	ON   BD.AgentId = AG.ID
+		WHERE  1=1
+		<isGreaterThan property="status" compareValue="-1">
+			AND CM.Status = #status#	 
+		</isGreaterThan>
+		<isNotEqual property="relayStatus" compareValue="10"> 
+			<isGreaterThan property="businessDeveloperId" compareValue="0">
+				AND CM.BusinessDeveloperId  = #businessDeveloperId#
+			</isGreaterThan>
+		</isNotEqual>
+		<!-- 转移状态 -->
+		<isEqual property="relayStatus" compareValue="10">  
+			<!-- bd查询 -->
+		 	 <isGreaterThan property="businessDeveloperId" compareValue="0">
+				AND  ( CM.BusinessDeveloperId  = #businessDeveloperId# OR CM.RelayBdId = #businessDeveloperId# )
+			</isGreaterThan>	
+		</isEqual>
+		<isGreaterThan property="relayStatus" compareValue="0">
+			AND CM.RelayStatus = #relayStatus#	 
+		</isGreaterThan>
+		<isGreaterThan property="relayBdId" compareValue="0">
+			AND CM.RelayBdId  = #relayBdId#
+		</isGreaterThan>	
+		<isGreaterThan property="agentId" compareValue="0">
+			AND BD.AgentId  = #agentId#
+		</isGreaterThan>
+	    <isNotNull property="searchId">      
+			<isGreaterThan property="searchId" compareValue="0">
+				AND CM.ID  like  concat('%',#searchId#,'%')
+			</isGreaterThan>
+		</isNotNull>
+		<isNotNull property="searchName">  
+			AND  CM.NAME like  concat('%',#searchName#,'%')
+		</isNotNull>
+		   ORDER BY #sortIndex#	        
+		<isEqual property="sortType" compareValue="desc"> DESC 
+		</isEqual> 	 	
+		<![CDATA[ LIMIT  #page.index#, #page.pageSize# ]]>
+	</select>
+	
+	<select id="getCustomerListCount" parameterClass="customerVO" resultClass="int">
+		SELECT 	COUNT(CM.ID) 
+		FROM CUSTOMER CM  
+		LEFT JOIN PORTAL_USER PU ON (PU.RoleId = CM.ID AND PU.RoleType = 'CM')
+		LEFT JOIN BUSINESS_DEVELOPER BD ON BD.ID = CM.BusinessDeveloperId
+	 	LEFT JOIN AGENT AG ON BD.AgentId = AG.ID
+	   	WHERE 1=1
+		<isGreaterThan property="status" compareValue="-1">
+		   AND CM.Status = #status#	 
+		</isGreaterThan>
+		<isNotEqual property="relayStatus" compareValue="10"> 
+		<isGreaterThan property="businessDeveloperId" compareValue="0">
+			AND CM.BusinessDeveloperId  = #businessDeveloperId#
+		</isGreaterThan>
+		</isNotEqual>		
+		<isGreaterThan property="relayStatus" compareValue="0">
+			AND CM.RelayStatus = #relayStatus#	 
+		</isGreaterThan>		
+		<!-- 转移状态 -->
+		<isEqual property="relayStatus" compareValue="10">
+		<!-- bd查询 -->
+			<isGreaterThan property="businessDeveloperId" compareValue="0">
+				AND ( CM.BusinessDeveloperId  = #businessDeveloperId# OR CM.RelayBdId = #businessDeveloperId# )
+			</isGreaterThan>	
+		</isEqual>
+		<isGreaterThan property="relayBdId" compareValue="0">
+			AND CM.RelayBdId  = #relayBdId#
+		</isGreaterThan>
+		<isGreaterThan property="agentId" compareValue="0">
+			AND BD.AgentId  = #agentId#
+		</isGreaterThan>
+		<isNotNull property="searchId">      
+			<isGreaterThan property="searchId" compareValue="0">
+				AND CM.ID  like  concat('%',#searchId#,'%')
+	 		</isGreaterThan>
+		</isNotNull>
+		<isNotNull property="searchName">  
+			AND  CM.NAME like  concat('%',#searchName#,'%')
+		</isNotNull>
+	</select>
+	
+<!-- 所有客户list -->	
+	<select id="getAllCustomerList" parameterClass="customerVO" resultClass="customerVO">
+		SELECT 	CM.ID  id,
+				CM.Name	name,
+				IFNULL(AG.Name,'') agentName,
+				IFNULL(BD.Name,'') businessDeveloperName,
+				CM.City	city,
+				CM.Status	status,
+				DATE_FORMAT(CM.ConfirmTime,'%Y-%m-%d')  confirmTime,				
+				DATE_FORMAT(CM.CallBackTime ,'%Y-%m-%d')  callBackTime,	
+				TO_DAYS(now()) - ifnull(TO_DAYS(CM.callBackTime),'') callBackDays,  			
+				DATE_FORMAT(CM.SubmitTime,'%Y-%m-%d')  submitTime,
+				DATE_FORMAT(CM.AbandonTime,'%Y-%m-%d')  abandonTime,	
+				DATE_FORMAT(CM.SignupTime,'%Y-%m-%d')  signupTime,																
+	            IFNULL(PU.ID,0) portalUserId,
+				CM.BusinessDeveloperId	businessDeveloperId,
+				CM.RelayStatus  relayStatus ,
+				CM.SalesViewPermit    salesViewPermit,
+				CM.RelayBdId    relayBdId,			
+				CM.ExpiryDate	expiryDate,
+				TO_DAYS(now()) - ifnull(TO_DAYS(CM.ConfirmTime),0)  leftDays
+		FROM CUSTOMER CM  
+		LEFT  JOIN PORTAL_USER PU  ON (PU.RoleId = CM.ID  AND PU.RoleType = 'CM')
+		LEFT  JOIN BUSINESS_DEVELOPER BD	ON BD.ID = CM.BusinessDeveloperId 
+		LEFT  JOIN   AGENT AG	ON BD.AgentId = AG.ID
+		WHERE  1=1 
+		<!-- 查询公司客户（拓展和合作的和过期的） --> 	
+		<isEqual property="status" compareValue="24">	
+		    AND CM.Status in (2,4,7)
+		</isEqual>	
+		<!-- 商务自有客户 --> 
+		<isGreaterThan property="businessDeveloperId" compareValue="0">
+			AND CM.BusinessDeveloperId  = #businessDeveloperId#
+			AND CM.Status in (0,1,2,3,4,7,8,10)
+		</isGreaterThan>
+		<!-- 代理商客户 --> 	
+		<isGreaterThan property="agentId" compareValue="0">
+			AND AG.ID  = #agentId#
+			AND CM.Status in (0,1,2,3,4,7,8,10)
+		</isGreaterThan>	
+		<isNotNull property="searchId">      
+			<isGreaterThan property="searchId" compareValue="0">
+				AND CM.ID  like  concat('%',#searchId#,'%')
+			</isGreaterThan>
+		</isNotNull>
+		<isNotNull property="searchName">  
+			AND  CM.Name like  concat('%',#searchName#,'%')
+		</isNotNull>
+		<isGreaterThan property="searchBdId" compareValue="0">
+			AND CM.BusinessDeveloperId  = #searchBdId#
+		</isGreaterThan>   
+		<isNotNull property="confirmTime">  
+			<isNotEqual property = "confirmTime" compareValue="">
+				AND  DATE_FORMAT(CM.ConfirmTime,'%Y%m')  =  #confirmTime# 
+			</isNotEqual>
+		</isNotNull>
+			ORDER BY #sortIndex#	        
+		<isEqual property="sortType" compareValue="desc"> DESC 
+		</isEqual> 	 	
+		<![CDATA[ LIMIT  #page.index#, #page.pageSize# ]]>
+	</select>
+	
+	<select id="getAllCustomerListCount" parameterClass="customerVO" resultClass="int">
+		SELECT COUNT(CM.ID) 
+	    FROM CUSTOMER CM  
+	    LEFT  JOIN PORTAL_USER PU  ON (PU.RoleId = CM.ID  AND PU.RoleType = 'CM')
+	    LEFT JOIN BUSINESS_DEVELOPER BD	ON BD.ID = CM.BusinessDeveloperId 
+		LEFT JOIN AGENT AG	ON BD.AgentId = AG.ID
+	   	WHERE  1=1	
+		<!-- 查询公司客户（拓展和合作的） --> 	
+		<isEqual property="status" compareValue="24">	
+			AND CM.Status in (2,4)
+		</isEqual>		   	
+		<!-- 商务自有客户 --> 
+		<isGreaterThan property="businessDeveloperId" compareValue="0">
+			AND CM.BusinessDeveloperId  = #businessDeveloperId#
+			AND CM.Status in (0,1,2,3,4,7,8,10)
+		</isGreaterThan>
+	   	<!-- 代理商客户 --> 	
+		<isGreaterThan property="agentId" compareValue="0">
+			AND AG.ID  = #agentId#
+			AND CM.Status in (0,1,2,3,4,7,8,10)
+		</isGreaterThan>	
+		<isNotNull property="searchId">      
+			<isGreaterThan property="searchId" compareValue="0">
+          		AND CM.ID  like  concat('%',#searchId#,'%')
+          	</isGreaterThan>
+		</isNotNull>
+		<isNotNull property="searchName">  
+          	AND  CM.NAME like  concat('%',#searchName#,'%')
+		</isNotNull>	
+		<isGreaterThan property="searchBdId" compareValue="0">
+          AND CM.BusinessDeveloperId  = #searchBdId#
+		</isGreaterThan>   		
+		<isNotNull property="confirmTime">  
+			<isNotEqual property = "confirmTime" compareValue="">
+				AND  DATE_FORMAT(CM.ConfirmTime,'%Y%m')  =  #confirmTime# 
+			</isNotEqual>
+		</isNotNull>  		 
+	</select>
+	
+	
+	<insert id="insert" parameterClass="customerVO">
+		INSERT  INTO  CUSTOMER( Name,City,BusinessDeveloperId,Status,Description ,contactPerson,contactInfo)
+ 		VALUES (#name#,#city#,#businessDeveloperId#,#status#,#description#,#contactPerson#,#contactInfo#)
+ 		<selectKey resultClass="int"  keyProperty="id" >   
+        select @@IDENTITY as value      
+		</selectKey> 											
+	</insert>
+	<select id="getCustomerById" parameterClass="int" resultClass="customerVO">
+			SELECT   CM.ID	id,
+					 CM.Name  name,
+					 AG.Name agentName,
+					 CM.City	city,
+					 BD.Name businessDeveloperName,
+					 BD2.Name relayBdName,
+					 CM.BusinessDeveloperId  businessDeveloperId,
+					 CM.Status  status,
+					 DATE_FORMAT(CM.SubmitTime,'%Y-%m-%d %H:%i:%S') submitTime,
+					 DATE_FORMAT(CM.ConfirmTime,'%Y-%m-%d %H:%i:%S') confirmTime,
+					 DATE_FORMAT(CM.AbandonTime,'%Y-%m-%d %H:%i:%S') abandonTime,
+					 DATE_FORMAT(CM.SignupTime,'%Y-%m-%d %H:%i:%S')  signupTime,
+					 DATE_FORMAT(CM.CallBackTime,'%Y-%m-%d %H:%i:%S')  callBackTime,					 
+					 CM.SalesViewPermit    salesViewPermit,
+					 CM.Description  description ,
+					CM.RelayStatus  relayStatus ,
+					CM.RelayBdId    relayBdId,
+					CM.CallBackReason  callBackReason ,
+					CM.AbandonReason    abandonReason,
+					CM.AuditFailReason    auditFailReason,
+					CM.ExpiryDate	expiryDate,
+					TO_DAYS(now()) - IFNULL(TO_DAYS(CM.ConfirmTime),0)  leftDays,
+					IFNULL(AG.ID, 0)  agentId	,
+					CM.contactPerson		contactPerson	,
+					CM.contactInfo		contactInfo,
+					CM.CooperateType cooperateType	 			 		
+		    FROM  CUSTOMER CM  
+  		  	LEFT  JOIN	BUSINESS_DEVELOPER BD	ON BD.ID = CM.BusinessDeveloperId 
+  		  	LEFT  JOIN AGENT AG  ON BD.AgentId = AG.ID
+  		  	LEFT  JOIN	BUSINESS_DEVELOPER BD2	ON  BD2.ID = CM.RelayBdId 
+			WHERE CM.Id=#id#			
+	</select>
+ 	
+	<update  id="updateCustomer" parameterClass="customerVO" >
+		UPDATE CUSTOMER SET
+				Name = #name#,
+				 City  = #city#,
+				 BusinessDeveloperId  = #businessDeveloperId#,
+				 Description  = #description#				 
+ 		WHERE ID = #id#	
+	</update>
+	
+	<delete id="deleteCustomer" parameterClass="int">
+		DELETE FROM CUSTOMER WHERE ID = #id#
+	</delete> 
+ 	<select id="getCustomerByCriteria" parameterClass="customerVO" resultClass="customerVO">
+		SELECT ID	id,
+			Name  name
+		FROM  CUSTOMER
+		WHERE 1=1
+		<isNotEmpty property="name"> 
+			AND Name=#name#
+		</isNotEmpty>
+		<isGreaterThan property="id" compareValue="0">
+			AND ID != #id#
+		</isGreaterThan>
+	</select>
+ <!-- 更新客户状态 Struts -->
+	<update  id="updateCustomerStruts" parameterClass="customerVO" >
+			UPDATE CUSTOMER SET 
+			 Status  = #status#	
+			,BusinessDeveloperId = #businessDeveloperId#
+			,RelayStatus = #relayStatus#	
+			,RelayBdId = #relayBdId#  
+		 <isEqual property="newStatus" compareValue="1"> 
+          ,SubmitTime = now()
+		</isEqual>	
+		<isEqual property="newStatus" compareValue="2">  
+          ,ConfirmTime = now() 
+          ,ExpiryDate = 45
+		</isEqual>		
+		<isEqual property="newStatus" compareValue="4">  
+          ,SignUpTime = now()
+		</isEqual>
+		<!-- 代理放弃 -->
+		<isEqual property="newStatus" compareValue="5">
+          ,AbandonTime = now() 
+		</isEqual>	 	 	
+		<isEqual property="newStatus" compareValue="6">
+		 ,Status = 9
+		,CallBackTime = now()
+		</isEqual>	
+		<!-- 同意延期 -->
+		<isEqual property="newStatus" compareValue="80">
+		,Status = 2
+		,ExpiryDate = #expiryDate#
+		</isEqual>
+		<isNotNull property="callBackReason">  
+          ,CallBackReason = #callBackReason#  
+		</isNotNull>		
+		<isNotNull property="name"> 	
+         ,Name = #name#
+       </isNotNull>
+     	 <isNotNull property="city"> 	
+          ,City = #city#
+       	</isNotNull>	
+		<isNotNull property="auditFailReason">  
+          ,AuditFailReason = #auditFailReason#
+		</isNotNull>	
+		<isNotNull property="abandonReason">  
+          ,AbandonReason = #abandonReason#  
+		</isNotNull>			
+ 		WHERE ID = #id#	
+	</update>
+	
+	<select id="getCustomerCountByBd" parameterClass="int" resultClass="int">
+		SELECT COUNT(ID)
+		FROM  CUSTOMER
+		WHERE BusinessDeveloperId = #businessDeveloperId#
+		AND Status in (0,1,2,3,7,8)
+	</select>
+	
+	<select id="getCustomerCountByAgent" parameterClass="int" resultClass="int">
+		SELECT COUNT(CM.ID)
+		FROM  CUSTOMER  CM, BUSINESS_DEVELOPER BD  ,AGENT AG 
+		WHERE  CM.BusinessDeveloperId =  BD.ID
+		AND  AG.ID = BD.AgentId
+		AND  AG.ID =  #agentId#
+		AND CM.Status in (0,1,2,3,7,8)
+	</select>
+	
+		<select id="getCuCountOfBdMap" parameterClass="java.lang.String" resultMap="cuCountOfBdMap">
+		SELECT COUNT(CM.ID), 
+				BD.ID
+		FROM  CUSTOMER	CM,BUSINESS_DEVELOPER	BD 
+		WHERE CM.BusinessDeveloperId =  BD.ID
+		AND Status in (0,1,2,3,7,8,10)
+		GROUP BY BD.ID
+	</select>	
+	
+	<select id="getCuCountOfAgentMap" parameterClass="java.lang.String" resultMap="cuCountOfAgentMap">
+		SELECT COUNT(CM.ID), 
+				AG.ID
+		FROM  CUSTOMER  CM, BUSINESS_DEVELOPER BD  ,AGENT AG 
+		WHERE CM.BusinessDeveloperId =  BD.ID
+		AND  AG.ID = BD.AgentId
+		AND Status in (0,1,2,3,7,8,10)
+		GROUP BY AG.ID
+	</select>	
+
+	<select id="getValidCustomerList" parameterClass="customerVO"
+		resultClass="customerVO">
+	SELECT 	ID  id,
+			Name	name,
+			Status  status,
+			SalesViewPermit    salesViewPermit,
+			BusinessDeveloperId  businessDeveloperId		
+	 	  FROM CUSTOMER 
+	 	  WHERE  Status = 2 OR Status = 4 OR Status = 7
+		<isGreaterThan property="businessDeveloperId" compareValue="0">
+		AND BusinessDeveloperId = #businessDeveloperId#
+		</isGreaterThan>
+			ORDER BY Name ASC	
+	</select>	
+	
+	<update  id="udateProjectToBd" parameterClass="customerVO" >
+		UPDATE PROJECT_NEW SET 
+			FormerBdId		= BusinessDeveloperId,
+			BusinessDeveloperId = #businessDeveloperId#
+		WHERE CustomerId = #id#	
+	</update>	
+	
+	<update  id="udateProjectCooperateByBd" parameterClass="customerVO" >
+		UPDATE PROJECT_COOPERATE_NEW SET 
+			PannerId = #businessDeveloperId#
+		WHERE PannerType = 'BD'
+		AND	ProjectId in	(SELECT ID FROM PROJECT_NEW WHERE CustomerId = #id# )
+	</update>
+	
+	<select id="getCustomerExistent" parameterClass="map"
+		resultClass="customerVO">	
+		SELECT 	CM.ID  id,
+				CM.Name	name,
+				IFNULL(BD.Name,'') businessDeveloperName,
+				CM.Status  status,
+				CM.City		city
+		FROM	CUSTOMER CM  
+	 	LEFT JOIN	BUSINESS_DEVELOPER BD	ON BD.ID = CM.BusinessDeveloperId 
+	 	WHERE  CM.Name  like  '%$name$%'
+	</select> 	
+	
+	
+		<select id="getCustomerIdleList" parameterClass="customerVO"
+		resultClass="customerVO">
+	SELECT 	CM.ID  id,
+			CM.Name	name,
+			AG.Name agentName,
+			BD.Name businessDeveloperName,
+			CM.City	city,
+			CM.Status	status,
+			DATE_FORMAT(CM.ConfirmTime,'%Y-%m-%d')  confirmTime,
+			DATE_FORMAT(CM.SubmitTime,'%Y-%m-%d')  submitTime,
+			DATE_FORMAT(PU.CreateTime,'%Y-%m-%d %H:%i:%S')  createTime,		
+			DATE_FORMAT(CM.AbandonTime,'%Y-%m-%d')  abandonTime,	
+			DATE_FORMAT(CM.SignupTime,'%Y-%m-%d')  signupTime,	
+			DATE_FORMAT(CM.CallBackTime ,'%Y-%m-%d')  callBackTime,																   
+            IFNULL(PU.ID,0) portalUserId,           
+			CM.RelayStatus  relayStatus ,
+			CM.RelayBdId    relayBdId,
+			CM.SalesViewPermit    salesViewPermit,
+			CM.BusinessDeveloperId	businessDeveloperId,
+			CM.ExpiryDate	expiryDate,
+			TO_DAYS(now()) - ifnull(TO_DAYS(CM.ConfirmTime),0)  leftDays,
+			TO_DAYS(now()) - ifnull(TO_DAYS(CM.callBackTime),0) callBackDays
+	FROM CUSTOMER CM  LEFT  JOIN PORTAL_USER PU  ON (PU.RoleId = CM.ID  AND PU.RoleType = 'CM')
+	 	 LEFT  JOIN   BUSINESS_DEVELOPER  BD 	ON   BD.ID = CM.RelayBdId
+	 	 LEFT  JOIN   AGENT AG   	ON   BD.AgentId = AG.ID
+	   	WHERE	CM.Status = #status#	
+	   	<isNotNull property="searchId"> 
+       <isGreaterThan property="searchId" compareValue="0">
+          AND CM.ID  like  concat('%',#searchId#,'%')
+ 		</isGreaterThan>
+       </isNotNull>
+		<isNotNull property="searchName">  
+          AND  CM.NAME like  concat('%',#searchName#,'%')
+		</isNotNull>	   	
+	   	   ORDER BY #sortIndex#	        
+		<isEqual property="sortType" compareValue="desc"> DESC 
+		</isEqual> 	 	
+	   <![CDATA[ LIMIT  #page.index#, #page.pageSize# ]]>	
+	</select>	
+	
+	<select id="getCustomerIdleListCount" parameterClass="customerVO"
+		resultClass="int">
+		SELECT 	COUNT(CM.ID) 
+		FROM CUSTOMER CM  LEFT  JOIN PORTAL_USER PU  ON (PU.RoleId = CM.ID  AND PU.RoleType = 'CM')
+	 	 LEFT  JOIN   BUSINESS_DEVELOPER  BD 	ON   BD.ID = CM.RelayBdId
+	 	 LEFT  JOIN   AGENT AG   	ON   BD.AgentId = AG.ID
+	   	WHERE	CM.Status = #status#
+		<isNotNull property="searchId"> 	
+       <isGreaterThan property="searchId" compareValue="0">
+          AND CM.ID  like  concat('%',#searchId#,'%')
+ 		</isGreaterThan>
+       </isNotNull>
+		<isNotNull property="searchName">  
+          AND  CM.NAME like  concat('%',#searchName#,'%')
+   		</isNotNull>	   	
+	</select>
+	
+	<select id="getAllCustomer" parameterClass="map"
+		resultClass="customerVO">	
+	SELECT 	CM.ID  id,
+			CM.Name	name,
+			CM.City	city,
+			CM.Status	status,
+			DATE_FORMAT(CM.ConfirmTime,'%Y-%m-%d %H:%i:%S')  confirmTime,
+			DATE_FORMAT(CM.SubmitTime,'%Y-%m-%d %H:%i:%S')  submitTime,
+			DATE_FORMAT(PU.CreateTime,'%Y-%m-%d %H:%i:%S')  createTime,		
+			DATE_FORMAT(CM.AbandonTime,'%Y-%m-%d %H:%i:%S')  abandonTime,	
+			DATE_FORMAT(CM.SignupTime,'%Y-%m-%d %H:%i:%S')  signupTime,	
+			DATE_FORMAT(CM.CallBackTime,'%Y-%m-%d %H:%i:%S')   callBackTime,																   
+            IFNULL(PU.ID,0) portalUserId,           
+			CM.RelayStatus  relayStatus ,
+			CM.RelayBdId    relayBdId,
+			CM.SalesViewPermit    salesViewPermit,
+			CM.BusinessDeveloperId	businessDeveloperId,
+			CM.ExpiryDate	expiryDate,
+			TO_DAYS(now()) - ifnull(TO_DAYS(CM.ConfirmTime),0)  leftDays,
+			TO_DAYS(now()) - ifnull(TO_DAYS(CM.callBackTime),0) callBackDays
+	FROM 	CUSTOMER CM  
+	LEFT  JOIN PORTAL_USER PU  ON (PU.RoleId = CM.ID  AND PU.RoleType = 'CM')
+	left  join BUSINESS_DEVELOPER   BD  on	CM.BusinessDeveloperId = BD.ID
+	   	 <dynamic  prepend =" WHERE " >    
+	   	   	<isNotNull prepend=" and "  property="businessDeveloperId">	
+	   	   		CM.BusinessDeveloperId = #businessDeveloperId#
+	   	   	</isNotNull>
+			<isNotNull prepend=" and "  property="agentId">	
+	   	   		BD.AgentId = #agentId#
+	   	   	</isNotNull>			
+			<isNotNull prepend="and"  property="status">					
+				CM.Status in 
+				<iterate property="status" conjunction="," close=")" open="(">
+						#status[]#
+				</iterate>
+			</isNotNull>
+		</dynamic>					
+	</select>
+	
+	
+	
+	 <!-- 更新客户-->
+	<update  id="update" parameterClass="customerVO" >
+			UPDATE CUSTOMER SET 
+			Status  = #status#	
+			,BusinessDeveloperId = #businessDeveloperId#
+			,RelayStatus = #relayStatus#	
+			,RelayBdId = #relayBdId#  
+			,Name  = #name# 
+			,City	= #city#
+			,SubmitTime = #submitTime#
+			,ConfirmTime = #confirmTime#
+			,AbandonTime = #abandonTime#
+			,SignupTime = #signupTime#
+			,CallBackTime = #callBackTime#
+			,Description   = #description# 
+			,CallBackReason   = #callBackReason# 
+			,AbandonReason     = #abandonReason#
+			,ExpiryDate	 = #expiryDate#
+ 		WHERE ID = #id#	
+	</update>
+	
+	 <select id="getCustomerListByBdId" parameterClass="customerVO" resultClass="customerVO">
+		SELECT 	CM.ID  id,
+				CM.Name	name,
+				BD.Name businessDeveloperName,
+				CM.BusinessDeveloperId	businessDeveloperId
+		FROM CUSTOMER CM  
+		LEFT  JOIN   BUSINESS_DEVELOPER  BD 	ON   BD.ID = CM.BusinessDeveloperId
+		WHERE  1=1
+		<isGreaterThan property="businessDeveloperId" compareValue="0">
+			AND CM.BusinessDeveloperId  = #businessDeveloperId#
+		</isGreaterThan>
+		ORDER BY CM.Name ASC 
+	</select>
+	<select id="getAllCustomerForSelect" parameterClass="customerVO" resultClass="customerVO">
+		SELECT 	CM.ID  id,
+				CM.Name	name,
+				IFNULL(AG.Name,'') agentName,
+				IFNULL(BD.Name,'') businessDeveloperName
+		FROM CUSTOMER CM  
+		LEFT  JOIN BD	ON BD.ID = CM.BdId
+		LEFT  JOIN   AGENT AG	ON BD.AgentId = AG.ID
+		WHERE  1=1 
+		<isNotNull property="id">      
+			<isGreaterThan property="id" compareValue="0">
+				AND CM.ID  =#id#
+			</isGreaterThan>
+		</isNotNull>
+		<isGreaterThan property="businessDeveloperId" compareValue="0">
+			AND CM.BdId  = #businessDeveloperId#
+		</isGreaterThan>   
+		ORDER BY CM.ID
+	</select>
+</sqlMap>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="projectDistinctSqlMap">
+	<select id="getProjectDataVOList" parameterClass="searchVO" resultClass="projectDataVO">
+		SELECT  IFNULL(SUM(D.UserCount),0) userCount,
+				IFNULL(D.ProjectId,0) projectId,
+				IFNULL(PR.Name,'未知项目') projectName,
+				IFNULL(D.DistinctProjectId,0) distinctProjectId,
+				IFNULL(PT.Name,'未知项目') distinctProjectName
+				<isGreaterThan property="type" compareValue="0">
+				,D.type type
+				</isGreaterThan>
+			FROM $table$ D
+			LEFT JOIN PROJECT PR ON PR.ID=D.ProjectId
+			LEFT JOIN PROJECT PT ON PT.ID = D.DistinctProjectId
+			WHERE D.StatDate between #startDate# and #endDate#
+			<isGreaterThan property="type" compareValue="0">
+				AND D.type = #type#
+			</isGreaterThan>
+			<isGreaterThan property="projectId" compareValue="0">
+				AND D.projectId = #projectId#
+			</isGreaterThan>
+			GROUP BY
+			D.ProjectId,D.DistinctProjectId
+			ORDER BY UserCount Desc
+			LIMIT 30
+	</select>
+</sqlMap>

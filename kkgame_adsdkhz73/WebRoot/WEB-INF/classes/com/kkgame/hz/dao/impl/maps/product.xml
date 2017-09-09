@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="productSqlMap">
+	<select id="getAllProductVOList" parameterClass="productVO" resultClass="productVO">
+		SELECT  ID id,
+			Name name,
+			CooperateMode cooperateMode,
+			BdBuildInRegisterPrice bdBuildInRegisterPrice,
+			CuBuildInRegisterPrice cuBuildInRegisterPrice,
+			BdUninstallRegisterPrice bdUninstallRegisterPrice,
+			CuUninstallRegisterPrice cuUninstallRegisterPrice,
+			BdDividePercent*100 bdDividePercent,
+			CuDividePercent*100 cuDividePercent,
+			Url url
+		FROM PRODUCT
+		WHERE CustomerId=0
+	</select>
+	<select id="getProductVOListByProductIds" parameterClass="java.lang.String" resultClass="productVO">
+		SELECT  ID id,
+			Name name,
+			CooperateMode cooperateMode,
+			BdBuildInRegisterPrice bdBuildInRegisterPrice,
+			CuBuildInRegisterPrice cuBuildInRegisterPrice,
+			BdUninstallRegisterPrice bdUninstallRegisterPrice,
+			CuUninstallRegisterPrice cuUninstallRegisterPrice,
+			BdDividePercent*100 bdDividePercent,
+			CuDividePercent*100 cuDividePercent,
+			Url url
+		FROM PRODUCT
+		WHERE ID IN ($productIds$)
+	</select>
+	<select id="getProductVOList" parameterClass="productVO" resultClass="productVO">
+		SELECT  ID id,
+			Name name,
+			CooperateMode cooperateMode,
+			BdBuildInRegisterPrice bdBuildInRegisterPrice,
+			CuBuildInRegisterPrice cuBuildInRegisterPrice,
+			BdUninstallRegisterPrice bdUninstallRegisterPrice,
+			CuUninstallRegisterPrice cuUninstallRegisterPrice,
+			BdDividePercent*100 bdDividePercent,
+			CuDividePercent*100 cuDividePercent,
+			Url url
+		FROM PRODUCT
+		WHERE 1=1
+			<isNotNull property="id">
+				<isGreaterThan property="id" compareValue="0">
+					AND ID = #id#
+				</isGreaterThan>
+			</isNotNull>
+			<isNotNull property="name">
+				<isNotEmpty property="name">
+					AND Name like concat('%',#name#,'%')
+				</isNotEmpty>
+			</isNotNull>
+			ORDER BY ID DESC
+			<![CDATA[ LIMIT  #page.index#, #page.pageSize# ]]>
+	</select>
+	<select id="getProductVOListCount" parameterClass="productVO" resultClass="int">
+		SELECT  count(*)
+			FROM PRODUCT
+			WHERE 1=1
+			<isNotNull property="id">
+				<isGreaterThan property="id" compareValue="0">
+					AND ID = #id#
+				</isGreaterThan>
+			</isNotNull>
+			<isNotNull property="name">
+				<isNotEmpty property="name">
+					AND Name like concat('%',#name#,'%')
+				</isNotEmpty>
+			</isNotNull>
+	</select>
+	<select id="getProductVO" parameterClass="productVO" resultClass="productVO">
+		SELECT  ID id,
+			Name name,
+			CooperateMode cooperateMode,
+			BdBuildInRegisterPrice bdBuildInRegisterPrice,
+			CuBuildInRegisterPrice cuBuildInRegisterPrice,
+			BdUninstallRegisterPrice bdUninstallRegisterPrice,
+			CuUninstallRegisterPrice cuUninstallRegisterPrice,
+			BdDividePercent*100 bdDividePercent,
+			CuDividePercent*100 cuDividePercent,
+			Url url
+		FROM PRODUCT
+		WHERE ID = #id#
+	</select>
+	<select id="getProductVOByName" parameterClass="productVO" resultClass="productVO">
+		SELECT  ID id,
+				Name name
+		FROM PRODUCT
+		WHERE Name = #name# AND Id!=#id#
+	</select>
+	<insert id="insert" parameterClass="productVO">
+		INSERT INTO PRODUCT(Name,CooperateMode,BdBuildInRegisterPrice,CuBuildInRegisterPrice,BdUninstallRegisterPrice,CuUninstallRegisterPrice,BdDividePercent,CuDividePercent,Url)
+		VALUES(#name#,#cooperateMode#,#bdBuildInRegisterPrice#,#cuBuildInRegisterPrice#,#bdUninstallRegisterPrice#,#cuUninstallRegisterPrice#,#bdDividePercent#,#cuDividePercent#,#url#)
+		<selectKey keyProperty="id" resultClass="int">
+			SELECT LAST_INSERT_ID() AS ID FROM PRODUCT LIMIT 1
+		</selectKey>
+	</insert>
+	<delete id="delete" parameterClass="productVO">
+		DELETE FROM PRODUCT WHERE ID = #id#
+	</delete>
+	<update id="update" parameterClass="productVO">
+		UPDATE PRODUCT SET Name = #name#, 
+		CooperateMode = #cooperateMode#,
+		BdBuildInRegisterPrice = #bdBuildInRegisterPrice#,
+		CuBuildInRegisterPrice = #cuBuildInRegisterPrice#,
+		BdUninstallRegisterPrice = #bdUninstallRegisterPrice#,
+		CuUninstallRegisterPrice = #cuUninstallRegisterPrice#,
+		BdDividePercent = #bdDividePercent#,
+		CuDividePercent = #cuDividePercent#,
+		Url=#url#
+		WHERE ID = #id#
+	</update>
+
+
+
+
+
+
+
+
+
+
+
+
+	<select id="getProductVOSubscribeList" parameterClass="productVO" resultClass="productVO">
+		SELECT  ID id,
+		Name name ,
+		projectId,
+		status
+		FROM PRODUCT_SUBSCRIBE
+		WHERE 1=1
+		<isNotNull property="id">
+			<isGreaterThan property="id" compareValue="0">
+				AND ID = #id#
+			</isGreaterThan>
+		</isNotNull>
+		<isNotNull property="projectId">
+			<isGreaterThan property="projectId" compareValue="0">
+				AND projectId = #projectId#
+			</isGreaterThan>
+		</isNotNull>
+		<isNotNull property="name">
+			<isNotEmpty property="name">
+				AND Name like concat('%',#name#,'%')
+			</isNotEmpty>
+		</isNotNull>
+		<isNotNull property="status">
+			<isGreaterThan property="status" compareValue="0">
+				AND status = #status#
+			</isGreaterThan>
+		</isNotNull>
+		ORDER BY ID DESC
+		<![CDATA[ LIMIT  #page.index#, #page.pageSize# ]]>
+	</select>
+	<select id="getProductVOSubscribeListCount" parameterClass="productVO" resultClass="int">
+		SELECT  count(*)
+		FROM PRODUCT_SUBSCRIBE
+		WHERE 1=1
+		<isNotNull property="id">
+			<isGreaterThan property="id" compareValue="0">
+				AND ID = #id#
+			</isGreaterThan>
+		</isNotNull>
+		<isNotNull property="projectId">
+			<isGreaterThan property="projectId" compareValue="0">
+				AND projectId = #projectId#
+			</isGreaterThan>
+		</isNotNull>
+		<isNotNull property="name">
+			<isNotEmpty property="name">
+				AND Name like concat('%',#name#,'%')
+			</isNotEmpty>
+		</isNotNull>
+		<isNotNull property="status">
+			<isGreaterThan property="status" compareValue="0">
+				AND status = #status#
+			</isGreaterThan>
+		</isNotNull>
+	</select>
+
+	<select id="getAllProductVOSubscribeList" parameterClass="productVO" resultClass="productVO">
+		SELECT  ID id,
+		Name name
+
+		FROM PRODUCT_SUBSCRIBE  where status=1
+	</select>
+
+	<select id="getProductVOSubscribe" parameterClass="productVO" resultClass="productVO">
+		SELECT  ID id,
+		projectId,
+		Name name ,
+		status
+		FROM PRODUCT_SUBSCRIBE
+		WHERE ID = #id#
+	</select>
+
+	<insert id="createSubscribe" parameterClass="productVO">
+		INSERT INTO PRODUCT_SUBSCRIBE(projectId,Name,status)
+		VALUES(#projectId#,#name#,#status#)
+		<selectKey keyProperty="id" resultClass="int">
+			SELECT LAST_INSERT_ID() AS ID FROM PRODUCT LIMIT 1
+		</selectKey>
+	</insert>
+	<delete id="deleteSubscribe" parameterClass="productVO">
+		DELETE FROM PRODUCT_SUBSCRIBE WHERE ID = #id#
+	</delete>
+
+	<update id="updateSubscribe" parameterClass="productVO">
+		UPDATE PRODUCT_SUBSCRIBE
+		SET Name = #name#  ,
+		status = #status# ,
+		projectId = #projectId#
+		WHERE ID = #id#
+	</update>
+</sqlMap>

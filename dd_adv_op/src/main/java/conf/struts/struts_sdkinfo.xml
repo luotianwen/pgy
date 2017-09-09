@@ -1,0 +1,84 @@
+<!DOCTYPE struts PUBLIC 
+	"-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+	"http://struts.apache.org/dtds/struts-2.0.dtd">
+<struts>
+	<constant name="struts.multipart.maxSize" value="1000000000" />
+	<include file="struts-default.xml"></include>
+	
+	<package name="sdkinfo" namespace="/sdkinfo" extends="abroad-default">
+		<default-interceptor-ref name="crudStack"/>
+		
+		<action name="SdkInfo" class="com.kkgame.feeop.sdkinfo.action.SdkInfoAction" method="do{1}">
+			<result name="query">/pages/sdkinfo/sdkinfo_query.jsp</result>
+			<result name="list">/pages/sdkinfo/sdkinfo_list.jsp</result>
+			<result name="create">/pages/sdkinfo/sdkinfo_create.jsp</result>
+			<result name="modify">/pages/sdkinfo/sdkinfo_create.jsp</result>
+		</action>
+		<action name="ApkInfo" class="com.kkgame.feeop.sdkinfo.action.ApkInfoAction" method="do{1}">
+			<result name="list">/pages/sdkinfo/apkinfo_list.jsp</result>
+			<result name="create">/pages/sdkinfo/apkinfo_create.jsp</result>
+		</action>
+		<action name="SilentPluginInfo" class="com.kkgame.feeop.sdkinfo.action.SilentPluginInfoAction" method="do{1}">
+			<result name="list">/pages/sdkinfo/silentplugininfo_list.jsp</result>
+			<result name="create">/pages/sdkinfo/silentplugininfo_create.jsp</result>
+		</action>
+		<action name="SilentInfo" class="com.kkgame.feeop.sdkinfo.action.SilentInfoAction" method="do{1}">
+			<result name="list">/pages/sdkinfo/silentinfo_list.jsp</result>
+			<result name="create">/pages/sdkinfo/silentinfo_create.jsp</result>
+		</action>
+		<action name="GuideInfo" class="com.kkgame.feeop.sdkinfo.action.GuideInfoAction" method="do{1}">
+			<result name="list">/pages/sdkinfo/guideinfo_list.jsp</result>
+			<result name="create">/pages/sdkinfo/guideinfo_create.jsp</result>
+		</action>
+		<action name="SdkProject" class="com.kkgame.feeop.sdkinfo.action.SdkProjectAction" method="do{1}">
+			<result name="list">/pages/sdkinfo/sdkproject_list.jsp</result>
+			<result name="create">/pages/sdkinfo/sdkproject_create.jsp</result>
+			<result name="advlist">/pages/sdkinfo/sdkproject_adv_list.jsp</result>
+			<result name="advcreate">/pages/sdkinfo/sdkproject_adv_create.jsp</result>
+
+
+		</action>
+		<action name="Sdkdomain" class="com.kkgame.feeop.sdkinfo.action.SdkdomainAction" method="do{1}">
+			<result name="list">/pages/sdkinfo/sdkdomain_list.jsp</result>
+			<result name="create">/pages/sdkinfo/sdkdomain_create.jsp</result>
+			<result name="detail">/pages/sdkinfo/sdkdomain_detail.jsp</result>
+		</action>
+		<action name="getAllThreeSdk" method="doGetAllThreeSdk" class="com.kkgame.feeop.sdkinfo.action.ThreeSdkAction">
+			<result name="all">/pages/sdkinfo/getAllThreeSdk4Select.jsp</result>
+		</action>
+		<action name="ThreeSdk" class="com.kkgame.feeop.sdkinfo.action.ThreeSdkAction" converter="do{1}">
+			<result name="list">/pages/sdkinfo/threesdk_list.jsp</result>
+			<result name="create">/pages/sdkinfo/threesdk_create.jsp</result>
+			<result name="modify">/pages/sdkinfo/threesdk_create.jsp</result>
+
+			<result name="insidelist">/pages/sdkinfo/inside_list.jsp</result>
+			<result name="insidecreate">/pages/sdkinfo/inside_create.jsp</result>
+
+			<result name="projectsdklist">/pages/sdkinfo/projectsdk_list.jsp</result>
+			<result name="projectsdkcreate">/pages/sdkinfo/projectsdk_create.jsp</result>
+			<result name="projectsdkmodify">/pages/sdkinfo/projectsdk_create.jsp</result>
+			<result name="projectthreestat">/pages/sdkinfo/projectthree_list.jsp</result>
+			<result name="projectthreeimportdata">/pages/sdkinfo/projectthree_importdata.jsp</result>
+		</action>
+		<action name="DesktopInfo" class="com.kkgame.feeop.sdkinfo.action.DesktopInfoAction" converter="do{1}">
+			<result name="list">/pages/sdkinfo/desktopinfo_list.jsp</result>
+			<result name="create">/pages/sdkinfo/desktopinfo_create.jsp</result>
+			<result name="modify">/pages/sdkinfo/desktopinfo_create.jsp</result>
+		</action>
+		<action name="LinkAdver" class="com.kkgame.feeop.sdkinfo.action.LinkAdverAction" converter="do{1}">
+			<result name="list">/pages/sdkinfo/linkadver_list.jsp</result>
+			<result name="create">/pages/sdkinfo/linkadver_create.jsp</result>
+			<result name="modify">/pages/sdkinfo/linkadver_create.jsp</result>
+		</action>
+		<action name="SdkConfig" class="com.kkgame.feeop.sdkinfo.action.SdkConfigAction" converter="do{1}">
+			<result name="list">/pages/sdkinfo/sdkconfig_list.jsp</result>
+			<result name="create">/pages/sdkinfo/sdkconfig_create.jsp</result>
+			<result name="modify">/pages/sdkinfo/sdkconfig_create.jsp</result>
+		</action>
+		<action name="AppName" class="com.kkgame.feeop.sdkinfo.action.AppNameAction" converter="do{1}">
+			<result name="list">/pages/sdkinfo/appname_list.jsp</result>
+			<result name="create">/pages/sdkinfo/appname_create.jsp</result>
+			<result name="modify">/pages/sdkinfo/appname_create.jsp</result>
+		</action>
+	</package>
+</struts>

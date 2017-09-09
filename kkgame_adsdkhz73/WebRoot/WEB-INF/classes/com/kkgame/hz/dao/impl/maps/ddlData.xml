@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="ddlDataSqlMap">
+	
+	<select id="getDdlDataVOListDay" parameterClass="billSearchVO" resultClass="ddlDataVO">
+		SELECT  IFNULL(SUM(B.SaleCount),0) saleCount,
+				IFNULL(SUM(B.ClickCount),0) clickCount,
+				IFNULL(SUM(B.ValidClickCount),0) validClickCount,
+				IFNULL(ROUND(IFNULL(SUM(B.SaleCount),0)*100.0/IFNULL(SUM(B.ValidClickCount),0),2),0) percent ,
+		        PR.CooperateType   serverId
+				<isEqual property="rowFieldVO.isShowDate" compareValue="1">
+					, B.StatDate time
+				</isEqual>
+				<isEqual property="rowFieldVO.isShowDate" compareValue="0">
+					, null time
+				</isEqual>				
+				<isEqual property="rowFieldVO.isShowAgent" compareValue="1">  
+					, A.Name agentName
+				</isEqual>
+				<isEqual property="rowFieldVO.isShowAgent" compareValue="0">
+					, null agentName
+				</isEqual>
+				<isEqual property="rowFieldVO.isShowBd" compareValue="1">  
+					, BD.Name bdName
+				</isEqual>
+				<isEqual property="rowFieldVO.isShowBd" compareValue="0">
+					, null bdName
+				</isEqual>
+				<isEqual property="rowFieldVO.isShowCustomer" compareValue="1">  
+					, CU.Name  customerName
+				</isEqual>
+				<isEqual property="rowFieldVO.isShowCustomer" compareValue="0">
+					, null customerName
+				</isEqual>
+				<isEqual property="rowFieldVO.isShowProject" compareValue="1">  
+					, PR.Name  projectName
+					, IFNULL(PR.ID,0) projectId
+				</isEqual>
+				<isEqual property="rowFieldVO.isShowProject" compareValue="0">
+					, null projectName
+					, 0 projectId
+				</isEqual>
+				<isEqual property="rowFieldVO.isShowProduct" compareValue="1">  
+					, PD.Name  productName
+					, IFNULL(PD.ID,0) productId
+				</isEqual>
+				<isEqual property="rowFieldVO.isShowProduct" compareValue="0">
+					, null productName
+					, 0 productId
+				</isEqual>
+			FROM (
+					SELECT StatDate StatDate, 
+						IFNULL(SUM(SaleCount),0) SaleCount,
+						ProjectId ProjectId,
+							IFNULL(SUM(ClickCount),0) ClickCount,
+							IFNULL(SUM(ValidClickCount),0) ValidClickCount				 
+					FROM $table$
+					WHERE StatDate BETWEEN #startTime# AND #endTime#
+					<isGreaterThan property="projectId" compareValue="0">
+						AND ProjectId = #projectId#
+					</isGreaterThan>
+					GROUP BY StatDate ,ProjectId	
+				  ) B
+			LEFT JOIN PROJECT PR ON PR.ID = B.ProjectId
+			LEFT JOIN PROJECT_PRODUCT PP ON PP.ProjectId = PR.ID
+			LEFT JOIN CUSTOMER CU ON CU.ID = PR.CustomerId
+			LEFT JOIN BUSINESS_DEVELOPER BD ON BD.ID = CU.BusinessDeveloperId
+			LEFT JOIN AGENT A ON A.ID = BD.AgentId
+			LEFT JOIN PRODUCT PD ON PD.ID = PP.ProductId
+			WHERE PR.Type=2
+			<isGreaterThan property="agentId" compareValue="0">
+				AND A.ID = #agentId#
+			</isGreaterThan>
+			<isGreaterThan property="bdId" compareValue="0">
+				AND BD.ID = #bdId#
+			</isGreaterThan>
+			<isGreaterThan property="customerId" compareValue="0">				
+				AND PR.CustomerId = #customerId# 
+			</isGreaterThan>
+			<isGreaterThan property="projectId" compareValue="0">
+				AND PR.ID = #projectId#
+			</isGreaterThan>
+			<isGreaterThan property="bhId" compareValue="0">
+				AND PR.BhId = #bdId#
+			</isGreaterThan>
+			<isGreaterThan property="productId" compareValue="0">
+				AND PD.ID = #productId#
+			</isGreaterThan>
+			<dynamic  prepend =" GROUP BY ">
+				<isEqual prepend =" , " property="rowFieldVO.isShowDate" compareValue="1">  
+					B.StatDate
+				</isEqual>
+				<isEqual prepend =" , " property="rowFieldVO.isShowAgent" compareValue="1">  
+					A.ID
+				</isEqual>
+				<isEqual prepend =" , " property="rowFieldVO.isShowBd" compareValue="1">  
+					BD.ID
+				</isEqual> 
+				<isEqual prepend =" , " property="rowFieldVO.isShowCustomer" compareValue="1">  
+					CU.ID
+				</isEqual>
+				<isEqual prepend =" , " property="rowFieldVO.isShowProject" compareValue="1">  
+					PR.ID
+				</isEqual> 
+				<isEqual prepend =" , " property="rowFieldVO.isShowProduct" compareValue="1">  
+					PD.ID
+				</isEqual> 
+			</dynamic>
+			<dynamic  prepend =" ORDER BY ">
+				<isEqual prepend =" , " property="rowFieldVO.isShowDate" compareValue="1">  
+					B.StatDate
+				</isEqual>
+				<isEqual prepend =" , " property="rowFieldVO.isShowAgent" compareValue="1">  
+					A.ID
+				</isEqual>
+				<isEqual prepend =" , " property="rowFieldVO.isShowBd" compareValue="1">  
+					BD.ID
+				</isEqual> 
+				<isEqual prepend =" , " property="rowFieldVO.isShowCustomer" compareValue="1">  
+					CU.ID
+				</isEqual>
+				<isEqual prepend =" , " property="rowFieldVO.isShowProject" compareValue="1">  
+					PR.ID
+				</isEqual> 
+				<isEqual prepend =" , " property="rowFieldVO.isShowProduct" compareValue="1">  
+					PD.ID
+				</isEqual> 
+			</dynamic>
+	</select>
+	<select id="getDdlDataVOListMonth" parameterClass="billSearchVO" resultClass="ddlDataVO">
+		SELECT  IFNULL(SUM(B.SaleCount),0) saleCount
+				<isEqual property="rowFieldVO.isShowDate" compareValue="1">
+					, #searchMonth# time
+				</isEqual>
+				<isEqual property="rowFieldVO.isShowDate" compareValue="0">
+					, null time
+				</isEqual>				
+				<isEqual property="rowFieldVO.isShowAgent" compareValue="1">  
+					, A.Name agentName
+				</isEqual>
+				<isEqual property="rowFieldVO.isShowAgent" compareValue="0">
+					, null agentName
+				</isEqual>
+				<isEqual property="rowFieldVO.isShowBd" compareValue="1">  
+					, BD.Name bdName
+				</isEqual>
+				<isEqual property="rowFieldVO.isShowBd" compareValue="0">
+					, null bdName
+				</isEqual>
+				<isEqual property="rowFieldVO.isShowCustomer" compareValue="1">  
+					, CU.Name  customerName
+				</isEqual>
+				<isEqual property="rowFieldVO.isShowCustomer" compareValue="0">
+					, null customerName
+				</isEqual>
+				<isEqual property="rowFieldVO.isShowProject" compareValue="1">  
+					, PR.Name  projectName
+					, IFNULL(PR.ID,0) projectId
+				</isEqual>
+				<isEqual property="rowFieldVO.isShowProject" compareValue="0">
+					, null projectName
+					, 0 projectId
+				</isEqual>		
+				<isEqual property="rowFieldVO.isShowProduct" compareValue="1">  
+					, PD.Name  productName
+					, IFNULL(PD.ID,0) productId
+				</isEqual>
+				<isEqual property="rowFieldVO.isShowProduct" compareValue="0">
+					, null productName
+					, 0 productId
+				</isEqual>	
+			FROM (	
+					SELECT ProjectId ProjectId,
+							IFNULL(SUM(SaleCount),0) SaleCount,
+							IFNULL(SUM(ClickCount),0) ClickCount,
+							IFNULL(SUM(ValidClickCount),0) ValidClickCount
+							
+					FROM $table$
+					WHERE 1=1
+					<isGreaterThan property="projectId" compareValue="0">
+						AND ProjectId = #projectId#
+					</isGreaterThan>
+					GROUP BY StatDate ,ProjectId		
+				  ) B
+			LEFT JOIN PROJECT PR ON PR.ID = B.ProjectId
+			LEFT JOIN PROJECT_PRODUCT PP ON PP.ProjectId = PR.ID
+			LEFT JOIN CUSTOMER CU ON CU.ID = PR.CustomerId
+			LEFT JOIN BUSINESS_DEVELOPER BD ON BD.ID = CU.BusinessDeveloperId
+			LEFT JOIN AGENT A ON A.ID = BD.AgentId
+			LEFT JOIN PRODUCT PD ON PD.ID = PP.ProductId
+			WHERE 1 = 1 
+			<isGreaterThan property="agentId" compareValue="0">
+				AND A.ID = #agentId# 
+			</isGreaterThan>
+			<isGreaterThan property="bdId" compareValue="0">
+				AND BD.ID = #bdId#
+			</isGreaterThan>
+			<isGreaterThan property="customerId" compareValue="0">			
+				AND PR.CustomerId = #customerId# 
+			</isGreaterThan>
+			<isGreaterThan property="projectId" compareValue="0">			
+				AND PR.ID = #projectId# 
+			</isGreaterThan>
+			<isGreaterThan property="bhId" compareValue="0">
+				AND PR.BhId = #bdId#
+			</isGreaterThan>
+			<isGreaterThan property="productId" compareValue="0">
+				AND PD.ID = #productId#
+			</isGreaterThan>
+			<dynamic  prepend =" GROUP BY ">
+				<isEqual prepend =" , " property="rowFieldVO.isShowAgent" compareValue="1">  
+					A.ID
+				</isEqual>
+				<isEqual prepend =" , " property="rowFieldVO.isShowBd" compareValue="1">  
+					BD.ID
+				</isEqual> 
+				<isEqual prepend =" , " property="rowFieldVO.isShowCustomer" compareValue="1">  
+					CU.ID
+				</isEqual>
+				<isEqual prepend =" , " property="rowFieldVO.isShowProject" compareValue="1">  
+					PR.ID
+				</isEqual> 
+				<isEqual prepend =" , " property="rowFieldVO.isShowProduct" compareValue="1">  
+					PD.ID
+				</isEqual> 
+			</dynamic>
+			<dynamic  prepend =" ORDER BY ">
+				<isEqual prepend =" , " property="rowFieldVO.isShowAgent" compareValue="1">  
+					A.ID
+				</isEqual>
+				<isEqual prepend =" , " property="rowFieldVO.isShowBd" compareValue="1">  
+					BD.ID
+				</isEqual> 
+				<isEqual prepend =" , " property="rowFieldVO.isShowCustomer" compareValue="1">  
+					CU.ID
+				</isEqual>
+				<isEqual prepend =" , " property="rowFieldVO.isShowProject" compareValue="1">  
+					PR.ID
+				</isEqual> 
+				<isEqual prepend =" , " property="rowFieldVO.isShowProduct" compareValue="1">  
+					PD.ID
+				</isEqual> 
+			</dynamic>
+	</select>
+	<insert id="insert" parameterClass="ddlDataVO">
+		INSERT INTO $table$(StatDate,ProjectId,ProductId,ServerId,ClickCount,ValidClickCount,SaleCount)
+		VALUES(#time#,#projectId#,#productId#,#serverId#,#clickCount#,#validClickCount#,#saleCount#)
+		ON DUPLICATE KEY UPDATE ClickCount=VALUES(ClickCount),ValidClickCount=VALUES(ValidClickCount),SaleCount=VALUES(SaleCount)
+	</insert>
+</sqlMap>

@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="systemSqlMap">
+	<select id="getProvinceList" resultClass="provinceVO">
+		SELECT ID provinceId,
+				Name provinceName
+		FROM PROVINCE 
+	</select>
+	<select id="getVersionList" resultClass="versionVO">
+		SELECT ID id,
+				`Version` version,
+				`Desc` `desc`
+		FROM `VERSION`
+		ORDER BY VERSION DESC
+	</select>
+	<select id="getProvince" parameterClass="int" resultClass="provinceVO">
+		SELECT ID provinceId,
+				Name provinceName
+		FROM PROVINCE 
+		WHERE ID=#id#
+	</select>
+	<select id="getProductList" parameterClass="int" resultClass="productVO">
+		SELECT ID id,
+				Name name
+		FROM PRODUCT 
+		WHERE CustomerId=0
+	</select>
+	<select id="getOperatorList" resultClass="operatorVO">
+		SELECT ID operatorId,
+				Name operatorName
+		FROM OPERATOR 
+	</select>
+	<select id="getCountryList" resultClass="countryVO">
+		select id id,
+			   description	name
+		from kok_sdk.EnumerationValue
+		WHERE enumeration=8200400
+		ORDER BY name
+	</select>
+	<select id="getEnuList" resultClass="hashmap">
+		select id as `key`,
+		description	as `value`
+		from kok_sdk.EnumerationValue
+		WHERE enumeration=#i#
+		ORDER BY id
+	</select>
+	<select id="getDdlChannelList" resultClass="ddlChannelVO">
+		select id channelId,
+			   name	channelName
+		from CHANNELS
+	</select>
+	<select id="getDdlProductList" resultClass="ddlProductVO">
+		select id id,
+			   name	name
+		from PRODUCTS
+	</select>
+	<select id="getDdlProjectList" resultClass="ddlProjectVO">
+		select id id,
+			   name	name
+		from PROJECT 
+		WHERE type=2
+	</select>
+	<select id="getAdList" resultClass="adVO">
+		select id id,
+			   appName	name
+		from kok_sdk.A_SdkPushApk
+		<!-- where deleted=0 -->
+	</select>
+	<select id="getPlatformList" resultClass="countryVO">
+		SELECT id , name from kok_sdk.platform
+	</select>
+</sqlMap>

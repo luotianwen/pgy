@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+               xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+               xmlns:dubbo="http://code.alibabatech.com/schema/dubbo" xmlns:bean="http://code.alibabatech.com/schema/dubbo"
+               xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+	http://code.alibabatech.com/schema/dubbo http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
+<bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+    <property name="systemPropertiesModeName" value="SYSTEM_PROPERTIES_MODE_OVERRIDE" />
+    <property name="location" value="classpath:dubbo.properties" />
+</bean>
+<dubbo:application name="adserver-consumer" owner="programmer"  organization="dubbox"/>
+
+
+<dubbo:registry protocol="zookeeper" address="${dubbo.address}"/>
+<!--uncomment this if you want to test dubbo's monitor-->
+<dubbo:monitor protocol="registry"/>
+
+<dubbo:reference check="false" id="sdkService" interface="com.kokmobi.server.service.SdkService" />
+<dubbo:reference check="false" id="disListService" interface="com.kokmobi.server.protocol.service.DisListService"/>
+<dubbo:reference check="false" id="redisService" interface="com.kokmobi.server.service.RedisService"/>
+<dubbo:reference check="false" id="adUsersProcessService" interface="com.kokmobi.server.protocol.service.AdUsersProcessService"/>
+<dubbo:reference check="false" id="areaService" interface="com.kokmobi.server.service.AreaService"/>
+<dubbo:reference check="false" id="getAdListFeebackService" interface="com.kokmobi.server.protocol.service.GetAdListFeebackService"/>
+<dubbo:reference check="false" id="adLogDataProcessService" interface="com.kokmobi.server.protocol.service.AdLogDataProcessService"/>
+<dubbo:reference check="false" id="getPluginInfoProcessService" interface="com.kokmobi.server.protocol.service.GetCommonInfoProcessService"/>
+<dubbo:reference check="false" id="getAdjustKeyService" interface="com.kokmobi.server.protocol.service.GetAdjustKeyService"/>
+
+<dubbo:reference check="false" id="getAdListProcessService" group="getAdList"  interface="com.kokmobi.server.protocol.service.GetAdListProcessService"/>
+<dubbo:reference check="false" id="getSilentAdListProcessService"  group="getSilentAdList"  interface="com.kokmobi.server.protocol.service.GetAdListProcessService"/>
+<dubbo:reference check="false"  id="getWebAdListProcessService" group="getWebAdList"  interface="com.kokmobi.server.protocol.service.GetAdListProcessService"/>
+<dubbo:reference check="false"  id="webAdListProcessService" group="webAdList"  interface="com.kokmobi.server.protocol.service.WebAdListProcessService"/>
+<dubbo:reference check="false" id="getSubProcessService" group="getSubAd" interface="com.kokmobi.server.protocol.service.SubAdProcessService" />
+</beans>

@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="advSqlMap">
+	<select id="getAdvVOListCount" parameterClass="advVO" resultClass="int">
+		SELECT COUNT(ID) count			
+		FROM LinkAds
+		WHERE 1=1
+		<isNotNull property="id">
+			<isGreaterThan property="id" compareValue="0">
+				AND ID = #id#
+			</isGreaterThan>
+		</isNotNull>
+		 <isNotNull property="name">
+				  <isNotEmpty property="name">
+					AND Name like concat('%',#name#,'%')
+				</isNotEmpty>
+		</isNotNull>
+		<isNotNull property="status">
+			<isGreaterThan property="status" compareValue="0">
+				AND Status = #status#
+			</isGreaterThan>
+		</isNotNull>
+	</select>
+	<select id="getAdvVOList" parameterClass="advVO" resultClass="advVO">
+		SELECT A.ID id,
+				A.Name name,
+				A.Status status,
+				A.AdverId adverId,
+				IFNULL(AD.Name,'') adverName,
+				A.linkType linkType,
+				A.linkUrl linkUrl,
+				A.DeskIconName deskIconName,
+				A.DeskIconUrl deskIconUrl,
+				A.StatusBarTitle statusBarTitle,
+				A.StatusBarContent statusBarContent,
+				A.CreateTime createTime,
+				A.RedirectUrl redirectUrl,
+				A.Orders orders
+		FROM LinkAds A
+		LEFT JOIN ADVER AD ON AD.ID = A.AdverId
+		WHERE 1=1
+		<isNotNull property="id">
+			<isGreaterThan property="id" compareValue="0">
+				AND A.ID = #id#
+			</isGreaterThan>
+		</isNotNull>
+		 <isNotNull property="name">
+				  <isNotEmpty property="name">
+					AND A.Name like concat('%',#name#,'%')
+				</isNotEmpty>
+		</isNotNull>
+		<isNotNull property="status">
+			<isGreaterThan property="status" compareValue="0">
+				AND A.Status = #status#
+			</isGreaterThan>
+		</isNotNull>
+		ORDER BY A.ID DESC
+		<![CDATA[ LIMIT  #page.index#, #page.pageSize# ]]>
+	</select>
+	<select id="getAdvVO" parameterClass="advVO" resultClass="advVO">
+		SELECT A.ID id,
+				A.Name name,
+				A.Status status,
+				A.AdverId adverId,
+				IFNULL(AD.Name,'') adverName,
+				A.linkType linkType,
+				A.linkUrl linkUrl,
+				A.DeskIconName deskIconName,
+				A.DeskIconUrl deskIconUrl,
+				A.StatusBarTitle statusBarTitle,
+				A.StatusBarContent statusBarContent,
+				A.CreateTime createTime,
+				A.RedirectUrl redirectUrl,
+				A.Orders orders
+		FROM LinkAds A
+		LEFT JOIN ADVER AD ON AD.ID = A.AdverId
+		WHERE A.ID = #id#	
+	</select>
+	<insert id="insert" parameterClass="advVO">
+		INSERT INTO LinkAds(Name,AdverId,Status,linkType,linkUrl,RedirectUrl,Orders,DeskIconName,DeskIconUrl,statusBarTitle,statusBarContent,createTime)
+		VALUES(#name#,#adverId#,#status#,#linkType#,#linkUrl#,#redirectUrl#,#orders#,#deskIconName#,#deskIconUrl#,#statusBarTitle#,#statusBarContent#,now())
+		<selectKey keyProperty="id" resultClass="int">
+			SELECT LAST_INSERT_ID() AS ID FROM LinkAds LIMIT 1
+		</selectKey>
+	</insert>
+	<update id="update" parameterClass="advVO">
+		UPDATE LinkAds 
+		SET	Name = #name#,
+			AdverId = #adverId#,
+			linkType=#linkType#,
+			Status=#status#,
+			linkUrl=#linkUrl#,
+			deskIconName=#deskIconName#,
+			deskIconUrl=#deskIconUrl#,
+			statusBarTitle=#statusBarTitle#,
+			statusBarContent=#statusBarContent#,
+			redirectUrl=#redirectUrl#,
+			Orders=#orders#
+			
+		WHERE ID = #id#
+	</update>
+	<update id="updateStatus" parameterClass="advVO">
+		UPDATE LinkAds 
+		SET	Status=#status#
+		WHERE ID = #id#
+	</update>
+	<select id="getAllAdvVOList" parameterClass="advVO" resultClass="advVO">
+		SELECT A.ID id,
+				A.Name name,
+				A.Status status,
+				A.AdverId adverId,
+				IFNULL(AD.Name,'') adverName,
+				A.linkType linkType,
+				A.linkUrl linkUrl,
+				A.DeskIconName deskIconName,
+				A.DeskIconUrl deskIconUrl,
+				A.StatusBarTitle statusBarTitle,
+				A.StatusBarContent statusBarContent,
+				A.CreateTime createTime,
+				A.RedirectUrl redirectUrl,
+				A.Orders orders
+		FROM LinkAds A
+		LEFT JOIN ADVER AD ON AD.ID = A.AdverId
+		WHERE 1=1
+		<isNotNull property="id">
+			<isGreaterThan property="id" compareValue="0">
+				AND A.ID = #id#
+			</isGreaterThan>
+		</isNotNull>
+		<isNotNull property="name">
+				  <isNotEmpty property="name">
+					AND A.Name like concat('%',#name#,'%')
+				</isNotEmpty>
+		</isNotNull>
+		<isNotNull property="status">
+			<isGreaterThan property="status" compareValue="0">
+				AND A.Status = #status#
+			</isGreaterThan>
+		</isNotNull>
+		ORDER BY A.ID DESC
+	</select>
+</sqlMap>

@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="webdomainSqlMap">
+	<typeAlias alias="webdomainVO" type="com.kkgame.feeop.adver.bean.WebdomainVO"/>
+	<select id="getWebdomainVOListCount" parameterClass="webdomainVO" resultClass="int">
+		SELECT
+		count(id)
+	        FROM webdomain 
+	        <dynamic prepend="WHERE">
+		        
+		       <isNotEmpty prepend="AND" property="id">
+		             id = #id#
+		       </isNotEmpty>
+				 
+		        
+		       <isNotEmpty prepend="AND" property="download">
+		             download = #download#
+		       </isNotEmpty>
+				 
+		        
+		       <isNotEmpty prepend="AND" property="cdate">
+		             cdate = #cdate#
+		       </isNotEmpty>
+				 
+	    </dynamic>	
+	</select>
+	<select id="getWebdomainVOList" parameterClass="webdomainVO" resultClass="webdomainVO">
+		  SELECT
+		<![CDATA[
+        id ,download ,cdate 
+	    ]]>
+		  FROM webdomain 
+
+	        <dynamic prepend="WHERE">
+		         
+		       <isNotEmpty prepend="AND" property="id">
+		             id = #id#
+		       </isNotEmpty>
+				 
+		         
+		       <isNotEmpty prepend="AND" property="download">
+		             download = #download#
+		       </isNotEmpty>
+				 
+		         
+		       <isNotEmpty prepend="AND" property="cdate">
+		             cdate = #cdate#
+		       </isNotEmpty>
+				 
+	    </dynamic>	
+	    
+    	<![CDATA[ LIMIT  #page.index#, #page.pageSize# ]]> 
+	</select>
+	 
+	<select id="getWebdomainVO" parameterClass="webdomainVO" resultClass="webdomainVO">
+		SELECT
+		 <![CDATA[
+        id ,download ,cdate 
+	    
+	        FROM webdomain 
+	        WHERE 
+		        id = #id# 
+	    ]]>
+	</select>
+	<insert id="create" parameterClass="webdomainVO">
+		 <![CDATA[
+        INSERT INTO webdomain (
+        	id ,
+        	download ,
+        	cdate 
+        ) VALUES (
+        	#id# ,
+        	#download# ,
+        	now()
+        )
+    ]]>
+		<selectKey keyProperty="id" resultClass="int">
+			SELECT LAST_INSERT_ID() AS ID
+		</selectKey>
+	</insert>
+	<update id="update" parameterClass="webdomainVO">
+		<![CDATA[
+        UPDATE webdomain SET
+	        download = #download# ,
+	        cdate = now()
+        WHERE 
+	        id = #id# 
+    ]]>
+	</update>
+	 <delete id="delete" parameterClass="webdomainVO">
+		 DELETE    FROM  webdomain
+		  WHERE
+	        id = #id#
+	 </delete>
+</sqlMap>

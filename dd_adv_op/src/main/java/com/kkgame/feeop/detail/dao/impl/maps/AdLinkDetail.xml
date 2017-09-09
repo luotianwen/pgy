@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="adLinkDetailSqlMap">
+	<select id="getAdLinkDetailVOList" parameterClass="adLinkDetailVO"
+		resultClass="adLinkDetailVO">
+		SELECT
+		id ,
+		linkType,
+		clickType,
+		cdate,
+		adId,
+		coo_id projectId,
+		imei
+		FROM kok_sdk.adv_feeback_list_link_$table$
+		WHERE 1=1
+		<isNotNull property="imei">
+			<isNotEmpty property="imei">
+				AND imei=#imei#
+			</isNotEmpty>
+		</isNotNull>
+		ORDER BY #sortIndex#
+		<isEqual property="sortType" compareValue="desc"> DESC </isEqual>
+    	<![CDATA[ LIMIT  #page.index#, #page.pageSize# ]]>
+	</select>
+	<select id="getAdLinkDetailVOListCount" parameterClass="adLinkDetailVO"
+		resultClass="int">
+		SELECT
+		COUNT(*) count
+		FROM kok_sdk.adv_feeback_list_link_$table$
+		WHERE 1=1
+		<isNotNull property="imei">
+			<isNotEmpty property="imei">
+				AND imei=#imei#
+			</isNotEmpty>
+		</isNotNull>
+	</select>
+</sqlMap>

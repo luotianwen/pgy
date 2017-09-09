@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="ddlChannelSqlMap">
+	<select id="getDdlChannelVOListCount" parameterClass="ddlChannelVO" resultClass="int">
+		SELECT COUNT(ID) count			
+		FROM CHANNELS
+		WHERE 1=1
+		<isNotNull property="id">
+			<isGreaterThan property="id" compareValue="0">
+				AND ID = #id#
+			</isGreaterThan>
+		</isNotNull>
+		 <isNotNull property="name">
+				  <isNotEmpty property="name">
+					AND Name like concat('%',#name#,'%')
+				</isNotEmpty>
+		</isNotNull>
+		<isNotNull property="status">
+			<isGreaterThan property="status" compareValue="0">
+				AND Status = #status#
+			</isGreaterThan>
+		</isNotNull>
+	</select>
+	<select id="getDdlChannelVOList" parameterClass="ddlChannelVO" resultClass="ddlChannelVO">
+		SELECT ID id,
+				Name name,
+				IFNULL(Status,3201) status,
+				version version,
+				createDate createDate
+		FROM CHANNELS
+		WHERE 1=1
+		<isNotNull property="id">
+			<isGreaterThan property="id" compareValue="0">
+				AND ID = #id#
+			</isGreaterThan>
+		</isNotNull>
+		 <isNotNull property="name">
+				  <isNotEmpty property="name">
+					AND Name like concat('%',#name#,'%')
+				</isNotEmpty>
+		</isNotNull>
+		<isNotNull property="status">
+			<isGreaterThan property="status" compareValue="0">
+				AND Status = #status#
+			</isGreaterThan>
+		</isNotNull>
+		ORDER BY ID DESC
+		<![CDATA[ LIMIT  #page.index#, #page.pageSize# ]]>
+	</select>
+	<select id="getDdlChannelVO" parameterClass="ddlChannelVO" resultClass="ddlChannelVO">
+		SELECT ID id,
+				Name name,
+				IFNULL(Status,3201) status,
+				version version,
+				createDate createDate
+		FROM CHANNELS
+		WHERE ID = #id#	
+	</select>
+	<insert id="insert" parameterClass="ddlChannelVO">
+		INSERT IGNORE INTO CHANNELS(Id,Name,Status,version,CreateDate)
+		VALUES(#id#,#name#,#status#,#version#,now())
+		<selectKey keyProperty="id" resultClass="int">
+			SELECT LAST_INSERT_ID() AS ID FROM CHANNELS LIMIT 1
+		</selectKey>
+	</insert>
+	<update id="update" parameterClass="ddlChannelVO">
+		UPDATE CHANNELS 
+		SET	Name = #name#,
+			Version = #version#,
+			Status=#status#
+		WHERE ID = #id#
+	</update>
+	<update id="updateStatus" parameterClass="ddlChannelVO">
+		UPDATE CHANNELS 
+		SET	Status=#status#
+		WHERE ID = #id#
+	</update>
+	<select id="getAllDdlChannel" parameterClass="ddlChannelVO" resultClass="ddlChannelVO">
+		SELECT ID id,
+				Name name,
+				IFNULL(Status,3201) status,
+				version version,
+				createDate createDate
+		FROM CHANNELS
+		WHERE 1=1
+		<isNotNull property="id">
+			<isGreaterThan property="id" compareValue="0">
+				AND ID = #id#
+			</isGreaterThan>
+		</isNotNull>
+		<isNotNull property="name">
+				  <isNotEmpty property="name">
+					AND Name like concat('%',#name#,'%')
+				</isNotEmpty>
+		</isNotNull>
+		<isNotNull property="status">
+			<isGreaterThan property="status" compareValue="0">
+				AND Status = #status#
+			</isGreaterThan>
+		</isNotNull>
+		ORDER BY ID DESC
+	</select>
+</sqlMap>

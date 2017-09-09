@@ -1,0 +1,433 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="feeSqlMap">
+	<select id="getUserDataList" resultClass="userData" parameterClass="map">
+		SELECT #statDate# statDate,
+			coo_id projectId,
+			IFNULL(channelId,'') channelId,
+			IFNULL(xc_coo_id,0) pluginId,
+			#type# type,
+			IFNULL(xcou,0) country,
+			countryLevel countryLevel,
+			COUNT(DISTINCT imei) userCount
+		FROM $table$
+		GROUP BY coo_id,channelId,xc_coo_id,xcou,countryLevel
+	</select>
+	<select id="getVersionUserDataList" resultClass="userData" parameterClass="map">
+		SELECT #statDate# statDate,
+			#type# type,
+			IFNULL(sdkversion,'') version,
+			COUNT(DISTINCT imei) userCount
+		FROM $table$
+		GROUP BY sdkversion
+	</select>
+	<select id="getUserActiveDataList" resultClass="userData" parameterClass="map">
+		SELECT #statDate# statDate,
+			coo_id projectId,
+			IFNULL(channelId,'') channelId,
+			IFNULL(xc_coo_id,0) pluginId,
+			#type# type,
+			IFNULL(xcou,0) country,
+			countryLevel countryLevel,
+			COUNT(DISTINCT imei) activeCount
+		FROM $table$
+		GROUP BY coo_id,channelId,xc_coo_id,xcou,countryLevel
+	</select>
+	<select id="getVersionUserActiveDataList" resultClass="userData" parameterClass="map">
+		SELECT #statDate# statDate,
+			#type# type,
+			IFNULL(sdkversion,'') version,
+			COUNT(DISTINCT imei) activeCount
+		FROM $table$
+		GROUP BY sdkversion
+	</select>
+	<select id="getUserProjectActiveDataList" resultClass="userData" parameterClass="map">
+		SELECT #statDate# statDate,
+			coo_id projectId,
+			IFNULL(channelId,'') channelId,
+			IFNULL(xc_coo_id,0) pluginId,
+			#type# type,
+			IFNULL(xcou,0) country,
+			countryLevel countryLevel,
+			COUNT(DISTINCT imei) projectActiveCount
+		FROM $table$
+		GROUP BY coo_id,channelId,xc_coo_id,xcou,countryLevel
+	</select>
+	<select id="getVersionUserProjectActiveDataList" resultClass="userData" parameterClass="map">
+		SELECT #statDate# statDate,
+			IFNULL(sdkversion,'') version,
+			#type# type,
+			COUNT(DISTINCT imei) projectActiveCount
+		FROM $table$
+		GROUP BY sdkversion
+	</select>
+	<select id="getTotalUserActiveDataList" resultClass="userData" parameterClass="map">
+		SELECT #statDate# statDate,
+			coo_id projectId,
+			IFNULL(channelId,'') channelId,
+			IFNULL(xc_coo_id,0) pluginId,
+			IFNULL(sdkstyle,600400) type,
+			IFNULL(xcou,0) country,
+			countryLevel countryLevel,
+			COUNT(DISTINCT imei) activeCount
+		FROM $table$
+		GROUP BY sdkstyle,coo_id,channelId,xc_coo_id,xcou,countryLevel
+	</select>
+	<select id="getTotalVersionUserActiveDataList" resultClass="userData" parameterClass="map">
+		SELECT #statDate# statDate,
+			IFNULL(sdkstyle,600400) type,
+			IFNULL(sdkversion,'') version,
+			COUNT(DISTINCT imei) activeCount
+		FROM $table$
+		GROUP BY sdkstyle,version
+	</select>
+	<select id="getRetentionUserDataList" resultClass="userData" parameterClass="map">
+		SELECT #registerDate# statDate,
+			scoo_id projectId,
+			IFNULL(channelId,'') channelId,
+			IFNULL(xc_coo_id,0) pluginId,
+			#type# type,
+			IFNULL(xcou,0) country,
+			countryLevel countryLevel,
+			COUNT(DISTINCT imei) activeCount
+		FROM $table$
+		WHERE Date(xdate)=#registerDate#
+		GROUP BY scoo_id,channelId,xc_coo_id,xcou,countryLevel
+	</select>
+	<select id="getShowData" parameterClass="map" resultClass="data">
+		SELECT #statDate# statDate,
+			apkid adId,
+			IFNULL(sdk,600500) adType,
+			coo_id projectId,
+			IFNULL(channelId,'') channelId,
+			IFNULL(xc_coo_id,0) pluginId,
+			IFNULL(sdkstyle,600400) type,
+			IFNULL(cou,0) country,
+			countryLevel countryLevel,
+			COUNT(*) showTimes,
+			COUNT(DISTINCT IMEI) showCount
+		FROM $table$
+		GROUP BY sdkstyle,coo_id,xc_coo_id,channelId,cou,countryLevel,sdk,apkid
+	</select>
+	<select id="getShowCacheData" parameterClass="map" resultClass="data">
+		SELECT #statDate# statDate,
+			AdId adId,
+			COUNT(*) showTimes,
+			COUNT(DISTINCT IMEI) showCount
+		FROM $table$
+		GROUP BY AdId
+	</select>
+	<select id="getClickData" parameterClass="map" resultClass="data">
+		SELECT #statDate# statDate,
+			apkid adId,
+			IFNULL(sdk,600500) adType,
+			coo_id projectId,
+			IFNULL(channelId,'') channelId,
+			IFNULL(xc_coo_id,0) pluginId,
+			IFNULL(sdkstyle,600400) type,
+			IFNULL(cou,0) country,
+			countryLevel countryLevel,
+			COUNT(*) clickTimes,
+			COUNT(DISTINCT IMEI) clickCount
+		FROM $table$
+		GROUP BY sdkstyle,coo_id,xc_coo_id,channelId,cou,countryLevel,sdk,apkid
+	</select>
+	<select id="getDownloadData" parameterClass="map" resultClass="data">
+		SELECT #statDate# statDate,
+			apkid adId,
+			IFNULL(sdk,600500) adType,
+			coo_id projectId,
+			IFNULL(channelId,'') channelId,
+			IFNULL(xc_coo_id,0) pluginId,
+			IFNULL(sdkstyle,600400) type,
+			IFNULL(cou,0) country,
+			countryLevel countryLevel,
+			COUNT(*) downloadTimes,
+			COUNT(DISTINCT IMEI) downloadCount
+		FROM $table$
+		GROUP BY sdkstyle,coo_id,xc_coo_id,channelId,cou,countryLevel,sdk,apkid
+	</select>
+	<select id="getInstallData" parameterClass="map" resultClass="data">
+		SELECT #statDate# statDate,
+			apkid adId,
+			IFNULL(sdk,600500) adType,
+			coo_id projectId,
+			IFNULL(channelId,'') channelId,
+			IFNULL(xc_coo_id,0) pluginId,
+			IFNULL(sdkstyle,600400) type,
+			IFNULL(cou,0) country,
+			countryLevel countryLevel,
+			COUNT(*) installTimes,
+			COUNT(DISTINCT IMEI) installCount
+		FROM $table$
+		GROUP BY sdkstyle,coo_id,xc_coo_id,channelId,cou,countryLevel,sdk,apkid
+	</select>
+	<select id="getActiveData" parameterClass="map" resultClass="data">
+		SELECT #statDate# statDate,
+			apkid adId,
+			IFNULL(sdk,600500) adType,
+			coo_id projectId,
+			IFNULL(channelId,'') channelId,
+			IFNULL(xc_coo_id,0) pluginId,
+			IFNULL(sdkstyle,600400) type,
+			IFNULL(cou,0) country,
+			countryLevel countryLevel,
+			COUNT(*) activateTimes,
+			COUNT(DISTINCT IMEI) activateCount
+		FROM $table$
+		GROUP BY sdkstyle,coo_id,xc_coo_id,channelId,cou,countryLevel,sdk,apkid
+	</select>
+	<select id="getAdSendData" parameterClass="map" resultClass="data">
+		SELECT #statDate# statDate,
+			apkid adId,
+			IFNULL(sdk,600500) adType,
+			coo_id projectId,
+			IFNULL(channelId,'') channelId,
+			IFNULL(xc_coo_id,0) pluginId,
+			IFNULL(sdkstyle,600400) type,
+			IFNULL(cou,0) country,
+			countryLevel countryLevel,
+			COUNT(id) sendTimes,
+			COUNT(DISTINCT IMEI) sendCount
+		FROM $table$
+		GROUP BY sdkstyle,coo_id,channelId,xc_coo_id,cou,countryLevel,sdk,apkid
+	</select>
+	
+	<select id="getAdReceiveData" parameterClass="map" resultClass="data">
+		SELECT #statDate# statDate,
+			apkid adId,
+			IFNULL(sdk,600500) adType,
+			coo_id projectId,
+			IFNULL(channelId,'') channelId,
+			IFNULL(xc_coo_id,0) pluginId,
+			IFNULL(sdkstyle,600400) type,
+			IFNULL(cou,0) country,
+			countryLevel countryLevel,
+			COUNT(id) receiveTimes,
+			COUNT(DISTINCT IMEI) receiveCount
+		FROM $table$
+		WHERE pkgstatus = 3200
+		GROUP BY sdkstyle,coo_id,channelId,xc_coo_id,cou,countryLevel,sdk,apkid
+	</select>
+	
+	<select id="getProjectSendData" parameterClass="map" resultClass="data">
+		SELECT #statDate# statDate,
+			IFNULL(sdk,600500) adType,
+			coo_id projectId,
+			IFNULL(channelId,'') channelId,
+			IFNULL(xc_coo_id,0) pluginId,
+			IFNULL(sdkstyle,600400) type,
+			IFNULL(cou,0) country,
+			countryLevel countryLevel,
+			COUNT(id) sendTimes,
+			COUNT(DISTINCT IMEI) sendCount
+		FROM $table$
+		GROUP BY sdkstyle,coo_id,channelId,xc_coo_id,cou,countryLevel,sdk
+	</select>
+	<select id="getVersionProjectSendData" parameterClass="map" resultClass="data">
+		SELECT #statDate# statDate,
+			IFNULL(sdk,600500) adType,
+			IFNULL(sdkstyle,600400) type,
+			IFNULL(sdkversion,'') version,
+			COUNT(id) sendTimes,
+			COUNT(DISTINCT IMEI) sendCount
+		FROM $table$
+		GROUP BY sdkstyle,sdkversion,sdk
+	</select>
+	<select id="getProjectReceiveData" parameterClass="map" resultClass="data">
+		SELECT #statDate# statDate,
+			IFNULL(sdk,600500) adType,
+			coo_id projectId,
+			IFNULL(channelId,'') channelId,
+			IFNULL(xc_coo_id,0) pluginId,
+			IFNULL(sdkstyle,600400) type,
+			IFNULL(cou,0) country,
+			countryLevel countryLevel,
+			COUNT(id) receiveTimes,
+			COUNT(DISTINCT IMEI) receiveCount
+		FROM $table$
+		WHERE pkgstatus = 3200
+		GROUP BY sdkstyle,coo_id,channelId,xc_coo_id,cou,countryLevel,sdk
+	</select>
+	<select id="getVersionProjectReceiveData" parameterClass="map" resultClass="data">
+		SELECT #statDate# statDate,
+			IFNULL(sdk,600500) adType,
+			IFNULL(sdkstyle,600400) type,
+			IFNULL(sdkversion,'') version,
+			COUNT(id) receiveTimes,
+			COUNT(DISTINCT IMEI) receiveCount
+		FROM $table$
+		WHERE pkgstatus = 3200
+		GROUP BY sdkstyle,sdkversion,sdk
+	</select>
+	<select id="getProjectShowData" parameterClass="map" resultClass="data">
+		SELECT #statDate# statDate,
+			IFNULL(sdk,600500) adType,
+			coo_id projectId,
+			IFNULL(channelId,'') channelId,
+			IFNULL(xc_coo_id,0) pluginId,
+			IFNULL(sdkstyle,600400) type,
+			IFNULL(cou,0) country,
+			countryLevel countryLevel,
+			COUNT(*) showTimes,
+			COUNT(DISTINCT IMEI) showCount
+		FROM $table$
+		GROUP BY sdkstyle,coo_id,xc_coo_id,channelId,cou,countryLevel,sdk
+	</select>
+	<select id="getVersionProjectShowData" parameterClass="map" resultClass="data">
+		SELECT #statDate# statDate,
+			IFNULL(sdk,600500) adType,
+			IFNULL(sdkstyle,600400) type,
+			IFNULL(sdkversion,'') version,
+			COUNT(*) showTimes,
+			COUNT(DISTINCT IMEI) showCount
+		FROM $table$
+		GROUP BY sdkstyle,sdkversion,sdk
+	</select>
+	<select id="getProjectClickData" parameterClass="map" resultClass="data">
+		SELECT #statDate# statDate,
+			IFNULL(sdk,600500) adType,
+			coo_id projectId,
+			IFNULL(channelId,'') channelId,
+			IFNULL(xc_coo_id,0) pluginId,
+			IFNULL(sdkstyle,600400) type,
+			IFNULL(cou,0) country,
+			countryLevel countryLevel,
+			COUNT(*) clickTimes,
+			COUNT(DISTINCT IMEI) clickCount
+		FROM $table$
+		GROUP BY sdkstyle,coo_id,xc_coo_id,channelId,cou,countryLevel,sdk
+	</select>
+	<select id="getVersionProjectClickData" parameterClass="map" resultClass="data">
+		SELECT #statDate# statDate,
+			IFNULL(sdk,600500) adType,
+			IFNULL(sdkstyle,600400) type,
+			IFNULL(sdkversion,'') version,
+			COUNT(*) clickTimes,
+			COUNT(DISTINCT IMEI) clickCount
+		FROM $table$
+		GROUP BY sdkstyle,sdkversion,sdk
+	</select>
+	<select id="getProjectDownloadData" parameterClass="map" resultClass="data">
+		SELECT #statDate# statDate,
+			IFNULL(sdk,600500) adType,
+			coo_id projectId,
+			IFNULL(channelId,'') channelId,
+			IFNULL(xc_coo_id,0) pluginId,
+			IFNULL(sdkstyle,600400) type,
+			IFNULL(cou,0) country,
+			countryLevel countryLevel,
+			COUNT(*) downloadTimes,
+			COUNT(DISTINCT IMEI) downloadCount
+		FROM $table$
+		GROUP BY sdkstyle,coo_id,xc_coo_id,channelId,cou,countryLevel,sdk
+	</select>
+	<select id="getVersionProjectDownloadData" parameterClass="map" resultClass="data">
+		SELECT #statDate# statDate,
+			IFNULL(sdk,600500) adType,
+			IFNULL(sdkstyle,600400) type,
+			IFNULL(sdkversion,'') version,
+			COUNT(*) downloadTimes,
+			COUNT(DISTINCT IMEI) downloadCount
+		FROM $table$
+		GROUP BY sdkstyle,sdkversion,sdk
+	</select>
+	<select id="getProjectInstallData" parameterClass="map" resultClass="data">
+		SELECT #statDate# statDate,
+			IFNULL(sdk,600500) adType,
+			coo_id projectId,
+			IFNULL(channelId,'') channelId,
+			IFNULL(xc_coo_id,0) pluginId,
+			IFNULL(sdkstyle,600400) type,
+			IFNULL(cou,0) country,
+			countryLevel countryLevel,
+			COUNT(*) installTimes,
+			COUNT(DISTINCT IMEI) installCount
+		FROM $table$
+		GROUP BY sdkstyle,coo_id,xc_coo_id,channelId,cou,countryLevel,sdk
+	</select>
+	<select id="getVersionProjectInstallData" parameterClass="map" resultClass="data">
+		SELECT #statDate# statDate,
+			IFNULL(sdk,600500) adType,
+			IFNULL(sdkstyle,600400) type,
+			IFNULL(sdkversion,'') version,
+			COUNT(*) installTimes,
+			COUNT(DISTINCT IMEI) installCount
+		FROM $table$
+		GROUP BY sdkstyle,sdkversion,sdk
+	</select>
+	<select id="getProjectActiveData" parameterClass="map" resultClass="data">
+		SELECT #statDate# statDate,
+			IFNULL(sdk,600500) adType,
+			coo_id projectId,
+			IFNULL(channelId,'') channelId,
+			IFNULL(xc_coo_id,0) pluginId,
+			IFNULL(sdkstyle,600400) type,
+			IFNULL(cou,0) country,
+			countryLevel countryLevel,
+			COUNT(*) activateTimes,
+			COUNT(DISTINCT IMEI) activateCount
+		FROM $table$
+		GROUP BY sdkstyle,coo_id,xc_coo_id,channelId,cou,countryLevel,sdk
+	</select>
+	<select id="getVersionProjectActiveData" parameterClass="map" resultClass="data">
+		SELECT #statDate# statDate,
+			IFNULL(sdk,600500) adType,
+			IFNULL(sdkstyle,600400) type,
+			IFNULL(sdkversion,'') version,
+			COUNT(*) activateTimes,
+			COUNT(DISTINCT IMEI) activateCount
+		FROM $table$
+		GROUP BY sdkstyle,sdkversion,sdk
+	</select>
+	<update id="updateProjectUserData" parameterClass="userData">
+		UPDATE A_product SET isfull100=3200 WHERE coo_id=#coo_id# AND isfull100!=3200  AND fulls<![CDATA[<]]>  #userCount#
+	</update>
+	<insert id="insertDaySendData" parameterClass="map">
+		INSERT INTO A_apkcount_$table$(cdate,apkid,tsup,cpup,jmup)
+		VALUES
+		<iterate conjunction="," property="list">
+			<![CDATA[
+			(#list[].statDate#,#list[].adId#,#list[].pushShowTimes#,#list[].showTimes#,#list[].silenceInstallTimes#)
+			]]>  
+		</iterate>	
+		ON DUPLICATE KEY UPDATE tsup=VALUES(tsup),cpup=VALUES(cpup),jmup=VALUES(jmup)
+	</insert>
+
+	<insert id="insertLinkPv" parameterClass="map">
+		INSERT INTO A_webcount_$table$(cdate,apkid,cup)
+		VALUES
+		<iterate conjunction="," property="list">
+			<![CDATA[
+			(#list[].statDate#,#list[].adId#,#list[].clickTimes#)
+			]]>
+		</iterate>
+		ON DUPLICATE KEY UPDATE cup=VALUES(cup)
+	</insert>
+	<insert id="insertDsPv" parameterClass="map">
+		INSERT INTO A_dssdkcount_$table$(cdate,apkid,cup)
+		VALUES
+		<iterate conjunction="," property="list">
+			<![CDATA[
+			(#list[].statDate#,#list[].adId#,#list[].clickTimes#)
+			]]>
+		</iterate>
+		ON DUPLICATE KEY UPDATE cup=VALUES(cup)
+	</insert>
+	<select id="getAdBackData" parameterClass="map" resultClass="data">
+		SELECT #statDate# statDate,
+			apkid adId,
+			COUNT(*) realCount
+		FROM $table$
+		GROUP BY apkid
+	</select>
+	<update id="updateAdCpm" parameterClass="data">
+		UPDATE A_SdkPushApk SET orders=#cpm# WHERE id=#adId# AND iscpoy=3200
+	</update>
+	<update id="updateSub"  parameterClass="data">
+		update subscribe set autoECPM=#cpm#,ctr = #cr# where id = #adId#
+	</update>
+	<update id="updateOfferSdk"  parameterClass="data">
+		update offer_sdk set autoecpm=#cpm#,ctr = #cr# where id = #adId#
+	</update>
+</sqlMap>

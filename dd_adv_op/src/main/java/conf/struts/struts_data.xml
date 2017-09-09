@@ -1,0 +1,134 @@
+<!DOCTYPE struts PUBLIC 
+	"-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+	"http://struts.apache.org/dtds/struts-2.0.dtd">
+<struts>
+	<constant name="struts.multipart.maxSize" value="1000000000" />
+	<include file="struts-default.xml"></include>
+	<package name="data" namespace="/data" extends="abroad-default">
+		<default-interceptor-ref name="crudStack"/>
+		<action name="ProjectData" class="com.kkgame.feeop.data.action.ProjectDataAction" method="do{1}">
+			<result name="query">/pages/data/project_data_query.jsp</result>
+			<result name="list">/pages/data/project_data_list.jsp</result>
+			<result name="totalQuery">/pages/data/project_total_query.jsp</result>
+			<result name="totalList">/pages/data/project_total_list.jsp</result>
+
+			<result name="affairQuery">/pages/data/project_data_affair_query.jsp</result>
+			<result name="affairList">/pages/data/project_data_affair_list.jsp</result>
+			<result name="totalaffairQuery">/pages/data/project_total_affair_query.jsp</result>
+			<result name="totalaffairList">/pages/data/project_total_affair_list.jsp</result>
+
+
+			<result name="projectTotalQuery">/pages/data/project_count_query.jsp</result>
+			<result name="projectTotalList">/pages/data/project_count_list.jsp</result>
+			<result name="dayInfo">/pages/main/dayinfo.jsp</result>
+			
+			<result name="excel" type="stream">  
+                <param name="contentType">application/vnd.ms-excel</param>  
+                <param name="contentDisposition">attachment;filename="${downloadFileName}"</param>  
+                <param name="bufferSize">1024</param>
+                <param name="inputName">excelFile</param>  
+            </result>
+		</action>
+		
+		<action name="ProjectDistinct" class="com.kkgame.feeop.data.action.ProjectDistinctAction" method="do{1}">
+			<result name="query">/pages/data/project_distinct_query.jsp</result>
+			<result name="list">/pages/data/project_distinct_list.jsp</result>
+		</action>
+		
+		<action name="VersionData" class="com.kkgame.feeop.data.action.VersionDataAction" method="do{1}">
+			<result name="query">/pages/data/version_data_query.jsp</result>
+			<result name="list">/pages/data/version_data_list.jsp</result>
+		</action>
+		<action name="BdData" class="com.kkgame.feeop.data.action.BdDataAction" method="do{1}">
+			<result name="query">/pages/data/bd_data_query.jsp</result>
+			<result name="list">/pages/data/bd_data_list.jsp</result>
+		</action>
+		
+		<action name="UserAdData" class="com.kkgame.feeop.data.action.UserAdAction" method="do{1}">
+			<result name="query">/pages/data/userAd_query.jsp</result>
+			<result name="list">/pages/data/userAd_list.jsp</result>
+		
+		</action>
+		<action name="AdData" class="com.kkgame.feeop.data.action.AdDataAction" method="do{1}">
+			<result name="query">/pages/data/ad_data_query.jsp</result>
+			<result name="list">/pages/data/ad_data_list.jsp</result>
+			<result name="effectQuery">/pages/data/ad_effect_query.jsp</result>
+			<result name="effectList">/pages/data/ad_effect_list.jsp</result>
+			<result name="excel" type="stream">  
+                <param name="contentType">application/vnd.ms-excel</param>  
+                <param name="contentDisposition">attachment;filename="${downloadFileName}"</param>  
+                <param name="bufferSize">1024</param>
+                <param name="inputName">excelFile</param>  
+            </result>
+		</action>
+		<action name="ProjectIncome" class="com.kkgame.feeop.data.action.ProjectIncomeAction" method="do{1}">
+			<result name="query">/pages/data/project_income_query.jsp</result>
+			<result name="list">/pages/data/project_income_list.jsp</result>
+			<result name="totalQuery">/pages/data/project_dayTotal_query.jsp</result>
+			<result name="totalList">/pages/data/project_dayTotal_list.jsp</result>
+			<result name="effectQuery">/pages/data/project_effect_query.jsp</result>
+			<result name="effectList">/pages/data/project_effect_list.jsp</result>
+			<result name="modify">/pages/data/project_income_modify.jsp</result>
+			<result name="postquery">/pages/data/project_post_query.jsp</result>
+			<result name="postlist">/pages/data/project_post_list.jsp</result>
+			<result name="excel" type="stream">  
+                <param name="contentType">application/vnd.ms-excel</param>  
+                <param name="contentDisposition">attachment;filename="${downloadFileName}"</param>  
+                <param name="bufferSize">1024</param>
+                <param name="inputName">excelFile</param>  
+            </result> 
+		</action>
+		
+		<action name="AdIncome" class="com.kkgame.feeop.data.action.AdIncomeAction" method="do{1}">
+			<result name="query">/pages/data/ad_income_query.jsp</result>
+			<result name="list">/pages/data/ad_income_list.jsp</result>
+		</action>
+		<action name="Retention" class="com.kkgame.feeop.data.action.RetentionAction" method="do{1}">
+			<result name="query">/pages/data/retention_query.jsp</result>
+			<result name="list">/pages/data/retention_list.jsp</result>
+			<result name="excel" type="stream">  
+                <param name="contentType">application/vnd.ms-excel</param>  
+                <param name="contentDisposition">attachment;filename="${downloadFileName}"</param>  
+                <param name="bufferSize">1024</param>
+                <param name="inputName">excelFile</param>  
+            </result>
+		</action>
+		<action name="DdlData" class="com.kkgame.feeop.data.action.DdlDataAction" method="do{1}">
+			<result name="query">/pages/data/ddl_query.jsp</result>
+			<result name="list">/pages/data/ddl_list.jsp</result>
+			<result name="salequery">/pages/data/ddl_sale_query.jsp</result>
+			<result name="salelist">/pages/data/ddl_sale_list.jsp</result>
+		</action>
+		<action name="AdLinkData" class="com.kkgame.feeop.data.action.AdLinkDataAction" method="do{1}">
+			<result name="query">/pages/data/adlink_data_query.jsp</result>
+			<result name="list">/pages/data/adlink_data_list.jsp</result>
+			<result name="create">/pages/data/adlink_create.jsp</result>
+			<result name="excel" type="stream">  
+                <param name="contentType">application/vnd.ms-excel</param>  
+                <param name="contentDisposition">attachment;filename="${downloadFileName}"</param>  
+                <param name="bufferSize">1024</param>
+                <param name="inputName">excelFile</param>  
+            </result>
+		</action>
+		<action name="UserGuard" class="com.kkgame.feeop.data.action.UserGuardAction" method="do{1}">
+			<result name="query">/pages/data/user_guard_query.jsp</result>
+			<result name="list">/pages/data/user_guard_list.jsp</result>
+		</action>
+		<action name="SdkData" class="com.kkgame.feeop.data.action.SdkDataAction" method="do{1}">
+			<result name="query">/pages/data/sdk_total_query.jsp</result>
+			<result name="list">/pages/data/sdk_total_list.jsp</result>
+		</action>
+		<action name="SubData" class="com.kkgame.feeop.data.action.SubDataAction" method="do{1}">
+			<result name="query">/pages/data/sub_total_query.jsp</result>
+			<result name="list">/pages/data/sub_total_list.jsp</result>
+		</action>
+		<action name="OfferSdkData" class="com.kkgame.feeop.data.action.OfferSdkDataAction"  >
+			<result name="query">/pages/data/offersdk_total_query.jsp</result>
+			<result name="list">/pages/data/offersdk_total_list.jsp</result>
+		</action>
+		<action name="IframeData" class="com.kkgame.feeop.data.action.IframeDataAction"  >
+			<result name="query">/pages/data/iframe_total_query.jsp</result>
+			<result name="list">/pages/data/iframe_total_list.jsp</result>
+		</action>
+	</package>
+</struts>

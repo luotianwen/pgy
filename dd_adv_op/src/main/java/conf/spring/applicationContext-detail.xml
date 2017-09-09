@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop" 
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:p="http://www.springframework.org/schema/p" 
+       xsi:schemaLocation="http://www.springframework.org/schema/beans 
+       		http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+       		http://www.springframework.org/schema/aop
+       		http://www.springframework.org/schema/aop/spring-aop-2.5.xsd 
+		    http://www.springframework.org/schema/tx  
+    	    http://www.springframework.org/schema/tx/spring-tx-2.5.xsd 
+            http://www.springframework.org/schema/context
+            http://www.springframework.org/schema/context/spring-context-2.5.xsd">
+ 	
+ 	
+ 	 <bean id="advFeebackListClickModelService" class="com.kkgame.feeop.detail.service.impl.AdvFeebackListClickModelServiceImpl">
+ 		<property name="advFeebackListClickModelDAO" ref="advFeebackListClickModelDAO"></property>
+ 	</bean> 
+ 	<bean id="advFeebackListClickModelDAO" class="com.kkgame.feeop.detail.dao.impl.AdvFeebackListClickModelDAOImpl">
+ 		<!--<property name="sqlMapClient" ref="sqlMapClient_kkpay_data"></property>
+ 		<property name="dataSource" ref="dataSource_kkpay_data"></property>-->
+		<property name="mongoTemplate" ref="mongoTemplate"></property>
+ 	</bean>
+ 		<bean id="advSentsListModelService" class="com.kkgame.feeop.detail.service.impl.AdvSentsListModelServiceImpl">
+ 		<property name="advSentsListModelDAO" ref="advSentsListModelDAO"></property>
+ 	</bean>
+ 	<bean id="advSentsListModelDAO" class="com.kkgame.feeop.detail.dao.impl.AdvSentsListModelDAOImpl">
+ 		<!--<property name="sqlMapClient" ref="sqlMapClient_kkpay_data"></property>
+ 		<property name="dataSource" ref="dataSource_kkpay_data"></property>-->
+		<property name="mongoTemplate" ref="mongoTemplate"></property>
+ 	</bean>
+ 	 	<bean id="apkActusersModelService" class="com.kkgame.feeop.detail.service.impl.ApkActusersModelServiceImpl">
+ 		<property name="apkActusersModelDAO" ref="apkActusersModelDAO"></property>
+ 	</bean>
+ 	<bean id="apkActusersModelDAO" class="com.kkgame.feeop.detail.dao.impl.ApkActusersModelDAOImpl">
+ 		<property name="sqlMapClient" ref="sqlMapClient_kkpay_data"></property>
+ 		<property name="dataSource" ref="dataSource_kkpay_data"></property>
+
+ 	</bean>
+ 	 <bean id="sdkActusersModelService" class="com.kkgame.feeop.detail.service.impl.SdkActusersModelServiceImpl">
+ 		<property name="sdkActusersModelDAO" ref="sdkActusersModelDAO"></property>
+ 	</bean>
+ 	<bean id="sdkActusersModelDAO" class="com.kkgame.feeop.detail.dao.impl.SdkActusersModelDAOImpl">
+ 		<property name="sqlMapClient" ref="sqlMapClient_kkpay_data"></property>
+ 		<property name="dataSource" ref="dataSource_kkpay_data"></property>
+ 	</bean>
+ 	<bean id="apkUsersModelService" class="com.kkgame.feeop.detail.service.impl.ApkUsersModelServiceImpl">
+ 		<property name="apkUsersModelDAO" ref="apkUsersModelDAO"></property>
+ 	</bean>
+ 	<bean id="apkUsersModelDAO" class="com.kkgame.feeop.detail.dao.impl.ApkUsersModelDAOImpl">
+		<property name="sqlMapClient" ref="sqlMapClient_kkpay_data"></property>
+		<property name="dataSource" ref="dataSource_kkpay_data"></property>
+ 	</bean>
+	<bean id="sdkUsersModelService" class="com.kkgame.feeop.detail.service.impl.SdkUsersModelServiceImpl">
+ 		<property name="sdkUsersModelDAO" ref="sdkUsersModelDAO"></property>
+ 	</bean>
+ 	<bean id="sdkUsersModelDAO" class="com.kkgame.feeop.detail.dao.impl.SdkUsersModelDAOImpl">
+ 		 <property name="sqlMapClient" ref="sqlMapClient_kkpay_data"></property>
+ 		 <property name="dataSource" ref="dataSource_kkpay_data"></property>
+
+ 	</bean>
+ 	<bean id="ddlDetailService" class="com.kkgame.feeop.detail.service.impl.DdlDetailServiceImpl">
+ 		<property name="ddlDetailDAO" ref="ddlDetailDAO"></property>
+ 	</bean>
+ 	<bean id="ddlDetailDAO" class="com.kkgame.feeop.detail.dao.impl.DdlDetailDAOImpl">
+ 		<property name="sqlMapClient" ref="sqlMapClient_kkpay_ddlslave"></property>
+ 		<property name="dataSource" ref="dataSource_kkpay_ddlslave"></property>
+ 	</bean>
+ 	<bean id="adLinkDetailService" class="com.kkgame.feeop.detail.service.impl.AdLinkDetailServiceImpl">
+ 		<property name="adLinkDetailDAO" ref="adLinkDetailDAO"></property>
+ 	</bean>
+ 	<bean id="adLinkDetailDAO" class="com.kkgame.feeop.detail.dao.impl.AdLinkDetailDAOImpl">
+		<property name="mongoTemplate" ref="mongoTemplate"></property>
+ 	</bean>
+	<bean id="sdkDetailService" class="com.kkgame.feeop.detail.service.impl.SdkDetailServiceImpl">
+		<property name="sdkDetailDAO" ref="sdkDetailDAO"></property>
+	</bean>
+	<bean id="sdkDetailDAO" class="com.kkgame.feeop.detail.dao.impl.SdkDetailDAOImpl">
+		<property name="mongoTemplate" ref="mongoTemplate"></property>
+	</bean>
+	<bean id="subDetailService" class="com.kkgame.feeop.detail.service.impl.SubDetailServiceImpl">
+		<property name="subDetailDAO" ref="subDetailDAO"></property>
+	</bean>
+	<bean id="subDetailDAO" class="com.kkgame.feeop.detail.dao.impl.SubDetailDAOImpl">
+		<property name="mongoTemplate" ref="mongoTemplate"></property>
+	</bean>
+	<bean id="linkDetailService" class="com.kkgame.feeop.detail.service.impl.LinkDetailServiceImpl">
+		<property name="linkDetailDAO" ref="linkDetailDAO"></property>
+	</bean>
+	<bean id="linkDetailDAO" class="com.kkgame.feeop.detail.dao.impl.LinkDetailDAOImpl">
+		<property name="mongoTemplate" ref="mongoTemplate"></property>
+	</bean>
+	<bean id="iframeDetailService" class="com.kkgame.feeop.detail.service.impl.IframeDetailServiceImpl">
+		<property name="iframeDetailDAO" ref="iframeDetailDAO"></property>
+	</bean>
+	<bean id="iframeDetailDAO" class="com.kkgame.feeop.detail.dao.impl.IframeDetailDAOImpl">
+		<property name="mongoTemplate" ref="mongoTemplate"></property>
+	</bean>
+ </beans>

@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="silentInfoSqlMap">
+	<select id="getSilentInfoVOListCount" parameterClass="silentInfoVO" resultClass="int">
+		SELECT COUNT(ID) count			
+		FROM A_Silent
+		WHERE 1=1
+		<isNotNull property="id">
+			<isGreaterThan property="id" compareValue="0">
+				AND ID = #id#
+			</isGreaterThan>
+		</isNotNull>
+		<isNotNull property="status">
+			<isGreaterThan property="status" compareValue="0">
+				AND status = #status#
+			</isGreaterThan>
+		</isNotNull>
+	</select>
+	<select id="getSilentInfoVOList" parameterClass="silentInfoVO" resultClass="silentInfoVO">
+		SELECT ID id,
+				version version,
+				frequency frequency,
+				times times,
+				days days,
+				isDel isDel,
+				versions versions,
+				status status,
+				LEFT(note,8) noteInfo,
+				note note,
+				yl1 yl1,
+				yl2 yl2,
+				creator creator
+		FROM A_Silent
+		WHERE 1=1
+		<isNotNull property="id">
+			<isGreaterThan property="id" compareValue="0">
+				AND ID = #id#
+			</isGreaterThan>
+		</isNotNull>
+		<isNotNull property="status">
+			<isGreaterThan property="status" compareValue="0">
+				AND status = #status#
+			</isGreaterThan>
+		</isNotNull>
+		ORDER BY ID DESC
+		<![CDATA[ LIMIT  #page.index#, #page.pageSize# ]]>
+	</select>
+	<select id="getSilentInfoVO" parameterClass="silentInfoVO" resultClass="silentInfoVO">
+		SELECT ID id,
+				version version,
+				frequency frequency,
+				times times,
+				days days,
+				isDel isDel,
+				versions versions,
+				status status,
+				LEFT(note,8) noteInfo,
+				note note,
+				yl1 yl1,
+				yl2 yl2,
+				creator creator
+		FROM A_Silent
+		WHERE ID = #id#	
+	</select>
+	<insert id="insert" parameterClass="silentInfoVO">
+		INSERT INTO A_Silent(version,frequency,versions,times,days,note,isDel,status,yl1,yl2,creator)
+		VALUES(#version#,#frequency#,#versions#,#times#,#days#,#note#,#isDel#,#status#,#yl1#,#yl2#,#creator#)
+		<selectKey keyProperty="id" resultClass="int">
+			SELECT LAST_INSERT_ID() AS ID FROM K_Updatejar LIMIT 1
+		</selectKey>
+	</insert>
+	<update id="update" parameterClass="silentInfoVO">
+		UPDATE A_Silent 
+		SET	version = #version#,
+			versions=#versions#,
+			note=#note#,
+			creator=#creator#,
+			frequency = #frequency#,
+			times=#times#,
+			days=#days#,
+			isDel=#isDel#,
+			status=#status#,
+			yl1=#yl1#,
+			yl2=#yl2#
+		WHERE ID = #id#
+	</update>
+	<select id="getAllSilentInfoVOList" parameterClass="silentInfoVO" resultClass="silentInfoVO">
+		SELECT ID id,
+				version version,
+				frequency frequency,
+				times times,
+				days days,
+				isDel isDel,
+				versions versions,
+				status status,
+				LEFT(note,8) noteInfo,
+				note note,
+				yl1 yl1,
+				yl2 yl2,
+				creator creator
+		FROM A_Silent
+		WHERE 1=1
+		<isNotNull property="id">
+			<isGreaterThan property="id" compareValue="0">
+				AND ID = #id#
+			</isGreaterThan>
+		</isNotNull>
+		<isNotNull property="status">
+			<isGreaterThan property="status" compareValue="0">
+				AND status = #status#
+			</isGreaterThan>
+		</isNotNull>
+		ORDER BY ID DESC
+	</select>
+	<delete id="delete" parameterClass="silentInfoVO" >
+	    delete from A_Silent where Id = #id#
+	</delete>
+</sqlMap>

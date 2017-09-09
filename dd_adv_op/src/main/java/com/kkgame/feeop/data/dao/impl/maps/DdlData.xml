@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="ddlDataSqlMap">
+	<select id="getDdlDataVOList" parameterClass="searchVO" resultClass="ddlDataVO">
+		SELECT IFNULL(SUM(D.ClickCount),0) clickCount,
+				IFNULL(SUM(D.ValidClickCount),0) validClickCount,
+				ROUND(IFNULL(SUM(D.ValidClickCount)*100/SUM(D.ClickCount),0.00),2) percent
+				<isEqual property="rowFieldVO.isShowDate" compareValue="1">  
+					,D.statDate statDate
+					,D.Hour hour
+				</isEqual>
+				<isEqual property="rowFieldVO.isShowDate" compareValue="0">  
+					,null statDate
+					,0 hour
+				</isEqual>
+				<isEqual property="rowFieldVO.isShowProduct" compareValue="1">  
+					,IFNULL(P.id,0) productId
+					,P.Name productName
+				</isEqual>
+				<isEqual property="rowFieldVO.isShowProduct" compareValue="0">  
+					,0 productId
+					,null productName
+				</isEqual>	
+				<isEqual property="rowFieldVO.isShowChannel" compareValue="1">  
+					,IFNULL(C.id,0) channelId
+					,C.Name channelName
+				</isEqual>
+				<isEqual property="rowFieldVO.isShowChannel" compareValue="0">  
+					,0 channelId
+					,null channelName
+				</isEqual>	
+				<isEqual property="rowFieldVO.isShowProject" compareValue="1">  
+					,IFNULL(PR.id,0) projectId
+					,PR.Name projectName
+				</isEqual>
+				<isEqual property="rowFieldVO.isShowProject" compareValue="0">  
+					,0 projectId
+					,null projectName
+				</isEqual>	
+				<isEqual property="rowFieldVO.isShowCountry" compareValue="1">  
+					,IFNULL(D.Country,0) countryId
+					,IFNULL(E.description,'未知国家') countryName
+				</isEqual>
+				<isEqual property="rowFieldVO.isShowCountry" compareValue="0">  
+					,0 countryId
+					,null countryName
+				</isEqual>	
+				<isEqual property="rowFieldVO.isShowType" compareValue="1">  
+					,D.UaType uaType
+				</isEqual>
+				<isEqual property="rowFieldVO.isShowType" compareValue="0">  
+					,0 uaType
+				</isEqual>	
+			FROM $table$ D
+			LEFT JOIN PRODUCTS P ON P.ID=D.ProductId
+			LEFT JOIN CHANNELS C ON C.ID=D.ChannelId
+			LEFT JOIN PROJECT PR ON PR.ID=D.ProjectId
+			LEFT JOIN kok_sdk.EnumerationValue E on E.id=D.Country
+			WHERE D.statDate Between #startDate# AND #endDate#
+			<isGreaterThan property="productId" compareValue="0">
+				AND D.ProductId = #productId#
+			</isGreaterThan>
+			<isGreaterThan property="channelId" compareValue="0">
+				AND D.ChannelId = #channelId#
+			</isGreaterThan>
+			<isGreaterThan property="projectId" compareValue="0">
+				AND D.ProjectId = #projectId#
+			</isGreaterThan>
+			<isNotEqual property="country" compareValue="0">
+				AND D.Country = #country#
+			</isNotEqual>
+			<isGreaterThan property="type" compareValue="0">
+				AND D.UaType = #type#
+			</isGreaterThan>
+			<dynamic  prepend =" GROUP BY ">
+				<isEqual prepend =" , " property="rowFieldVO.isShowDate" compareValue="1">  
+					D.StatDate,D.Hour
+				</isEqual>
+				<isEqual prepend =" , " property="rowFieldVO.isShowProduct" compareValue="1">  
+					D.ProductId
+				</isEqual>
+				<isEqual prepend =" , " property="rowFieldVO.isShowChannel" compareValue="1">  
+					D.ChannelId
+				</isEqual>
+				<isEqual prepend =" , " property="rowFieldVO.isShowProject" compareValue="1">  
+					D.ProjectId
+				</isEqual>
+				<isEqual prepend =" , " property="rowFieldVO.isShowCountry" compareValue="1">  
+					D.Country
+				</isEqual>
+				<isEqual prepend =" , " property="rowFieldVO.isShowType" compareValue="1">  
+					D.UaType
+				</isEqual>
+			</dynamic>
+			<dynamic  prepend =" ORDER BY ">
+				<isEqual prepend =" , " property="rowFieldVO.isShowDate" compareValue="1">  
+					D.StatDate ASC ,D.Hour ASC , clickCount DESC
+				</isEqual>
+				<isEqual prepend =" , " property="rowFieldVO.isShowDate" compareValue="0">  
+					clickCount DESC
+				</isEqual>
+			</dynamic>
+			
+	</select>
+	<select id="getDdlSaleDataVOList" parameterClass="searchVO" resultClass="ddlDataVO">
+		SELECT IFNULL(SUM(D.ClickCount),0) clickCount,
+				IFNULL(SUM(D.ValidClickCount),0) validClickCount,
+				ROUND(IFNULL(SUM(D.ValidClickCount)*100/SUM(D.ClickCount),0.00),2) percent,
+				 IFNULL(SUM(D.SaleCount),0) saleCount,
+				 IFNULL(SUM(D.ShowSaleCount),0) showSaleCount,
+				ROUND(IFNULL(SUM(D.SaleCount)*100/SUM(D.ClickCount),0.00),2) salePercent,
+				ROUND(IFNULL(SUM(D.ShowSaleCount)*100/SUM(D.SaleCount),0.00),2) changePercent,
+				ROUND(IFNULL(SUM(D.ShowSaleCount)*100/SUM(D.ClickCount),0.00),2) cv
+				<isEqual property="rowFieldVO.isShowDate" compareValue="1">  
+					,D.statDate statDate
+				</isEqual>
+				<isEqual property="rowFieldVO.isShowDate" compareValue="0">  
+					,null statDate
+				</isEqual>
+				<isEqual property="rowFieldVO.isShowHour" compareValue="1">  
+					,D.Hour hour
+				</isEqual>
+				<isEqual property="rowFieldVO.isShowHour" compareValue="0">  
+					,0 hour
+				</isEqual>
+				<isEqual property="rowFieldVO.isShowProduct" compareValue="1">  
+					,IFNULL(P.id,0) productId
+					,P.Name productName
+				</isEqual>
+				<isEqual property="rowFieldVO.isShowProduct" compareValue="0">  
+					,0 productId
+					,null productName
+				</isEqual>	
+				<isEqual property="rowFieldVO.isShowChannel" compareValue="1">  
+					,IFNULL(C.id,0) channelId
+					,C.Name channelName
+				</isEqual>
+				<isEqual property="rowFieldVO.isShowChannel" compareValue="0">  
+					,0 channelId
+					,null channelName
+				</isEqual>	
+				<isEqual property="rowFieldVO.isShowProject" compareValue="1">  
+					,IFNULL(PR.id,0) projectId
+					,PR.Name projectName
+				</isEqual>
+				<isEqual property="rowFieldVO.isShowProject" compareValue="0">  
+					,0 projectId
+					,null projectName
+				</isEqual>	
+				
+				<isEqual property="rowFieldVO.isShowCountry" compareValue="1">  
+					,IFNULL(D.Country,0) countryId
+					,IFNULL(E.description,'未知国家') countryName
+				</isEqual>
+				<isEqual property="rowFieldVO.isShowCountry" compareValue="0">  
+					,0 countryId
+					,null countryName
+				</isEqual>	
+			FROM $table$ D
+			LEFT JOIN PRODUCTS P ON P.ID=D.ProductId
+			LEFT JOIN CHANNELS C ON C.ID=D.ChannelId
+			LEFT JOIN PROJECT PR ON PR.ID=D.ProjectId
+			LEFT JOIN kok_sdk.EnumerationValue E on E.id=D.Country
+			WHERE D.statDate Between #startDate# AND #endDate#
+			<isGreaterThan property="productId" compareValue="0">
+				AND D.ProductId = #productId#
+			</isGreaterThan>
+			<isGreaterThan property="channelId" compareValue="0">
+				AND D.ChannelId = #channelId#
+			</isGreaterThan>
+			<isGreaterThan property="projectId" compareValue="0">
+				AND D.ProjectId = #projectId#
+			</isGreaterThan>
+				<isNotEqual property="country" compareValue="0">
+				AND D.Country = #country#
+			</isNotEqual>
+			<dynamic  prepend =" GROUP BY ">
+				<isEqual prepend =" , " property="rowFieldVO.isShowDate" compareValue="1">  
+					D.StatDate
+				</isEqual>
+				<isEqual prepend =" , " property="rowFieldVO.isShowHour" compareValue="1">  
+					D.Hour
+				</isEqual>
+				<isEqual prepend =" , " property="rowFieldVO.isShowProduct" compareValue="1">  
+					D.ProductId
+				</isEqual>
+				<isEqual prepend =" , " property="rowFieldVO.isShowChannel" compareValue="1">  
+					D.ChannelId
+				</isEqual>
+				<isEqual prepend =" , " property="rowFieldVO.isShowProject" compareValue="1">  
+					D.ProjectId
+				</isEqual>
+				<isEqual prepend =" , " property="rowFieldVO.isShowCountry" compareValue="1">  
+					D.Country
+				</isEqual>
+			</dynamic>
+			<dynamic  prepend =" ORDER BY ">
+				<isEqual prepend =" , " property="rowFieldVO.isShowDate" compareValue="1">  
+					D.StatDate ASC
+					<isEqual prepend =" , " property="rowFieldVO.isShowHour" compareValue="0">  
+						clickCount DESC
+					</isEqual>
+				</isEqual>
+				<isEqual prepend =" , " property="rowFieldVO.isShowHour" compareValue="1">  
+					D.Hour ASC,clickCount DESC
+				</isEqual>
+				<isEqual prepend =" , " property="rowFieldVO.isShowDate" compareValue="0">  
+					clickCount DESC
+				</isEqual>
+				
+			</dynamic>
+			
+	</select>
+</sqlMap>

@@ -1,0 +1,277 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="linkads2SqlMap">
+	<typeAlias alias="linkads2VO" type="com.kkgame.feeop.adver.bean.Linkads2VO"/>
+	<select id="getLinkads2VOListCount" parameterClass="linkads2VO" resultClass="int">
+		SELECT
+		count(id)
+	        FROM linkads2 
+	        <dynamic prepend="WHERE">
+		        
+		       <isNotEmpty prepend="AND" property="id">
+		             ID = #id#
+		       </isNotEmpty>
+				 
+		        
+		       <isNotEmpty prepend="AND" property="name">
+		             Name = #name#
+		       </isNotEmpty>
+				 
+		        
+		       <isNotEmpty prepend="AND" property="adverId">
+		             AdverId = #adverId#
+		       </isNotEmpty>
+				 
+		        
+		       <isNotEmpty prepend="AND" property="linkType">
+		             LinkType = #linkType#
+		       </isNotEmpty>
+				 
+		        
+		       <isNotEmpty prepend="AND" property="redirectUrl">
+		             RedirectUrl = #redirectUrl#
+		       </isNotEmpty>
+				 
+		        
+		       <isNotEmpty prepend="AND" property="createTime">
+		             CreateTime = #createTime#
+		       </isNotEmpty>
+				 
+
+		        
+		       <isNotEmpty prepend="AND" property="operator">
+		             Operator = #operator#
+		       </isNotEmpty>
+				 
+		        
+		       <isNotEmpty prepend="AND" property="countryIds">
+		             CountryIds = #countryIds#
+		       </isNotEmpty>
+
+
+				<isGreaterThan compareValue="-1"   property="linkAdType" prepend="AND" >
+					LinkAdType = #linkAdType#
+				</isGreaterThan>
+
+				<isGreaterThan compareValue="-1"   property="clickType" prepend="AND" >
+					ClickType = #clickType#
+				</isGreaterThan>
+				<isGreaterThan compareValue="-1"   property="status" prepend="AND" >
+					Status = #status#
+				</isGreaterThan>
+
+
+
+				<isNotEmpty prepend="AND" property="cap">
+		             Cap = #cap#
+		       </isNotEmpty>
+				 
+		        
+		       <isNotEmpty prepend="AND" property="cpm">
+		             Cpm = #cpm#
+		       </isNotEmpty>
+				 
+		        
+		       <isNotEmpty prepend="AND" property="notes">
+		             Notes = #notes#
+		       </isNotEmpty>
+				 
+	    </dynamic>	
+	</select>
+	<select id="getLinkads2VOList" parameterClass="linkads2VO" resultClass="linkads2VO">
+		  SELECT
+
+        ID ,Name ,AdverId ,LinkType ,RedirectUrl ,CreateTime ,Status ,Operator ,CountryIds ,LinkAdType ,ClickType ,Cap ,Cpm ,Notes 
+
+		  FROM linkads2 
+
+	      
+	        <dynamic prepend="WHERE">
+		         
+		       <isNotEmpty prepend="AND" property="id">
+		             ID = #id#
+		       </isNotEmpty>
+				 
+		         
+		       <isNotEmpty prepend="AND" property="name">
+		             Name = #name#
+		       </isNotEmpty>
+				 
+		         
+		       <isNotEmpty prepend="AND" property="adverId">
+		             AdverId = #adverId#
+		       </isNotEmpty>
+				 
+		         
+
+				 
+		         
+		       <isNotEmpty prepend="AND" property="redirectUrl">
+		             RedirectUrl = #redirectUrl#
+		       </isNotEmpty>
+				 
+		         
+		       <isNotEmpty prepend="AND" property="createTime">
+		             CreateTime = #createTime#
+		       </isNotEmpty>
+				 
+		         
+
+				 
+		         
+		       <isNotEmpty prepend="AND" property="operator">
+		             Operator = #operator#
+		       </isNotEmpty>
+				 
+		         
+		       <isNotEmpty prepend="AND" property="countryIds">
+		             CountryIds = #countryIds#
+		       </isNotEmpty>
+
+				<isGreaterThan compareValue="-1"   property="linkAdType" prepend="AND" >
+					LinkAdType = #linkAdType#
+				</isGreaterThan>
+
+				<isGreaterThan compareValue="-1"   property="clickType" prepend="AND" >
+					ClickType = #clickType#
+				</isGreaterThan>
+				<isGreaterThan compareValue="-1"   property="status" prepend="AND" >
+					Status = #status#
+				</isGreaterThan>
+				 
+		         
+		       <isNotEmpty prepend="AND" property="cap">
+		             Cap = #cap#
+		       </isNotEmpty>
+				 
+		         
+		       <isNotEmpty prepend="AND" property="cpm">
+		             Cpm = #cpm#
+		       </isNotEmpty>
+				 
+		         
+		       <isNotEmpty prepend="AND" property="notes">
+		             Notes = #notes#
+		       </isNotEmpty>
+				 
+	    </dynamic>	
+	     ORDER BY  cpm DESC
+    	<![CDATA[ LIMIT  #page.index#, #page.pageSize# ]]> 
+	</select>
+
+	<select id="getLinkads2VOAll"   resultClass="advVO">
+		SELECT
+		        A.ID id,
+				A.Name name
+		FROM LinkAds2 A
+	</select>
+
+	<select id="getLinkads2VO" parameterClass="linkads2VO" resultClass="linkads2VO">
+		SELECT
+
+        ID ,Name ,AdverId ,LinkType ,RedirectUrl ,CreateTime ,Status ,Operator ,CountryIds ,LinkAdType ,ClickType ,Cap ,Cpm ,Notes,
+	   advLinkmanId
+	        FROM linkads2 
+	        WHERE 
+		        ID = #id# 
+
+	</select>
+	<insert id="create" parameterClass="linkads2VO">
+		 <![CDATA[
+        INSERT INTO linkads2 (
+
+        	Name ,
+        	AdverId ,
+        	LinkType ,
+        	RedirectUrl ,
+        	CreateTime ,
+        	Status ,
+        	Operator ,
+        	CountryIds ,
+        	LinkAdType ,
+        	ClickType ,
+        	Cap ,
+        	Cpm ,
+        	Notes ,
+        	advLinkmanId
+        ) VALUES (
+
+        	#name# ,
+        	#adverId# ,
+        	#linkType# ,
+        	#redirectUrl# ,
+        	now() ,
+        	#status# ,
+        	#operator# ,
+        	#countryIds# ,
+        	#linkAdType# ,
+        	#clickType# ,
+        	#cap# ,
+        	#cpm# ,
+        	#notes#,
+        	 #advLinkmanId#
+        )
+    ]]>
+		<selectKey keyProperty="id" resultClass="int">
+			SELECT LAST_INSERT_ID() AS ID
+		</selectKey>
+	</insert>
+
+	<insert id="copy" parameterClass="linkads2VO">
+
+        INSERT INTO linkads2 (
+
+        	Name ,
+        	AdverId ,
+        	LinkType ,
+        	RedirectUrl ,
+        	CreateTime ,
+        	Status ,
+        	Operator ,
+        	CountryIds ,
+        	LinkAdType ,
+        	ClickType ,
+        	Cap ,
+        	Cpm ,
+        	Notes ,
+        	advLinkmanId
+        )
+         select
+         Name ,
+        	AdverId ,
+        	LinkType ,
+        	RedirectUrl ,
+        	CreateTime ,
+        	Status ,
+        	Operator ,
+        	CountryIds ,
+        	LinkAdType ,
+        	ClickType ,
+        	Cap ,
+        	Cpm ,
+        	Notes ,
+        	advLinkmanId
+		from   linkads2 WHERE ID = #id#
+	</insert>
+	<update id="update" parameterClass="linkads2VO">
+
+        UPDATE linkads2 SET
+	        Name = #name# ,
+	        AdverId = #adverId# ,
+	        LinkType = #linkType# ,
+	        RedirectUrl = #redirectUrl# ,
+	        Status = #status# ,
+	        Operator = #operator# ,
+	        CountryIds = #countryIds# ,
+	        LinkAdType = #linkAdType# ,
+	        ClickType = #clickType# ,
+	        Cap = #cap# ,
+	        Cpm = #cpm# ,
+	        advLinkmanId=#advLinkmanId# ,
+	        Notes = #notes# 
+        WHERE 
+	        ID = #id# 
+
+	</update>
+	 
+</sqlMap>

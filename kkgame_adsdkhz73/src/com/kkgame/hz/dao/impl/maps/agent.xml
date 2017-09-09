@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="agentSqlMap">
+	<select id="getAgentList" parameterClass="agentVO" resultClass="agentVO">
+		SELECT 	AG.ID id,
+            AG.Name name, 
+            AG.Type type,		             
+			AG.Level level, 
+            IFNULL(PU.Status,0) status,    
+            IFNULL(PU.LastLogin,'') lastLogin ,
+            IFNULL(PU.ID,0) portalUserId,           
+			IFNULL(PU.LoginId,'') loginId,
+			IFNULL(PU.Passwd,'') passwd     
+ 	  	FROM AGENT AG  LEFT  JOIN PORTAL_USER PU  ON (PU.RoleId = AG.ID 	AND PU.RoleType = 'AG')
+	   	WHERE  1=1
+      	<isNotNull property="searchId">      
+      		<isGreaterThan property="searchId" compareValue="0">
+          		AND AG.ID  like  concat('%',#searchId#,'%')
+         	</isGreaterThan>
+      	</isNotNull>
+      	<isNotNull property="searchName">  
+          	AND  AG.NAME like  concat('%',#searchName#,'%')
+        </isNotNull>
+	   		ORDER BY #sortIndex#	   	     
+		<isEqual property="sortType" compareValue="desc"> DESC 
+		</isEqual> 	
+	   	<![CDATA[ LIMIT  #page.index#, #page.pageSize# ]]>
+	</select>
+	
+	<select id="getAgentListCount" parameterClass="agentVO" resultClass="int">
+		SELECT 	COUNT(AG.ID) 
+		FROM AGENT AG  
+		LEFT JOIN PORTAL_USER PU  ON (PU.RoleId = AG.ID AND PU.RoleType = 'AG')
+	    WHERE  1=1  
+		<isNotNull property="searchId">      
+			<isGreaterThan property="searchId" compareValue="0">
+         		AND AG.ID  like  concat('%',#searchId#,'%')
+          	</isGreaterThan>
+		</isNotNull>
+		<isNotNull property="searchName">  
+         	AND  AG.NAME like  concat('%',#searchName#,'%')
+		</isNotNull>     
+	</select>
+	
+	<select id="getAllAgentList" parameterClass="java.lang.String" resultClass="agentVO">
+		SELECT 	AG.ID id,
+            AG.Name name, 
+            AG.Type type,		             
+			AG.Level level         
+ 	  	FROM AGENT AG  
+	</select>
+	
+	<insert id="insert" parameterClass="agentVO">
+		INSERT  INTO  AGENT
+		(  Name, Type, Level, CooperateMode ,Description )
+ 		VALUES (#name#,#type#,#level#,#cooperateMode#,#description#)
+ 		<selectKey resultClass="int"  keyProperty="id" >   
+        select @@IDENTITY as value      
+		</selectKey> 											
+	</insert>
+	<select id="getAgentById" parameterClass="int" resultClass="agentVO">
+			SELECT   ID  id,
+					 Name  name,
+					 Type  type,
+					 Level  level,
+					 CooperateMode  cooperateMode,
+					 Description	description
+		    FROM  AGENT 
+			WHERE Id=#id#			
+	</select>
+ 	
+	<update  id="updateAgent" parameterClass="agentVO" >
+		UPDATE AGENT SET
+				Name = #name#,
+				Type  = #type#,
+				Level  = #level#,
+				CooperateMode  = #cooperateMode#,
+				Description	= #description#
+ 		WHERE ID = #id#	
+	</update>	
+	<delete id="deleteAgent" parameterClass="int">
+	DELETE FROM AGENT WHERE ID = #id#
+	</delete> 
+ 	<select id="getAgentByCriteria" parameterClass="agentVO" resultClass="agentVO">
+		SELECT ID id,
+			Name name
+		FROM AGENT
+		WHERE 1=1
+		<isNotEmpty property="name"> 
+			AND Name=#name#
+		</isNotEmpty>
+		<isGreaterThan property="id" compareValue="0">
+			AND ID != #id#
+		</isGreaterThan>
+	</select>
+</sqlMap>

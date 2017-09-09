@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="operatorSqlMap">
+    <typeAlias alias="operatorVO"
+               type="com.kkgame.feeop.record.bean.OperatorVO"/>
+    <select id="getOperatorVOListCount" parameterClass="operatorVO" resultClass="int">
+		SELECT COUNT(id) from  operator
+	</select>
+    <select id="getOperatorVOList" parameterClass="operatorVO" resultClass="operatorVO">
+		SELECT id as operatorId, name as operatorName, code  from operator <![CDATA[ LIMIT  #page.index#, #page.pageSize#
+        ]]>
+    </select>
+    <select id="getAllOperatorVOList" resultClass="operatorVO">
+		SELECT id as operatorId, name as operatorName, code  from operator
+	</select>
+    <select id="getOperatorsByCou" parameterClass="operatorVO" resultClass="operatorVO">
+        SELECT id as operatorId, name as operatorName, code, cou from operator WHERE cou = #cou#
+    </select>
+</sqlMap>

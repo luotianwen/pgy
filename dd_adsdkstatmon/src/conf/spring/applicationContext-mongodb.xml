@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:mongo="http://www.springframework.org/schema/data/mongo"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+            http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+
+            http://www.springframework.org/schema/aop  http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
+	        http://www.springframework.org/schema/tx  http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
+            http://www.springframework.org/schema/context
+            http://www.springframework.org/schema/context/spring-context-3.0.xsd
+            http://www.springframework.org/schema/data/mongo
+            http://www.springframework.org/schema/data/mongo/spring-mongo.xsd">
+
+    <bean id="placeholderConfig"
+          class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="location">
+            <value>classpath:db.properties</value>
+        </property>
+    </bean>
+
+
+    <mongo:mongo host="${datasource.host}" port="${datasource.port}">
+        <mongo:options connections-per-host="10"
+                       threads-allowed-to-block-for-connection-multiplier="10"
+                       auto-connect-retry="true"/>
+    </mongo:mongo>
+
+    <bean id="mongoTemplate" class="org.springframework.data.mongodb.core.MongoTemplate">
+        <constructor-arg ref="mongo"/>
+        <constructor-arg name="databaseName" value="${datasource.dbname}"/>
+
+    </bean>
+
+
+    <bean id="statisticsDao" class="com.kkgame.pay.stat.dao.impl.StatisticsDaoImpl">
+        <property name="mongoTemplate" ref="mongoTemplate"></property>
+        <property name="dataSource" ref="dataSource_data"></property>
+        <property name="sqlMapClient" ref="sqlMapClient_data"></property>
+    </bean>
+
+
+    <bean id="statisticsService" class="com.kkgame.pay.stat.service.impl.StatisticsServiceImpl">
+        <property name="statisticsDao" ref="statisticsDao"/>
+    </bean>
+
+
+    <bean id="dataStatistics" class="com.kkgame.pay.stat.quartz.DataStatistics" >
+        <property name="statisticsService" ref="statisticsService"/>
+    </bean>
+    <bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+        <property name="triggers">
+            <list>
+            <!--
+           <bean class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+               <property name="jobDetail">
+                   <bean class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+                       <property name="targetObject">
+                           <ref bean="dataStatistics" />
+                       </property>
+                       <property name="targetMethod">
+                           <value>everyFiveMinWork</value>
+                       </property>
+                   </bean>
+               </property>
+               <property name="cronExpression">
+                   <value>0 0/1 * * * ?</value>
+               </property>
+           </bean>
+             -->
+
+       </list>
+        </property>
+    </bean>
+
+
+
+    <bean id="dataSource" class="com.kkgame.pay.stat.datasource.DynamicDataSource">
+        <property name="targetDataSources">
+            <map key-type="java.lang.String">
+              <!--   key的值必须要和静态键值对照类中的值相同  -->
+                <entry value-ref="dataSource_data" key="kkpay_data"></entry>
+            </map>
+        </property>
+    </bean>
+
+
+    <bean id="dataSource_data" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">
+        <property name="url" value="${url}" />
+        <property name="username" value="${username}"/>
+        <property name="password" value="${password}" />
+        <property name="maxActive"><value>20</value></property>
+        <property name="initialSize"><value>1</value></property>
+        <property name="maxWait"><value>60000</value></property>
+        <property name="minIdle"><value>1</value></property>
+        <property name="timeBetweenEvictionRunsMillis"><value>60000</value></property>
+        <property name="minEvictableIdleTimeMillis"><value>300000</value></property>
+        <property name="validationQuery"><value>SELECT 1</value></property>
+        <property name="testWhileIdle"><value>true</value></property>
+        <property name="testOnBorrow"><value>false</value></property>
+        <property name="testOnReturn"><value>false</value></property>
+        <property name="poolPreparedStatements"><value>true</value></property>
+        <property name="maxOpenPreparedStatements"><value>20</value></property>
+    </bean>
+
+    <bean id = "sqlMapClient_data" class = "org.springframework.orm.ibatis.SqlMapClientFactoryBean">
+        <property name = "configLocation" value = "classpath:SqlMapConfig.xml"/>
+        <property name = "dataSource">
+            <ref local = "dataSource_data"/>
+        </property>
+    </bean>
+
+    <bean id="transactionManager_data" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource_data" />
+    </bean>
+     <tx:advice id="txAdvice_data" transaction-manager="transactionManager_data" >
+        <tx:attributes>
+            <tx:method name="get*" read-only="true" />
+            <tx:method name="getReceiveTaskDetailInfo" rollback-for="org.springframework.dao.DataAccessException" />
+            <tx:method name="*" rollback-for="org.springframework.dao.DataAccessException" />
+        </tx:attributes>
+    </tx:advice>
+    <aop:config>
+        <aop:pointcut id="allManagerMethod_data" expression="execution(* com.kkgame.pay.stat.service.*.*(..))" />
+        <aop:advisor advice-ref="txAdvice_data" pointcut-ref="allManagerMethod_data" />
+    </aop:config>
+
+
+
+</beans>

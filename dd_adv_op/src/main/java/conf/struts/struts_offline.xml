@@ -1,0 +1,30 @@
+<!DOCTYPE struts PUBLIC 
+	"-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+	"http://struts.apache.org/dtds/struts-2.0.dtd">
+<struts>
+	<constant name="struts.multipart.maxSize" value="1000000000" />
+	<include file="struts-default.xml"></include>
+	
+	<package name="offline" namespace="/offline" extends="abroad-default">
+		<default-interceptor-ref name="crudStack"/>
+		
+		<action name="Offsdk" class="com.kkgame.feeop.offline.action.OffsdkAction" method="do{1}">
+			<result name="query">/pages/offline/offlinesdk_query.jsp</result>
+			<result name="list">/pages/offline/offlinesdk_list.jsp</result>
+			<result name="create">/pages/offline/offlinesdk_create.jsp</result>
+		</action>
+		
+		<action name="Offjar" class="com.kkgame.feeop.offline.action.OffjarAction" method="do{1}">
+			<result name="query">/pages/offline/offlinejar_query.jsp</result>
+			<result name="list">/pages/offline/offlinejar_list.jsp</result>
+			<result name="create">/pages/offline/offlinejar_create.jsp</result>
+		</action>
+		
+		<action name="Offapk" class="com.kkgame.feeop.offline.action.OffapkAction" method="do{1}">
+			<result name="query">/pages/offline/offlineapk_query.jsp</result>
+			<result name="list">/pages/offline/offlineapk_list.jsp</result>
+			<result name="create">/pages/offline/offlineapk_create.jsp</result>
+		</action>
+		
+	</package>
+</struts>

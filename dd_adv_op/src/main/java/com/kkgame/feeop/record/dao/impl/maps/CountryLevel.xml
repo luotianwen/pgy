@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="countryLevelSqlMap">
+	<typeAlias alias="countryLevelVO"
+		type="com.kkgame.feeop.record.bean.CountryLevelVO" />
+	<select id="getCountryLevelVOListCount" parameterClass="countryLevelVO"
+		resultClass="int">
+		SELECT
+		count(a.countryId)
+		FROM COUNTRY_LEVEL a
+		left join kok_sdk.EnumerationValue b on b.id=a.countryId
+		WHERE 1=1
+		<isGreaterThan property="countryId" compareValue="-100">
+			AND a.countryId = #countryId#
+				</isGreaterThan>
+		<isGreaterThan property="productId" compareValue="-100">
+			AND a.productId = #productId#
+				</isGreaterThan>
+		<isGreaterThan property="level" compareValue="-100">
+			AND a.level = #level#
+				</isGreaterThan>
+
+
+	</select>
+	<select id="getCountryLevelVOList" parameterClass="countryLevelVO"
+		resultClass="countryLevelVO">
+		SELECT
+		a.countryId as id , 
+		IFNULL(b.description,'所有国家') as countryname ,
+		a.level ,
+		IFNULL(pj.ID,0) as productId,
+		IFNULL(pj.Name,'所有产品') as productname
+		FROM COUNTRY_LEVEL a
+		left join kok_sdk.EnumerationValue b on b.id=a.countryId
+		left join PRODUCT pj on pj.ID=a.productId
+		WHERE 1=1
+		<isGreaterThan property="countryId" compareValue="-100">
+			AND a.countryId = #countryId#
+				</isGreaterThan>
+		<isGreaterThan property="productId" compareValue="-100">
+			AND a.productId = #productId#
+				</isGreaterThan>
+		<isGreaterThan property="level" compareValue="-100">
+			AND a.level = #level#
+		</isGreaterThan>
+		ORDER BY countryname
+    	<![CDATA[ LIMIT  #page.index#, #page.pageSize# ]]>
+	</select>
+
+	<select id="getCountryLevelVO" parameterClass="countryLevelVO"
+		resultClass="countryLevelVO">
+		SELECT
+		a.countryId , IFNULL(b.description,'所有国家') as countryname ,a.level ,
+		IFNULL(pj.ID,0) as productId,
+		IFNULL(pj.Name,'所有产品') as productname
+		FROM COUNTRY_LEVEL a
+		left join kok_sdk.EnumerationValue b on b.id=a.countryId
+		left join PRODUCT pj on pj.ID=a.productId
+		WHERE
+		a.countryId = #id# and a.productId=#productId# 
+	</select>
+	<insert id="create" parameterClass="countryLevelVO">
+		 <![CDATA[
+        INSERT INTO COUNTRY_LEVEL (
+        	countryId ,
+        	productId ,
+        	level 
+        ) VALUES (
+        	#countryId# ,
+        	#productId# ,
+        	#level# 
+        ) ON DUPLICATE KEY UPDATE level=VALUES(level)
+    ]]>
+
+	</insert>
+	<update id="update" parameterClass="countryLevelVO">
+		UPDATE COUNTRY_LEVEL SET
+		level = #level#
+		WHERE
+		countryId = #countryId#
+		and
+		productId=#productId# 
+	</update>
+   <delete id="delete" parameterClass="countryLevelVO">
+		DELETE FROM COUNTRY_LEVEL 
+		WHERE
+		countryId = #countryId#
+		and
+		productId=#productId# 
+	</delete>
+</sqlMap>

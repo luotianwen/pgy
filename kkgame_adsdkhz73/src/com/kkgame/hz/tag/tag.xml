@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="tagSqlMap">
+		
+	<resultMap id="nameMap" class="java.util.HashMap">
+  		<result property="id" column="ID"  javaType="java.lang.Integer"/>
+		<result property="name" column="Name" javaType="java.lang.String"/>
+	</resultMap>
+	<select id="getAgentList" 	resultClass="nameVO"> 
+		SELECT  ID id,
+				Name name
+		FROM 	AGENT 
+		ORDER BY Name ASC		
+	</select>
+	<select id="getBdList" 	resultClass="nameVO"> 
+		SELECT  ID id,
+				Name name,
+				AgentId parentId,
+				Telephone tele
+		FROM 	BUSINESS_DEVELOPER 
+		ORDER BY Name ASC		
+	</select>	
+	<select id="getBhList" 	resultClass="nameVO"> 
+		SELECT  ID id,
+				Name name,
+				BusinessDeveloperId parentId
+		FROM 	BUSINESS_HELPER 
+		ORDER BY Name ASC		
+	</select>	
+	<select id="getPortalList" 	resultClass="nameVO"> 
+		SELECT  ID id,
+				Name name
+		FROM 	OS
+		ORDER BY Name ASC 		
+	</select>	
+	<select id="getLcdList" 	resultClass="nameVO"> 
+		SELECT  ID id,
+				Name name
+		FROM 	SCREEN 		
+	</select>		
+	<select id="getProvinceList" 	resultClass="nameVO"> 
+		SELECT  ID id,
+				Name name
+		FROM 	PROVINCE 		
+	</select>	
+	<select id="getProvinceMap" parameterClass="java.lang.String" resultMap="nameMap"> 
+		SELECT  ID id,
+				Name name
+		FROM 	PROVINCE 
+	</select>
+	<select id="getBdMap" parameterClass="java.lang.String" resultMap="nameMap">
+		SELECT ID, 
+				Name
+		FROM  BUSINESS_DEVELOPER
+	</select>		
+	<select id="getAgentMap" parameterClass="java.lang.String" resultMap="nameMap">
+		SELECT ID, 
+				Name
+		FROM  AGENT
+	</select>		
+	<select id="getBhMap" parameterClass="java.lang.String" resultMap="nameMap">
+		SELECT ID, 
+				Name
+		FROM  BUSINESS_HELPER
+	</select>		
+	<select id="getCustomerListByBdId" parameterClass="int"	resultClass="nameVO"> 
+		SELECT  ID id,
+				Name name
+		FROM 	CUSTOMER
+		WHERE (Status = 2 OR Status = 4 OR Status = 7)
+		AND BusinessDeveloperId=#id#
+		ORDER BY Name ASC
+	</select>
+	<select id="getCustomerListByAgentId" parameterClass="int"	resultClass="nameVO"> 
+		SELECT  C.ID id,
+				C.Name name
+		FROM 	CUSTOMER C,BUSINESS_DEVELOPER B
+		WHERE (Status = 2 OR Status = 4 OR Status = 7)
+		AND C.BusinessDeveloperId=B.ID
+		AND B.AgentId = #agentId#
+		ORDER BY Name ASC
+	</select>	
+	<select id="getProjectListByCustomerId" parameterClass="int" resultClass="nameVO"> 
+		SELECT  ID id,
+				Name name
+		FROM PROJECT_NEW
+		WHERE CustomerId=#customerId#
+		ORDER BY Name ASC
+	</select>	
+	<select id="getBdListByAgentId" parameterClass="int"	resultClass="nameVO"> 
+		SELECT  ID id,
+				Name name
+		FROM 	BUSINESS_DEVELOPER
+		WHERE AgentId=#id#
+		ORDER BY Name ASC
+	</select>	
+	<select id="getBhListByBdId" parameterClass="int"	resultClass="nameVO"> 
+		SELECT  ID id,
+				Name name
+		FROM 	BUSINESS_HELPER
+		WHERE BusinessDeveloperId=#bdId#
+		ORDER BY Name ASC
+	</select>
+	<select id="getBhListByAgentId" parameterClass="int"	resultClass="nameVO"> 
+		SELECT  h.ID id,
+				h.Name name
+		FROM 	BUSINESS_HELPER h,BUSINESS_DEVELOPER b
+		WHERE h.BusinessDeveloperId=b.ID
+		AND	  b.AgentId = #agentId#
+		ORDER BY h.Name ASC
+	</select>
+	<select id="getProjectListByBhId" parameterClass="int" resultClass="nameVO">
+		SELECT  distinct PJ.ID id,
+				PJ.Name name
+		FROM PROJECT_NEW PJ, PROJECT_PRODUCT_PACKAGE_COOPERATE PC
+		WHERE PJ.ID=PC.ProjectId AND PC.PannerType='BH' AND PC.PannerId=#bhId#
+		ORDER BY Name ASC
+	</select>	
+	<select id="getProductListByCpId" 	parameterClass="int" resultClass="nameVO"> 
+		SELECT  ID id,
+				Name name
+		FROM 	PRODUCT 	
+		WHERE   ContentProviderId = #cpId#
+		ORDER BY Name ASC	
+	</select>	
+	
+	
+	
+	
+	
+	<resultMap id="getCityAndProvinceName-result" class="cityVO">  
+	    <result property="id" column="id"/>   
+	    <result property="name" column="name"/>   
+	    <result property="provinceName" column="provinceName"/>  
+	</resultMap>	
+		<!-- 获取省份和城市名 -->
+	<select id="getCityAndProvinceName" parameterClass="map" resultMap="getCityAndProvinceName-result">
+		select  C.ID as id,
+				C.Name as name,
+				P.Name as provinceName
+ 			from CITY C, PROVINCE P
+ 			where P.ID=C.ProvinceId and C.ID in 
+		<dynamic>
+			<iterate property="ids" conjunction="," close=")" open="(">
+				#ids[]#
+			</iterate>
+		</dynamic>
+	</select>
+	<select id="getTcList" 	resultClass="nameVO"> 
+		SELECT  ID id,
+				LoginId name
+		FROM PORTAL_USER WHERE RoleType = 'TC'
+	</select>
+	<select id="getTcExitList" 	resultClass="nameVO"> 
+		SELECT  ID id,
+				LoginId name
+		FROM PORTAL_USER WHERE RoleType = 'TC' AND Status = 0
+	</select>
+</sqlMap>

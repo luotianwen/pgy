@@ -1,0 +1,42 @@
+<!DOCTYPE struts PUBLIC 
+	"-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+	"http://struts.apache.org/dtds/struts-2.0.dtd">
+<struts>
+	<constant name="struts.multipart.maxSize" value="1000000000" />
+	<include file="struts-default.xml"></include>
+	<package name="record" namespace="/record" extends="abroad-default">
+		<default-interceptor-ref name="crudStack"/>
+		 <action name="ProjectHzTotalModel" class="com.kkgame.feeop.record.action.ProjectHzTotalModelAction" method="do{1}">
+			<result name="list">/pages/record/projectHzTotalModel_list.jsp</result>
+			<result name="create">/pages/record/projectHzTotalModel_create.jsp</result>
+			<result name="detail">/pages/record/projectHzTotalModel_detail.jsp</result>
+			 <result name="download">/pages/record/projectHzTotalModel_download.jsp</result>
+		</action>
+		<action name="ApkCphcTotalModel" class="com.kkgame.feeop.record.action.ApkCphcTotalModelAction" method="do{1}">
+			<result name="list">/pages/record/apkCphcTotalModel_list.jsp</result>
+			<result name="create">/pages/record/apkCphcTotalModel_create.jsp</result>
+			<result name="detail">/pages/record/apkCphcTotalModel_detail.jsp</result>
+			<result name="updateprice">/pages/record/apkCphcTotalModel_update.jsp</result>
+		</action>
+		<action name="CountryLevel" class="com.kkgame.feeop.record.action.CountryLevelAction" method="do{1}">
+			<result name="list">/pages/record/countryLevel_list.jsp</result>
+			<result name="create">/pages/record/countryLevel_create.jsp</result>
+			<result name="detail">/pages/record/countryLevel_detail.jsp</result>
+		</action>
+		<action name="Adjust" class="com.kkgame.feeop.record.action.AdjustAction" method="do{1}">
+			<result name="list">/pages/adjust/adjust_list.jsp</result>
+			<result name="create">/pages/adjust/adjust_create.jsp</result>
+			<result name="detail">/pages/adjust/adjust_detail.jsp</result>
+		</action>
+		<action name="Operator" class="com.kkgame.feeop.record.action.OperatorAction" method="do{1}">
+			<result name="list">/pages/record/operator_list.jsp</result>
+			<result name="create">/pages/record/operator_create.jsp</result>
+		</action>
+		<action name="getAllOperator" method="getAllOperator" class="com.kkgame.feeop.record.action.OperatorAction">
+			<result name="success">/pages/record/getAllOperator4Select.jsp</result>
+		</action>
+		<action name="GetOperatorsByCou" method="GetOperatorsByCou" class="com.kkgame.feeop.record.action.OperatorAction">
+			<result name="success">/pages/record/getAllOperator4Select.jsp</result>
+		</action>
+	</package>
+</struts>

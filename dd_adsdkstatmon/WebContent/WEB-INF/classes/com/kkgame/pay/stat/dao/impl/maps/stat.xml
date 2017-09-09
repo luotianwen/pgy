@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="statSqlMap">
+	<insert id="insertSDKUserData" parameterClass="map">
+		insert ignore into $table$ ( coo_id, imei, channelid, sdk, cdate, xc_coo_id, xmodel,
+		xversion,
+		ximsi, xinternet, xoperator, xcou, countryLevel,sdate, sdkversion, xdate,
+		scoo_id, ipaddr) values
+		<iterate conjunction="," property="list">
+			(#list[].coo_id#,#list[].imei#,#list[].channelid#,#list[].sdk#,#list[].cdate#,#list[].xc_coo_id#,#list[].xmodel#,#list[].xversion#,#list[].ximsi#,#list[].xinternet#,#list[].xoperator#,#list[].xcou#,#list[].countryLevel#,#list[].sdate#,#list[].sdkversion#,#list[].xdate#,#list[].scoo_id#,#list[].ipaddr#)
+		</iterate>
+	</insert>
+	<insert id="insertUserData" parameterClass="map">
+		insert ignore into $table$ ( coo_id, imei, channelid, sdk, cdate, xc_coo_id, xmodel,
+		xversion,
+		ximsi, xinternet, xoperator, xcou, countryLevel,sdate, sdkversion, ipaddr)
+		values
+		<iterate conjunction="," property="list">
+			(#list[].coo_id#,#list[].imei#,#list[].channelid#,#list[].sdk#,#list[].cdate#,#list[].xc_coo_id#,#list[].xmodel#,#list[].xversion#,#list[].ximsi#,#list[].xinternet#,#list[].xoperator#,#list[].xcou#,#list[].countryLevel#,#list[].sdate#,#list[].sdkversion#,#list[].ipaddr#)
+		</iterate>
+	</insert>
+	<!-- <insert id="insertSDKUserData" parameterClass="userData"> insert ignore 
+		into $table$ ( coo_id, imei, channelid, sdk, cdate, xc_coo_id, xmodel, xversion, 
+		ximsi, xinternet, xoperator, xcou, countryLevel,sdate, sdkversion, xdate, 
+		scoo_id, ipaddr) values (#coo_id#,#imei#,#channelid#,#sdk#,#cdate#,#xc_coo_id#,#xmodel#,#xversion#,#ximsi#,#xinternet#,#xoperator#,#xcou#,#countryLevel#,#sdate#,#sdkversion#,#xdate#,#scoo_id#,#ipaddr#) 
+		</insert> <insert id="insertUserData" parameterClass="userData"> insert ignore 
+		into $table$ ( coo_id, imei, channelid, sdk, cdate, xc_coo_id, xmodel, xversion, 
+		ximsi, xinternet, xoperator, xcou, countryLevel,sdate, sdkversion, ipaddr) 
+		values (#coo_id#,#imei#,#channelid#,#sdk#,#cdate#,#xc_coo_id#,#xmodel#,#xversion#,#ximsi#,#xinternet#,#xoperator#,#xcou#,#countryLevel#,#sdate#,#sdkversion#, 
+		#ipaddr#) </insert> -->
+	<insert id="insertProjectUserData" parameterClass="map">
+		insert ignore
+		into $table$
+		( coo_id, imei, channelid, sdk, cdate, xc_coo_id, xmodel,
+		xversion,
+		ximsi, xinternet, xoperator, xcou, countryLevel,sdate,
+		sdkversion,
+		xdate, scoo_id, ipaddr)
+		values
+		<iterate conjunction="," property="list">
+		    (#list[].coo_id#,#list[].imei#,#list[].channelid#,#list[].sdk#,#list[].cdate#,#list[].xc_coo_id#,#list[].xmodel#,#list[].xversion#,#list[].ximsi#,#list[].xinternet#,#list[].xoperator#,#list[].xcou#,#list[].countryLevel#,#list[].sdate#,#list[].sdkversion#,#list[].xdate#,#list[].scoo_id#,#list[].ipaddr#)
+		</iterate>
+		
+	</insert>
+
+	<insert id="insertActiveData" parameterClass="map">
+		insert ignore into $table$
+		( coo_id, imei, channelid, sdk, cdate,
+		xc_coo_id, xmodel, xversion,
+		ximsi, xinternet, xoperator, xcou,
+		countryLevel, sdkversion, xdate,
+		scoo_id)
+		values
+		<iterate conjunction="," property="list">
+			(#list[].coo_id#,#list[].imei#,#list[].channelid#,#list[].sdk#,#list[].cdate#,#list[].xc_coo_id#,#list[].xmodel#,#list[].xversion#,#list[].ximsi#,#list[].xinternet#,#list[].xoperator#,#list[].xcou#,#list[].countryLevel#,
+			#list[].sdkversion#,#list[].xdate#,#list[].scoo_id#)
+		</iterate>
+	</insert>
+
+	<insert id="insertSentData" parameterClass="map">
+		insert ignore into $table$
+		( coo_id, imei, channelid, sdk, cdate,
+		xc_coo_id, apkid, pkgid, cou,
+		countryLevel, sdkversion, sdkstyle,
+		pkgstatus)
+		values
+		<iterate conjunction="," property="list">
+			(#list[].coo_id#,#list[].imei#,#list[].channelid#,#list[].sdk#,#list[].cdate#,#list[].xc_coo_id#,#list[].apkid#,#list[].pkgid#,#list[].cou#,#list[].countryLevel#,
+			#list[].sdkversion#,#list[].sdkstyle#,#list[].pkgstatus#)
+		</iterate>
+	</insert>
+	<insert id="insertSentSuccData" parameterClass="map">
+		insert ignore into $table$
+		( coo_id, imei, channelid, sdk, cdate,
+		xc_coo_id, apkid, pkgid, cou,
+		countryLevel, sdkversion, sdkstyle,
+		pkgstatus)
+		values
+		<iterate conjunction="," property="list">
+			(#list[].coo_id#,#list[].imei#,#list[].channelid#,#list[].sdk#,#list[].cdate#,#list[].xc_coo_id#,#list[].apkid#,#list[].pkgid#,#list[].cou#,#list[].countryLevel#,
+			#list[].sdkversion#,#list[].sdkstyle#,#list[].pkgstatus#)
+		</iterate>
+	</insert>
+
+
+
+	<insert id="insertShow" parameterClass="map">
+		insert ignore into $table$
+
+		( coo_id, imei, channelid, sdk, cdate,
+		xc_coo_id, apkid, pkgid, cou,
+		countryLevel, sdkversion, sdkstyle)
+		values
+		<iterate conjunction="," property="list">
+			(#list[].coo_id#,#list[].imei#,#list[].channelid#,#list[].sdk#,#list[].cdate#,#list[].xc_coo_id#,#list[].apkid#,#list[].pkgid#,#list[].cou#,#list[].countryLevel#,
+			#list[].sdkversion#,#list[].sdkstyle#)
+		</iterate>
+	</insert>
+	<insert id="insertActivate" parameterClass="map">
+		insert ignore into $table$
+		( coo_id, imei, channelid, sdk, cdate,
+		xc_coo_id, apkid, pkgid, cou,
+		countryLevel, sdkversion, sdkstyle)
+		values
+		<iterate conjunction="," property="list">
+			(#list[].coo_id#,#list[].imei#,#list[].channelid#,#list[].sdk#,#list[].cdate#,#list[].xc_coo_id#,#list[].apkid#,#list[].pkgid#,#list[].cou#,#list[].countryLevel#,
+			#list[].sdkversion#,#list[].sdkstyle#)
+		</iterate>
+	</insert>
+	<insert id="insertInstalled" parameterClass="map">
+		insert ignore into $table$
+		( coo_id, imei, channelid, sdk, cdate,
+		xc_coo_id, apkid, pkgid, cou,
+		countryLevel, sdkversion, sdkstyle)
+		values
+		<iterate conjunction="," property="list">
+			(#list[].coo_id#,#list[].imei#,#list[].channelid#,#list[].sdk#,#list[].cdate#,#list[].xc_coo_id#,#list[].apkid#,#list[].pkgid#,#list[].cou#,#list[].countryLevel#,
+			#list[].sdkversion#,#list[].sdkstyle#)
+		</iterate>
+	</insert>
+	<insert id="insertDownload" parameterClass="map">
+		insert ignore into $table$
+		( coo_id, imei, channelid, sdk, cdate,
+		xc_coo_id, apkid, pkgid, cou,
+		countryLevel, sdkversion, sdkstyle)
+		values
+		<iterate conjunction="," property="list">
+			(#list[].coo_id#,#list[].imei#,#list[].channelid#,#list[].sdk#,#list[].cdate#,#list[].xc_coo_id#,#list[].apkid#,#list[].pkgid#,#list[].cou#,#list[].countryLevel#,
+			#list[].sdkversion#,#list[].sdkstyle#)
+		</iterate>
+	</insert>
+	<insert id="insertClick" parameterClass="map">
+		insert ignore into $table$
+		( coo_id, imei, channelid, sdk, cdate,
+		xc_coo_id, apkid, pkgid, cou,
+		countryLevel, sdkversion, sdkstyle)
+		values
+
+		<iterate conjunction="," property="list">
+			(#list[].coo_id#,#list[].imei#,#list[].channelid#,#list[].sdk#,#list[].cdate#,#list[].xc_coo_id#,#list[].apkid#,#list[].pkgid#,#list[].cou#,#list[].countryLevel#,
+			#list[].sdkversion#,#list[].sdkstyle#)
+		</iterate>
+	</insert>
+</sqlMap>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="interSqlMap">
+	<insert id="insertAgent" parameterClass="interVO">
+		INSERT IGNORE INTO AGENT(ID,Name)
+		VALUES(#id#,#name#)
+	</insert>
+	<insert id="insertCustomer" parameterClass="interVO">
+		INSERT IGNORE INTO CUSTOMER(ID,Name,BdId)
+		VALUES(#id#,#name#,#bdId#)
+	</insert>
+	<insert id="insertBd" parameterClass="interVO">
+		INSERT IGNORE INTO BD(ID,Name,AgentId)
+		VALUES(#id#,#name#,#agentId#)
+	</insert>
+	<insert id="insertProject" parameterClass="interVO">
+		INSERT IGNORE INTO PROJECT(ID,Name,AgentId,BdId,CustomerId,Type,ProductId,CreateTime,RateHigh,RateMid,RateLow,MinIncomeRate)
+		VALUES(#id#,#name#,#agentId#,#bdId#,#customerId#,#projectType#,#productId#,now(),0.12,0.12,0.12,0.05)
+	</insert>
+	<insert id="insertProduct" parameterClass="interVO">
+		INSERT IGNORE INTO PRODUCT(ID,Name,CustomerId,HighPrice,MidPrice,LowPrice)
+		VALUES(#id#,#name#,#customerId#,0.1,0.1,0.1)
+	</insert>
+	<insert id="insertDevProduct" parameterClass="interVO">
+		INSERT IGNORE INTO PRODUCT(ID,Name,CustomerId,HighPrice,MidPrice,LowPrice)
+		VALUES(#id#,#name#,#customerId#,0.07,0.06,0.05)
+	</insert>
+</sqlMap>

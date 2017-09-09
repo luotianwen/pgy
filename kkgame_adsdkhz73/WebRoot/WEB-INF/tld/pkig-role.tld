@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?><!DOCTYPE taglib PUBLIC "-//Sun Microsystems, Inc.//DTD JSP Tag Library 1.1//EN"
+  "http://java.sun.com/j2ee/dtds/web-jsptaglibrary_1_1.dtd">
+
+<taglib>
+  <tlibversion>1.0</tlibversion>
+  <jspversion>1.1</jspversion>
+  <shortname>role</shortname>
+  <uri>http://www.kkgame.com</uri>
+  <info>Role Tags Library</info>
+
+  <tag>
+    <name>equal</name>
+    <tagclass>com.kkgame.hz.tag.RoleEqualTag</tagclass>
+    <bodycontent>jsp</bodycontent>
+    <info>get the of the Login User </info>
+    <attribute>
+      <name>type</name>
+      <required>true</required>
+      <rtexprvalue>true</rtexprvalue>
+    </attribute>
+  </tag>
+ <!--   
+  <tag>
+    <name>notEqual</name>
+    <tagclass>com.kkfun.web.module.tag.RoleNotEqualTag</tagclass>
+    <bodycontent>jsp</bodycontent>
+    <info>get the of the Login User </info>
+    <attribute>
+      <name>compareValue</name>
+      <required>true</required>
+      <rtexprvalue>true</rtexprvalue>
+    </attribute>
+  </tag>
+  
+  <tag>
+    <name>menu</name>
+    <tagclass>com.kkfun.web.module.tag.RoleMenuTag</tagclass>
+    <bodycontent>jsp</bodycontent>
+    <info>get the menu status (close or open) of the login user </info>
+    <attribute>
+      <name>menuName</name>
+      <required>true</required>
+      <rtexprvalue>true</rtexprvalue>
+    </attribute>
+  </tag>
+  -->
+</taglib>

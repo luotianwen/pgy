@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?><!DOCTYPE taglib PUBLIC "-//Sun Microsystems, Inc.//DTD JSP Tag Library 1.1//EN"
+  "http://java.sun.com/j2ee/dtds/web-jsptaglibrary_1_1.dtd">
+
+<taglib>
+  <tlibversion>1.0</tlibversion>
+  <jspversion>1.1</jspversion>
+  <shortname>page</shortname>
+  <uri>http://www.kkgame.com</uri>
+  <info>Page Pagination Tags Library</info>
+  
+  <tag>
+    <name>pagination</name>
+    <tagclass>com.kkgame.hz.tag.PaginationTag</tagclass>
+    <bodycontent>empty</bodycontent>
+    <info>get the page Pagination html info from the ActionForm</info>
+
+	<attribute>
+      <name>formName</name>
+      <required>true</required>
+      <rtexprvalue>true</rtexprvalue>
+    </attribute>
+  
+    <attribute>
+      <name>property</name>
+      <required>true</required>
+      <rtexprvalue>true</rtexprvalue>
+    </attribute>
+
+    <attribute>
+      <name>operation</name>
+      <required>true</required>
+      <rtexprvalue>true</rtexprvalue>
+    </attribute>
+  </tag>
+</taglib>

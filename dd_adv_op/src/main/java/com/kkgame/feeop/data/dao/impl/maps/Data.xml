@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="dataSqlMap">
+    <insert id="insertAdLinkIncomeList" parameterClass="map">
+		INSERT INTO AD_DATA_STAT_LINK_$table$(StatDate,AdId,ThirdClickTimes,LinkIncome)
+		VALUES
+		<iterate conjunction="," property="list">
+			<![CDATA[
+			(#list[].statDate#,#list[].adId#,#list[].thirdClickTimes#,#list[].linkIncome#)
+			]]>  
+		</iterate>
+		ON DUPLICATE KEY UPDATE ThirdClickTimes=VALUES(ThirdClickTimes),LinkIncome=VALUES(LinkIncome)
+	</insert>
+	<update id="updateAdLinkPercent" parameterClass="dataVO">
+		UPDATE AD_DATA_STAT_LINK_$table$ SET
+		ClickPercent=IFNULL(ThirdClickTimes*1.0/(TotalClickTimes*1.0),0.00),
+		IncomePercent=IFNULL(LinkIncome*1.0/(TotalClickTimes*1.0),0.00)
+		WHERE StatDate=#statDate#
+	</update>
+	<update id="updateAdLinkProjectPercent" parameterClass="dataVO">
+		UPDATE AD_DATA_LINK_$table$ AD,AD_DATA_STAT_LINK_$table$ A
+		SET AD.ThirdClickTimes=AD.TotalClickTimes*A.ClickPercent,
+		AD.LinkIncome=AD.TotalClickTimes*A.IncomePercent
+		WHERE AD.StatDate=#statDate# AND AD.StatDate=A.StatDate AND AD.AdId=A.AdId
+	</update>
+	<select id="getAdLinkIncome" parameterClass="dataVO" resultClass="dataVO">
+		SELECT #statDate# statDate,
+			ProjectId projectId,
+			600400 type,
+			SUM(LinkIncome) linkIncome
+		FROM AD_DATA_LINK_$table$
+		WHERE StatDate=#statDate#
+		GROUP BY StatDate,ProjectId
+	</select>
+	<insert id="insertAdLinkIncome" parameterClass="map">
+		INSERT INTO PROJECT_HZ_TOTAL_$table$(sdate,projectid,sdktype,linkincome) 
+		VALUES
+		<iterate conjunction="," property="list">
+			<![CDATA[
+				(#list[].statDate#,#list[].projectId#,#list[].type#,#list[].linkIncome#)
+			]]>  
+		</iterate>
+		ON DUPLICATE KEY UPDATE linkincome=VALUES(linkincome)
+	</insert>
+    <insert id="insertProjectIncomeDataList" parameterClass="map">
+		INSERT INTO PROJECT_HZ_TOTAL_$table$(sDate,ProjectId,sdkType,thirdIncome)
+		VALUES
+		<iterate conjunction="," property="list">
+			<![CDATA[
+			(#list[].statDate#,#list[].projectId#,#list[].type#,#list[].thirdIncome#)
+			]]>  
+		</iterate>
+		ON DUPLICATE KEY UPDATE ThirdIncome=VALUES(ThirdIncome)
+	</insert>
+	
+	<insert id="insertAdIncomeList" parameterClass="map">
+		INSERT INTO APK_CPHC_TOTAL_$table$(sdate,apkid,inputtotal)
+		VALUES
+		<iterate conjunction="," property="list">
+			<![CDATA[
+			(#list[].statDate#,#list[].adId#,#list[].inputTotal#)
+			]]>  
+		</iterate>
+		ON DUPLICATE KEY UPDATE inputtotal=VALUES(inputtotal)
+	</insert>
+	<insert id="insertProjectIncomeData" parameterClass="dataVO">
+		INSERT INTO PROJECT_HZ_TOTAL_$table$(sDate,ProjectId,sdkType,thirdIncome)
+		VALUES(#statDate#,#projectId#,#type#,#thirdIncome#)
+		ON DUPLICATE KEY UPDATE ThirdIncome=VALUES(ThirdIncome)
+	</insert>
+	<update id="updateProjectIncomePercent" parameterClass="dataVO">
+		UPDATE PROJECT_TOTAL_$table$ SET Percent=ThirdIncome/UserCount WHERE StatDate=#statDate# AND ProjectId=#projectId#
+	</update>
+	<update id="updateHzProjectIncome" parameterClass="dataVO">
+		UPDATE PROJECT_HZ_TOTAL_$table$ PHT,PROJECT_TOTAL_$table$ PT
+		SET PHT.ThirdIncome=PHT.newusers*PT.percent
+		WHERE PHT.sdate=#statDate# AND PHT.ProjectId=#projectId# AND PHT.sdate=PT.StatDate AND PT.ProjectId=PHT.projectId
+	</update>
+	<update id="updateExpectIncome" parameterClass="dataVO">
+		UPDATE PROJECT_HZ_TOTAL_$table$ SET expectIncome=installTotal*expectPrice 
+		WHERE sdate=#statDate#
+		<isGreaterThan property="projectId" compareValue="0">
+			AND D.ProjectId=#projectId#
+		</isGreaterThan>
+	</update>
+	<update id="updateProjectUsers" parameterClass="dataVO">
+		UPDATE PROJECT_HZ_TOTAL_$table$ D,PROJECT P 
+		SET D.highusers=D.install_high*D.RateHigh,
+			D.midusers=D.install_mid*D.RateMid,
+			D.lowusers=D.install_low*D.RateLow
+		WHERE D.sdate=#statDate#  AND D.sdkType=600400 AND D.ProjectId=P.ID AND P.Type=1
+		<isGreaterThan property="projectId" compareValue="0">
+			AND D.ProjectId=#projectId#
+		</isGreaterThan>
+		
+	</update>
+	<update id="updateProjectOutcome" parameterClass="dataVO">
+		UPDATE PROJECT_HZ_TOTAL_$table$ D,PROJECT PR,PRODUCT P 
+		SET D.OutCome=D.highusers*P.HighPrice+D.midusers*P.MidPrice+D.lowusers*P.LowPrice
+		WHERE D.sdate=#statDate# AND D.ProjectId=PR.ID AND PR.ProductId=P.ID
+		<isGreaterThan property="projectId" compareValue="0">
+			AND D.ProjectId=#projectId#
+		</isGreaterThan>
+	</update>
+	<update id="updateProjectOutcomeRateFirst" parameterClass="dataVO">
+		UPDATE PROJECT_HZ_TOTAL_$table$ 
+		SET rateout=IFNULL((expectIncome+thirdincome+linkincome-outcome)/(expectIncome+thirdincome+linkincome),0.00)
+		WHERE sdate=#statDate#
+		<isGreaterThan property="projectId" compareValue="0">
+			AND ProjectId=#projectId#
+		</isGreaterThan>
+	</update>
+	<update id="updateProjectOutcomeRateSecond" parameterClass="dataVO">
+		UPDATE PROJECT_HZ_TOTAL_$table$ 
+		SET rateout=-1.0
+		WHERE sdate=#statDate# and outcome>0 AND (expectIncome+thirdincome+linkincome)=0
+		<isGreaterThan property="projectId" compareValue="0">
+			AND ProjectId=#projectId#
+		</isGreaterThan>
+	</update>
+	<update id="updateProjectUsersNeedBack" parameterClass="dataVO">
+		UPDATE PROJECT_HZ_TOTAL_$table$ D,PROJECT P 
+		SET D.highusers=D.highusers*(D.expectIncome+D.thirdincome+D.linkincome)*(1-D.minincomerate)/D.outCome,
+			D.midusers=D.midusers*(D.expectIncome+D.thirdincome+D.linkincome)*(1-D.minincomerate)/D.outCome,
+			D.lowusers=D.lowusers*(D.expectIncome+D.thirdincome+D.linkincome)*(1-D.minincomerate)/D.outCome
+		WHERE D.sdate=#statDate# 
+		<isGreaterThan property="projectId" compareValue="0">
+			AND D.ProjectId=#projectId#
+		</isGreaterThan>
+		AND D.rateout<![CDATA[<]]>D.minincomerate  AND D.outcome>0
+		AND D.ProjectId=P.ID AND P.Type=1
+	</update>
+	<insert id="insertAdIncome" parameterClass="dataVO">
+		INSERT INTO APK_CPHC_TOTAL_$table$(sdate,apkid,inputtotal)
+		VALUES(#statDate#,#adId#,#inputTotal#)
+		ON DUPLICATE KEY UPDATE inputtotal=VALUES(inputtotal)
+	</insert>
+	<update id="updateAdPercent" parameterClass="dataVO">
+		UPDATE APK_CPHC_TOTAL_$table$ SET Income=(realTotal+inputTotal)*price,
+		RealPercent=IFNULL(realtotal*1.0/(effectiveInstalltotal*1.0),0.00),
+		InputPercent=IFNULL(inputtotal*1.0/(effectiveInstalltotal*1.0),0.00)
+		WHERE sdate=#statDate#
+	</update>
+	<update id="updateAdProjectPercent" parameterClass="dataVO">
+		UPDATE PROJECT_AD_INCOME_$table$ PA,APK_CPHC_TOTAL_$table$ AC
+		SET PA.RealTimes=PA.EffectiveInstallTimes*AC.RealPercent,
+		PA.InputTimes=PA.EffectiveInstallTimes*AC.inputPercent,
+		PA.Price=AC.Price
+		WHERE PA.StatDate=#statDate# AND PA.StatDate=AC.sdate AND PA.AdId=AC.apkId
+	</update>
+	<select id="getProjectIncome" parameterClass="dataVO" resultClass="dataVO">
+		SELECT #statDate# statDate,
+			ProjectId projectId,
+			Type type,
+			SUM(RealTimes*price+InputTimes*price) income
+		FROM PROJECT_AD_INCOME_$table$
+		WHERE StatDate=#statDate#
+		GROUP BY StatDate,ProjectId,Type
+	</select>
+	<insert id="insertProjectIncome" parameterClass="map">
+		INSERT INTO PROJECT_HZ_TOTAL_$table$(sdate,projectid,sdktype,income) 
+		VALUES
+		<iterate conjunction="," property="list">
+			<![CDATA[
+				(#list[].statDate#,#list[].projectId#,#list[].type#,#list[].income#)
+			]]>  
+		</iterate>
+		ON DUPLICATE KEY UPDATE income=VALUES(income)
+	</insert>
+	<update id="updateAdCpm" parameterClass="dataVO">
+		UPDATE APK_CPHC_TOTAL_$table$ D
+		SET D.cpm=IFNULL(D.installedCount/D.showtotal*1.0*1000*D.price*D.cpConversionRate,0.00),
+		D.silenceCpm=IFNULL(D.silenceInstalledCount/D.silenceShowtotal*1.0*1000*D.price*D.cpConversionRate,0.00)
+		WHERE D.sdate=#statDate#
+	</update>
+	<select id="getCpmList" parameterClass="dataVO" resultClass="dataVO">
+		SELECT #statDate# statDate,
+				apkid adId,
+				cpm cpm,
+				silenceCpm silenceCpm
+		FROM APK_CPHC_TOTAL_$table$
+		WHERE sdate=#statDate#
+		GROUP BY apkId
+	</select>
+	<insert id="insertCpmList" parameterClass="map">
+		INSERT INTO kok_sdk.A_SdkPushApk(id,orders) 
+		VALUES
+		<iterate conjunction="," property="list">
+			<![CDATA[
+				(#list[].adId#,#list[].cpm#)
+			]]>  
+		</iterate>
+		ON DUPLICATE KEY UPDATE orders=VALUES(orders)
+	</insert>
+	<insert id="updateMonthUserIncomeData" parameterClass="dataVO">
+		INSERT INTO REGISTER_DATA_MONTH(YearMonth,ProjectId,HighUsers,MidUsers,LowUsers,Income,ThirdIncome,LinkIncome,Outcome)
+		SELECT #yearMonth# yearMonth,
+				ProjectId projectId,
+				SUM(HighUsers) highUsers,
+				SUM(MidUsers) midUsers,
+				SUM(LowUsers) lowUsers,
+				SUM(income) income,
+				SUM(thirdIncome) thirdIncome,
+				SUM(linkIncome) linkIncome,
+				SUM(outcome) outcome
+		FROM PROJECT_HZ_TOTAL_$table$
+		GROUP BY ProjectId
+		HAVING (highUsers+midUsers+lowUsers+income+linkincome+thirdIncome+outcome)>0
+		ON DUPLICATE KEY UPDATE HighUsers=VALUES(HighUsers),MidUsers=VALUES(MidUsers),LowUsers=VALUES(LowUsers),Income=VALUES(Income),ThirdIncome=VALUES(ThirdIncome),LinkIncome=VALUES(LinkIncome),Outcome=VALUES(Outcome)
+	</insert>
+</sqlMap>

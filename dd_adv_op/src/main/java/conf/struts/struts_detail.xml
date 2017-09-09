@@ -1,0 +1,55 @@
+<!DOCTYPE struts PUBLIC 
+	"-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+	"http://struts.apache.org/dtds/struts-2.0.dtd">
+<struts>
+	<constant name="struts.multipart.maxSize" value="1000000000" />
+	<include file="struts-default.xml"></include>
+	
+	<package name="detail" namespace="/detail" extends="abroad-default">
+		<default-interceptor-ref name="crudStack"/>
+		<action name="UsersModel" class="com.kkgame.feeop.detail.action.ApkUsersModelAction" method="do{1}">
+			<result name="list">/pages/detail/apkUsersModel_list.jsp</result>
+		</action>
+		<action name="ActusersModel" class="com.kkgame.feeop.detail.action.ApkActusersModelAction" method="do{1}">
+			<result name="list">/pages/detail/apkActusersModel_list.jsp</result>
+			<result name="guardlist">/pages/detail/apkGuardModel_list.jsp</result>
+		</action>
+		<action name="AdvFeebackListClickModel" class="com.kkgame.feeop.detail.action.AdvFeebackListClickModelAction" method="do{1}">
+			<result name="list">/pages/detail/advFeebackListClickModel_list.jsp</result>
+		</action>
+		<action name="SdkActusersModel" class="com.kkgame.feeop.detail.action.SdkActusersModelAction" method="do{1}">
+			<result name="list">/pages/detail/sdkActusersModel_list.jsp</result>
+		</action>
+		
+		<action name="AdvSentsListModel" class="com.kkgame.feeop.detail.action.AdvSentsListModelAction" method="do{1}">
+			<result name="list">/pages/detail/advSentsListModel_list.jsp</result>
+		</action>
+		<action name="SdkUsersModel" class="com.kkgame.feeop.detail.action.SdkUsersModelAction" method="do{1}">
+			<result name="list">/pages/detail/sdkUsersModel_list.jsp</result>
+			<result name="projectlist">/pages/detail/projectUsers_list.jsp</result>
+			<result name="projectValidlist">/pages/detail/projectUsersValid_list.jsp</result>
+
+		</action>
+		<action name="DdlDetail" class="com.kkgame.feeop.detail.action.DdlDetailAction" method="do{1}">
+			<result name="list">/pages/detail/ddlDetail_list.jsp</result>
+		</action>
+		<action name="AdLinkDetail" class="com.kkgame.feeop.detail.action.AdLinkDetailAction" method="do{1}">
+			<result name="list">/pages/detail/adLinkDetail_list.jsp</result>
+		</action>
+		<action name="SdkDetail" class="com.kkgame.feeop.detail.action.SdkDetailAction" method="do{1}">
+			<result name="list">/pages/detail/sdkDetail_list.jsp</result>
+		</action>
+		<action name="SubDetail" class="com.kkgame.feeop.detail.action.SubDetailAction" method="do{1}">
+			<result name="list">/pages/detail/subDetail_list.jsp</result>
+		</action>
+		<action name="LinkDetail" class="com.kkgame.feeop.detail.action.LinkDetailAction" method="do{1}">
+			<result name="list">/pages/detail/linkDetail_list.jsp</result>
+		</action>
+		<action name="IframeDetail" class="com.kkgame.feeop.detail.action.IframeDetailAction" method="do{1}">
+		<result name="list">/pages/detail/iframeDetail_list.jsp</result>
+		</action>
+		<action name="IframeDataDetail" class="com.kkgame.feeop.detail.action.IframeDataAction" method="do{1}">
+			<result name="list">/pages/detail/iframeData_list.jsp</result>
+		</action>
+	</package>
+</struts>

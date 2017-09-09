@@ -1,0 +1,387 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="projectIncomeSqlMap">
+	<select id="getProjectIncomeVOList" parameterClass="searchVO" resultClass="projectIncomeVO">
+		SELECT   IFNULL(SUM(IF(D.sdktype=600400,D.newUsers,0)),0) newUsers,
+				IFNULL(SUM(IF(D.sdktype=600400,D.newprojectusers,0)),0) newProjectUsers,
+				IFNULL(SUM(D.actUsers),0) actUsers,
+				IFNULL(SUM(D.totalActUsers),0) totalActUsers,
+				IFNULL(SUM(D.projectActUsers),0) projectActUsers,
+				IFNULL(SUM(D.installTotal),0) installTotal,
+				IFNULL(SUM(D.install_high),0) installHigh,
+				IFNULL(SUM(D.install_mid),0) installMid,
+				IFNULL(SUM(D.install_low),0) installLow,
+				IFNULL(SUM(D.install_none),0) installNone,
+				IFNULL(SUM(D.showTotal),0) showTotal,
+				IFNULL(SUM(D.income),0) income,
+				IFNULL(SUM(D.income+D.thirdIncome-D.outcome),0) profit,
+				IFNULL(SUM(D.expectIncome),0) expectIncome,
+				IFNULL(SUM(D.thirdIncome),0) thirdIncome,
+				IFNULL(SUM(D.linkIncome),0) linkIncome,
+				IFNULL(SUM(D.highUsers),0) highUsers,
+				IFNULL(SUM(D.midUsers),0) midUsers,
+				IFNULL(SUM(D.lowUsers),0) lowUsers,
+				IFNULL(SUM(D.outcome),0) outcome,
+				IFNULL(SUM(D.minIncomeRate),0) minIncomeRate,
+				IFNULL(SUM(D.rateHigh),0) rateHigh,
+				IFNULL(SUM(D.rateLow),0) rateLow,
+				IFNULL(SUM(D.rateMid),0) rateMid,
+				IFNULL(ROUND(IFNULL(SUM(D.highUsers+D.midUsers+D.lowUsers)/SUM(D.install_high+D.install_low+D.install_mid),0),2),0.0) percent,
+				IFNULL(ROUND(IFNULL(SUM(D.income+D.thirdIncome+D.linkIncome-D.outcome)/SUM(D.income+D.thirdIncome+D.linkIncome),0),2),0.0) rateOut,
+				IFNULL(ROUND(IFNULL(SUM(D.expectIncome+D.thirdIncome+D.linkIncome-D.outcome)/SUM(D.expectIncome+D.thirdIncome+D.linkIncome),0),2),0.0) expectRateOut,
+				IFNULL(D.Status,0) status
+				<isEqual property="rowFieldVO.isShowDate" compareValue="1">  
+					,DATE_FORMAT(D.sdate,'%Y-%m-%d') statDate
+				</isEqual>
+				<isEqual property="rowFieldVO.isShowDate" compareValue="0">  
+					,null statDate
+				</isEqual>
+				<isEqual property="rowFieldVO.isShowAgent" compareValue="1">  
+					,IFNULL(A.ID,0) agentId
+					,A.Name agentName
+				</isEqual>
+				<isEqual property="rowFieldVO.isShowAgent" compareValue="0">  
+					,null agentName
+					,0 agentId
+				</isEqual>
+				<isEqual property="rowFieldVO.isShowBd" compareValue="1">  
+					,IFNULL(B.ID,0) bdId
+					,B.Name bdName
+				</isEqual>
+				<isEqual property="rowFieldVO.isShowBd" compareValue="0">  
+					,null bdName
+					,0 bdId
+				</isEqual>
+				<isEqual property="rowFieldVO.isShowCustomer" compareValue="1">  
+					,IFNULL(C.ID,0) customerId
+					,IFNULL(C.Name,'未知客户') customerName
+				</isEqual>
+				<isEqual property="rowFieldVO.isShowCustomer" compareValue="0">  
+					,null customerName
+					,0 customerId
+				</isEqual>
+				<isEqual property="rowFieldVO.isShowProject" compareValue="1">  
+					,IFNULL(D.ProjectId,0) projectId
+					,IFNULL(PR.Name,'未知项目') projectName
+				</isEqual>
+				<isEqual property="rowFieldVO.isShowProject" compareValue="0">  
+					,0 projectId
+					,null projectName
+				</isEqual>
+				<isEqual property="rowFieldVO.isShowType" compareValue="1">  
+					,IFNULL(D.SdkType,0) type
+				</isEqual>
+				<isEqual property="rowFieldVO.isShowType" compareValue="0">
+					, 0 type
+				</isEqual>		
+			FROM $table$ D
+			LEFT JOIN PROJECT PR ON PR.ID=D.ProjectId
+			LEFT JOIN CUSTOMER C ON C.ID = PR.CustomerId
+			LEFT JOIN BD B ON C.BdId = B.ID
+			LEFT JOIN AGENT A ON A.ID=B.AgentId
+			WHERE D.sdate BETWEEN #startDate# AND #endDate#
+			<isGreaterThan property="agentId" compareValue="0">
+				AND A.ID = #agentId#
+			</isGreaterThan>
+			<isGreaterThan property="bdId" compareValue="0">
+				AND B.ID = #bdId#
+			</isGreaterThan>
+			<isGreaterThan property="customerId" compareValue="0">
+				AND C.ID = #customerId#
+			</isGreaterThan>
+			<isGreaterThan property="projectId" compareValue="0">
+				AND D.projectId = #projectId#
+			</isGreaterThan>
+			<isGreaterThan property="type" compareValue="0">
+				AND D.SdkType = #type#
+			</isGreaterThan>
+			<dynamic  prepend =" GROUP BY ">
+				<isEqual prepend =" , " property="rowFieldVO.isShowDate" compareValue="1">  
+					DATE_FORMAT(D.sdate,'%Y-%m-%d')
+				</isEqual>
+				<isEqual prepend =" , " property="rowFieldVO.isShowAgent" compareValue="1">  
+						A.ID
+				</isEqual>	
+				<isEqual prepend =" , " property="rowFieldVO.isShowBd" compareValue="1">  
+						B.ID
+				</isEqual>	
+				<isEqual prepend =" , " property="rowFieldVO.isShowCustomer" compareValue="1">  
+						C.ID
+				</isEqual>	
+				<isEqual prepend =" , " property="rowFieldVO.isShowProject" compareValue="1">  
+						D.ProjectId
+				</isEqual>	
+				<isEqual prepend =" , " property="rowFieldVO.isShowType" compareValue="1">  
+						D.SdkType
+				</isEqual>	
+			</dynamic>
+			<dynamic  prepend =" ORDER BY ">
+				<isEqual prepend =" , " property="rowFieldVO.isShowDate" compareValue="1">  
+					DATE_FORMAT(D.sdate,'%Y-%m-%d') ASC ,newusers DESC
+				</isEqual>
+				<isEqual prepend =" , " property="rowFieldVO.isShowDate" compareValue="0">  
+						newusers DESC
+				</isEqual>
+			</dynamic>
+	</select>
+	<select id="getTotalProjectVOList" parameterClass="searchVO" resultClass="projectIncomeVO">
+		SELECT  IFNULL(SUM(D.newUsers),0) newUsers,
+				IFNULL(SUM(D.actUsers),0) actUsers,
+				IFNULL(SUM(D.totalActUsers),0) totalActUsers,
+				IFNULL(SUM(D.projectActUsers),0) projectActUsers,
+				IFNULL(SUM(D.installTotal),0) installTotal,
+				IFNULL(ROUND(IFNULL(SUM(D.installTotal),0)/IFNULL(SUM(D.newUsers),0),2),0) totalAipu,
+				IFNULL(SUM(D.sinkInstallTimes),0) sinkInstallTimes,
+				IFNULL(SUM(D.leadInstallTimes),0) leadInstallTimes,
+				IFNULL(ROUND(IFNULL(SUM(D.sinkInstallTimes),0)*100.0/IFNULL(SUM(D.newUsers),0),2),0) sinkPercent,
+				IFNULL(ROUND(IFNULL(SUM(D.leadInstallTimes),0)*100.0/IFNULL(SUM(D.newUsers),0),2),0) leadPercent,
+				IFNULL(SUM(D.install_high),0) installHigh,
+				IFNULL(SUM(D.install_mid),0) installMid,
+				IFNULL(SUM(D.install_low),0) installLow,
+				IFNULL(SUM(D.install_none),0) installNone,
+				IFNULL(SUM(D.showTotal),0) showTotal,
+				ROUND(IFNULL(SUM(D.income),0),2) income,
+				ROUND(IFNULL(SUM(D.linkincome),0),2) linkIncome,
+				ROUND(IFNULL(SUM(D.income+D.thirdIncome+D.linkincome-D.outcome),0),2) profit,
+				ROUND(IFNULL(SUM(D.income+D.thirdIncome+D.linkincome-D.outcome)*100/SUM(D.newUsers),0),2) profitRegister,
+				ROUND(IFNULL(SUM(D.expectIncome),0),2) expectIncome,
+				ROUND(IFNULL(SUM(D.thirdIncome),0),2) thirdIncome,
+				IFNULL(SUM(D.highUsers),0) highUsers,
+				IFNULL(SUM(D.midUsers),0) midUsers,
+				IFNULL(SUM(D.lowUsers),0) lowUsers,
+				IFNULL(ROUND(IFNULL(SUM(D.highUsers+D.midUsers+D.lowUsers)*100.0,0)/IFNULL(SUM(D.newUsers),0),2),0) conversionPercent,
+				IFNULL(ROUND(IFNULL(SUM(D.highUsers+D.midUsers+D.lowUsers)*100.0,0)/IFNULL(SUM(D.newUsers),0),2),0) percent,
+				IFNULL(SUM(D.outcome),0) outcome,
+				IFNULL(SUM(D.minIncomeRate),0) minIncomeRate,
+				IFNULL(SUM(D.rateHigh),0) rateHigh,
+				IFNULL(SUM(D.rateLow),0) rateLow,
+				IFNULL(SUM(D.rateMid),0) rateMid,
+				IFNULL(ROUND(IFNULL(SUM(D.income+D.thirdIncome+D.linkincome-D.outcome)/SUM(D.income+D.thirdIncome+D.linkincome),0),2),0.0) rateOut,
+				IFNULL(ROUND(IFNULL(SUM(D.expectincome+D.thirdIncome+D.linkincome-D.outcome)/SUM(D.expectincome+D.thirdIncome+D.linkincome),0),2),0.0) expectRateOut,
+				IFNULL(D.Status,0) status,
+				DATE_FORMAT(D.sdate,'%Y-%m-%d') statDate,
+				IFNULL(D.ProjectId,0) projectId,
+				IFNULL(PR.Name,'未知项目') projectName,
+				IFNULL(D.SdkType,0) type
+				<isNotEqual property="agentId" compareValue="0">
+					,IFNULL(A.ID,0) agentId
+					,A.Name agentName
+				</isNotEqual>
+				<isEqual property="agentId" compareValue="0">  
+					,null agentName
+					,0 agentId
+				</isEqual>
+				<isNotEqual property="bdId" compareValue="0">
+					,IFNULL(B.ID,0) bdId
+					,B.Name bdName
+				</isNotEqual>
+				<isEqual property="bdId" compareValue="0">  
+					,null bdName
+					,0 bdId
+				</isEqual>
+				<isNotEqual property="customerId" compareValue="0">
+					,IFNULL(C.ID,0) customerId
+					,IFNULL(C.Name,'未知客户') customerName
+				</isNotEqual>
+				<isEqual property="customerId" compareValue="0">  
+					,null customerName
+					,0 customerId
+				</isEqual>
+			FROM $table$ D
+			LEFT JOIN PROJECT PR ON PR.ID=D.ProjectId
+			LEFT JOIN CUSTOMER C ON C.ID = PR.CustomerId
+			LEFT JOIN BD B ON C.BdId = B.ID
+			LEFT JOIN AGENT A ON A.ID=B.AgentId
+			WHERE D.sdate BETWEEN #startDate#  AND #endDate#
+			<isGreaterThan property="agentId" compareValue="0">
+				AND A.ID = #agentId#
+			</isGreaterThan>
+			<isGreaterThan property="bdId" compareValue="0">
+				AND B.ID = #bdId#
+			</isGreaterThan>
+			<isGreaterThan property="customerId" compareValue="0">
+				AND C.ID = #customerId#
+			</isGreaterThan>
+			<isGreaterThan property="projectId" compareValue="0">
+				AND D.projectId = #projectId#
+			</isGreaterThan>
+			<isNotNull property="startTime">
+			<isNotEmpty property="startTime">
+			<isNotNull property="endTime">
+			<isNotEmpty property="endTime">
+					AND PR.CreateTime between #startTime# and #endTime#
+			</isNotEmpty>
+			</isNotNull>
+			</isNotEmpty>
+			</isNotNull>
+			GROUP BY 
+				D.ProjectId,D.SdkType
+				<isGreaterThan property="agentId" compareValue="0">
+						,A.ID
+				</isGreaterThan>	
+				<isGreaterThan property="bdId" compareValue="0">
+						,B.ID
+				</isGreaterThan>	
+				<isGreaterThan property="customerId" compareValue="0">
+						,C.ID
+				</isGreaterThan>
+			ORDER BY
+				newusers DESC
+	</select>
+	
+	<select id="getEffectProjectVOList" parameterClass="searchVO" resultClass="projectIncomeVO">
+		SELECT  IFNULL(SUM(D.newUsers),0) newUsers,
+				IFNULL(SUM(D.newProjectUsers),0) newProjectUsers,
+				IFNULL(SUM(D.actUsers),0) actUsers,
+				IFNULL(SUM(D.totalActUsers),0) totalActUsers,
+				IFNULL(SUM(D.projectActUsers),0) projectActUsers,
+				IFNULL(SUM(D.installTotal),0) installTotal,
+				IFNULL(ROUND(IFNULL(SUM(D.installTotal),0)/IFNULL(SUM(D.newUsers),0),2),0) totalAipu,
+				IFNULL(ROUND(IFNULL(SUM(D.firstCount),0)/IFNULL(SUM(D.newUsers),0),2),0) firstPercent,
+				IFNULL(ROUND(IFNULL(SUM(D.newProjectUsers-D.newUsers),0)/IFNULL(SUM(D.newProjectUsers),0),2),0) distinctPercent,
+				IFNULL(SUM(D.sinkInstallTimes),0) sinkInstallTimes,
+				IFNULL(SUM(D.leadInstallTimes),0) leadInstallTimes,
+				IFNULL(ROUND(IFNULL(SUM(D.sinkInstallTimes),0)*100.0/IFNULL(SUM(D.newUsers),0),2),0) sinkPercent,
+				IFNULL(ROUND(IFNULL(SUM(D.leadInstallTimes),0)*100.0/IFNULL(SUM(D.newUsers),0),2),0) leadPercent,
+				IFNULL(SUM(D.install_high),0) installHigh,
+				IFNULL(SUM(D.install_mid),0) installMid,
+				IFNULL(SUM(D.install_low),0) installLow,
+				IFNULL(SUM(D.install_none),0) installNone,
+				IFNULL(SUM(D.showTotal),0) showTotal,
+				ROUND(IFNULL(SUM(D.income),0),2) income,
+				ROUND(IFNULL(SUM(D.linkincome),0),2) linkIncome,
+				ROUND(IFNULL(SUM(D.income+D.thirdIncome+D.linkincome-D.outcome),0),2) profit,
+				ROUND(IFNULL(SUM(D.expectIncome),0),2) expectIncome,
+				ROUND(IFNULL(SUM(D.thirdIncome),0),2) thirdIncome,
+				IFNULL(SUM(D.highUsers),0) highUsers,
+				IFNULL(SUM(D.midUsers),0) midUsers,
+				IFNULL(SUM(D.lowUsers),0) lowUsers,
+				IFNULL(ROUND(IFNULL(SUM(D.highUsers+D.midUsers+D.lowUsers)*100.0,0)/IFNULL(SUM(D.newUsers),0),2),0) conversionPercent,
+				IFNULL(ROUND(IFNULL(SUM(D.highUsers+D.midUsers+D.lowUsers)*100.0,0)/IFNULL(SUM(D.newProjectUsers),0),2),0) projectConversionPercent,
+				IFNULL(ROUND(IFNULL(SUM(D.highUsers+D.midUsers+D.lowUsers)*100.0,0)/IFNULL(SUM(D.install_high+D.install_mid+D.install_low),0),2),0) effectConversionPercent,
+				IFNULL(SUM(D.outcome),0) outcome,
+				IFNULL(SUM(D.minIncomeRate),0) minIncomeRate,
+				IFNULL(SUM(D.rateHigh),0) rateHigh,
+				IFNULL(SUM(D.rateLow),0) rateLow,
+				IFNULL(SUM(D.rateMid),0) rateMid,
+				IFNULL(ROUND(IFNULL(SUM(D.income+D.thirdIncome+D.linkincome-D.outcome)/SUM(D.income+D.thirdIncome+D.linkincome),0),2),0.0) rateOut,
+				IFNULL(ROUND(IFNULL(SUM(D.expectincome+D.thirdIncome+D.linkincome-D.outcome)/SUM(D.expectincome+D.thirdIncome+D.linkincome),0),2),0.0) expectRateOut,
+				IFNULL(D.Status,0) status,
+				DATE_FORMAT(D.sdate,'%Y-%m-%d') statDate,
+				IFNULL(D.ProjectId,0) projectId,
+				IFNULL(PR.Name,'未知项目') projectName,
+				IFNULL(D.SdkType,0) type
+				<isNotEqual property="agentId" compareValue="0">
+					,IFNULL(A.ID,0) agentId
+					,A.Name agentName
+				</isNotEqual>
+				<isEqual property="agentId" compareValue="0">  
+					,null agentName
+					,0 agentId
+				</isEqual>
+				<isNotEqual property="bdId" compareValue="0">
+					,IFNULL(B.ID,0) bdId
+					,B.Name bdName
+				</isNotEqual>
+				<isEqual property="bdId" compareValue="0">  
+					,null bdName
+					,0 bdId
+				</isEqual>
+				<isNotEqual property="customerId" compareValue="0">
+					,IFNULL(C.ID,0) customerId
+					,IFNULL(C.Name,'未知客户') customerName
+				</isNotEqual>
+				<isEqual property="customerId" compareValue="0">  
+					,null customerName
+					,0 customerId
+				</isEqual>
+			FROM $table$ D
+			LEFT JOIN PROJECT PR ON PR.ID=D.ProjectId
+			LEFT JOIN CUSTOMER C ON C.ID = PR.CustomerId
+			LEFT JOIN BD B ON C.BdId = B.ID
+			LEFT JOIN AGENT A ON A.ID=B.AgentId
+			WHERE D.sdate = #startDate# 
+			<isGreaterThan property="agentId" compareValue="0">
+				AND A.ID = #agentId#
+			</isGreaterThan>
+			<isGreaterThan property="bdId" compareValue="0">
+				AND B.ID = #bdId#
+			</isGreaterThan>
+			<isGreaterThan property="customerId" compareValue="0">
+				AND C.ID = #customerId#
+			</isGreaterThan>
+			<isGreaterThan property="projectId" compareValue="0">
+				AND D.projectId = #projectId#
+			</isGreaterThan>
+			<isNotNull property="startTime">
+			<isNotEmpty property="startTime">
+			<isNotNull property="endTime">
+			<isNotEmpty property="endTime">
+					AND PR.CreateTime between #startTime# and #endTime#
+			</isNotEmpty>
+			</isNotNull>
+			</isNotEmpty>
+			</isNotNull>
+			GROUP BY 
+				D.sDate,D.ProjectId,D.SdkType
+				<isGreaterThan property="agentId" compareValue="0">
+						,A.ID
+				</isGreaterThan>	
+				<isGreaterThan property="bdId" compareValue="0">
+						,B.ID
+				</isGreaterThan>	
+				<isGreaterThan property="customerId" compareValue="0">
+						,C.ID
+				</isGreaterThan>
+			ORDER BY
+				DATE_FORMAT(D.sdate,'%Y-%m-%d') ASC ,newusers DESC
+	</select>
+	
+	<select id="getProjectIncomeVO" parameterClass="projectIncomeVO" resultClass="projectIncomeVO">
+		SELECT  IFNULL(SUM(D.newUsers),0) newUsers,
+				IFNULL(SUM(D.actUsers),0) actUsers,
+				IFNULL(SUM(D.totalActUsers),0) totalActUsers,
+				IFNULL(SUM(D.projectActUsers),0) projectActUsers,
+				IFNULL(SUM(D.installTotal),0) installTotal,
+				IFNULL(SUM(D.install_high),0) installHigh,
+				IFNULL(SUM(D.install_mid),0) installMid,
+				IFNULL(SUM(D.install_low),0) installLow,
+				IFNULL(SUM(D.install_none),0) installNone,
+				IFNULL(SUM(D.showTotal),0) showTotal,
+				IFNULL(SUM(D.income),0) income,
+				IFNULL(SUM(D.expectIncome),0) expectIncome,
+				IFNULL(SUM(D.thirdIncome),0) thirdIncome,
+				IFNULL(SUM(D.highUsers),0) highUsers,
+				IFNULL(SUM(D.midUsers),0) midUsers,
+				IFNULL(SUM(D.lowUsers),0) lowUsers,
+				IFNULL(SUM(D.outcome),0) outcome,
+				IFNULL(SUM(D.income+D.thirdIncome-D.outcome),0) profit,
+				IFNULL(SUM(D.minIncomeRate),0) minIncomeRate,
+				IFNULL(SUM(D.rateHigh),0) rateHigh,
+				IFNULL(SUM(D.rateLow),0) rateLow,
+				IFNULL(SUM(D.rateMid),0) rateMid,
+				IFNULL(ROUND(IFNULL(SUM(D.income+D.thirdIncome-D.outcome)/SUM(D.income+D.thirdIncome),0),2),0.0) rateOut,
+				IFNULL(ROUND(IFNULL(SUM(D.expectIncome+D.thirdIncome-D.outcome)/SUM(D.expectIncome+D.thirdIncome),0),2),0.0) expectRateOut,
+				IFNULL(D.Status,0) status,
+				DATE_FORMAT(D.sdate,'%Y-%m-%d') statDate,
+				IFNULL(D.ProjectId,0) projectId,
+				IFNULL(PR.Name,'未知项目') projectName,
+				IFNULL(D.ExpectPrice,0) expectPrice
+			FROM $table$ D
+			LEFT JOIN PROJECT PR ON PR.ID=D.ProjectId
+			WHERE D.sdate =#statDate# AND D.sdkType=600400
+			AND D.projectId = #projectId#
+	</select>
+	<update id="updateProjectIncomeVO" parameterClass="projectIncomeVO">
+		UPDATE $table$ SET rateHigh=#rateHigh#,rateLow=#rateLow#,rateMid=#rateMid#,minIncomeRate=#minIncomeRate#
+		WHERE sdate =#statDate# AND projectId = #projectId# AND sdkType=600400
+	</update>
+	<update id="updateExpectPrice" parameterClass="projectIncomeVO">
+		UPDATE $table$ SET expectPrice=#expectPrice#
+		WHERE sdate =#statDate#
+	</update>
+	<update id="updateProjectIncomeVOStatus" parameterClass="projectIncomeVO">
+		UPDATE $table$ SET Status=1
+		WHERE sdate =#statDate# AND projectId = #projectId# AND sdkType=600400
+	</update>
+</sqlMap>

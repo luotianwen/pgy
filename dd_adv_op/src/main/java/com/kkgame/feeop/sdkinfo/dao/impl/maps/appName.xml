@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="appNameSqlMap">
+	<select id="getAppNameVOListCount" parameterClass="AppNameVO" resultClass="int">
+		SELECT COUNT(id) count			
+		FROM app_name
+		WHERE 1=1
+		<isNotNull property="id">
+			<isGreaterThan property="id" compareValue="0">
+				AND id = #id#
+			</isGreaterThan>
+		</isNotNull>
+	</select>
+	<select id="getAppNameVOList" parameterClass="AppNameVO" resultClass="AppNameVO">
+		SELECT 	id,
+				packageName,
+				appName,
+				createDate
+		FROM app_name
+		WHERE 1=1
+		<isNotNull property="id">
+			<isGreaterThan property="id" compareValue="0">
+				AND id = #id#
+			</isGreaterThan>
+		</isNotNull>
+		ORDER BY id DESC
+	</select>
+	<select id="getAppNameVO" parameterClass="AppNameVO" resultClass="AppNameVO">
+		SELECT 	id,
+				packageName,
+				appName,
+				createDate
+		FROM app_name
+		WHERE id = #id#	
+	</select>
+	<insert id="insert" parameterClass="AppNameVO">
+		INSERT INTO app_name(packageName,appName,createDate)
+		VALUES(#packageName#,#appName#,now())
+		<selectKey keyProperty="id" resultClass="int">
+			SELECT LAST_INSERT_id() AS id FROM app_name LIMIT 1
+		</selectKey>
+	</insert>
+	<update id="update" parameterClass="AppNameVO">
+		UPDATE app_name 
+		SET	packageName = #packageName#,
+				appName = #appName#
+		WHERE id = #id#
+	</update>
+	<select id="getAllAppNameVOList" parameterClass="AppNameVO" resultClass="AppNameVO">
+		SELECT  id,
+				packageName,
+				appName,
+				createDate
+		FROM app_name
+		WHERE 1=1
+		<isNotNull property="id">
+			<isGreaterThan property="id" compareValue="0">
+				AND id = #id#
+			</isGreaterThan>
+		</isNotNull>
+		<isNotEmpty property="appName">
+			AND appName = #appName#
+		</isNotEmpty>
+		ORDER BY id DESC
+	</select>
+	<delete id="delete" parameterClass="AppNameVO" >
+	    delete from app_name where id = #id#
+	</delete>
+</sqlMap>

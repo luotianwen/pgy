@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+        "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="projectSqlMap">
+	
+	<typeAlias alias="projectVO" type="com.kokmobi.server.bean.ProjectVO" />
+	
+    <select id="getProjectVOById" parameterClass="int" resultClass="projectVO">
+    	SELECT p.stauts status,
+    		a.isTablePlaqueDown isDown,
+    		a.isopen isGuide,
+    		y.ydcs guideTimes,
+    		y.ydjg guideInterval
+    	FROM A_product p,A_advSet a,A_ydp y
+    	where a.apk=p.id AND p.id AND p.coo_id=#projectId# and p.stauts=3200
+    </select>
+</sqlMap>

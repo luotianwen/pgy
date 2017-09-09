@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop" 
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:p="http://www.springframework.org/schema/p" 
+       xsi:schemaLocation="http://www.springframework.org/schema/beans 
+       		http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+       		http://www.springframework.org/schema/aop
+       		http://www.springframework.org/schema/aop/spring-aop-2.5.xsd 
+		    http://www.springframework.org/schema/tx  
+    	    http://www.springframework.org/schema/tx/spring-tx-2.5.xsd 
+            http://www.springframework.org/schema/context
+            http://www.springframework.org/schema/context/spring-context-2.5.xsd">
+ 	
+ 	<!-- 索引 -->
+ 	<bean id="customerService" class="com.kkgame.feeop.customer.service.impl.CustomerServiceImpl">
+ 		<property name="customerDAO" ref="customerDAO"></property>
+ 	</bean>
+ 	<bean id="customerDAO" class="com.kkgame.feeop.customer.dao.impl.CustomerDAOImpl">
+ 		<property name="sqlMapClient" ref="sqlMapClient_kkpay_data"></property>
+ 		<property name="dataSource" ref="dataSource_kkpay_data"></property>
+ 	</bean>
+ 	<bean id="agentService" class="com.kkgame.feeop.customer.service.impl.AgentServiceImpl">
+ 		<property name="agentDAO" ref="agentDAO"></property>
+ 	</bean>
+ 	<bean id="agentDAO" class="com.kkgame.feeop.customer.dao.impl.AgentDAOImpl">
+ 		<property name="sqlMapClient" ref="sqlMapClient_kkpay_data"></property>
+ 		<property name="dataSource" ref="dataSource_kkpay_data"></property>
+ 	</bean>
+ 	
+ 	<bean id="productService" class="com.kkgame.feeop.customer.service.impl.ProductServiceImpl">
+ 		<property name="productDAO" ref="productDAO"></property>
+ 	</bean>
+ 	<bean id="productDAO" class="com.kkgame.feeop.customer.dao.impl.ProductDAOImpl">
+ 		<property name="sqlMapClient" ref="sqlMapClient_kkpay_data"></property>
+ 		<property name="dataSource" ref="dataSource_kkpay_data"></property>
+ 	</bean>
+ 	
+ 	<bean id="bdService" class="com.kkgame.feeop.customer.service.impl.BdServiceImpl">
+ 		<property name="bdDAO" ref="bdDAO"></property>
+ 	</bean>
+ 	<bean id="bdDAO" class="com.kkgame.feeop.customer.dao.impl.BdDAOImpl">
+ 		<property name="sqlMapClient" ref="sqlMapClient_kkpay_data"></property>
+ 		<property name="dataSource" ref="dataSource_kkpay_data"></property>
+ 	</bean>
+ 	<bean id="projectService" class="com.kkgame.feeop.customer.service.impl.ProjectServiceImpl">
+ 		<property name="projectDAO" ref="projectDAO"></property>
+ 	</bean>
+ 	<bean id="projectDAO" class="com.kkgame.feeop.customer.dao.impl.ProjectDAOImpl">
+ 		<property name="sqlMapClient" ref="sqlMapClient_kkpay_data"></property>
+ 		<property name="dataSource" ref="dataSource_kkpay_data"></property>
+ 	</bean>
+ 	<bean id="ddlService" class="com.kkgame.feeop.customer.service.impl.DdlServiceImpl">
+ 		<property name="ddlDAO" ref="ddlDAO"></property>
+ 	</bean>
+ 	<bean id="ddlDAO" class="com.kkgame.feeop.customer.dao.impl.DdlDAOImpl">
+ 		<property name="sqlMapClient" ref="sqlMapClient_kkpay_ddl"></property>
+ 		<property name="dataSource" ref="dataSource_kkpay_ddl"></property>
+ 	</bean>
+</beans>

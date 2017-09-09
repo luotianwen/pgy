@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMapConfig PUBLIC "-//ibatis.apache.org//DTD SQL Map Config 2.0//EN"
+    "http://ibatis.apache.org/dtd/sql-map-config-2.dtd">
+<sqlMapConfig>
+	<settings cacheModelsEnabled="false" enhancementEnabled="false"
+		lazyLoadingEnabled="true" useStatementNamespaces="true" />
+	<sqlMap resource="alias.xml" />
+<!-- tag-->
+	<sqlMap resource = "com/kkgame/hz/tag/tag.xml"/>
+<!-- 代理商-->
+	<sqlMap resource = "com/kkgame/hz/dao/impl/maps/agent.xml"/>
+<!-- 用户表-->
+	<sqlMap resource = "com/kkgame/hz/dao/impl/maps/portaluser.xml"/>
+<!-- 商务拓展人员-->
+	<sqlMap resource = "com/kkgame/hz/dao/impl/maps/bd.xml"/>
+<!-- 商务协助人员-->
+	<sqlMap resource = "com/kkgame/hz/dao/impl/maps/bh.xml"/>
+<!-- 客户-->
+	<sqlMap resource = "com/kkgame/hz/dao/impl/maps/customer.xml"/>
+<!-- 产品 -->
+	<sqlMap resource="com/kkgame/hz/dao/impl/maps/screen.xml" />
+	<sqlMap resource="com/kkgame/hz/dao/impl/maps/os.xml" />
+	<sqlMap resource="com/kkgame/hz/dao/impl/maps/product.xml" />
+	<sqlMap resource="com/kkgame/hz/dao/impl/maps/project.xml" />
+	<sqlMap resource="com/kkgame/hz/dao/impl/maps/userDivide.xml" />
+	<sqlMap resource="com/kkgame/hz/dao/impl/maps/ddlData.xml" />
+	<sqlMap resource="com/kkgame/hz/dao/impl/maps/userRegister.xml" />
+</sqlMapConfig>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="alias">
+	
+	<typeAlias alias = "nameVO" type= "com.kkgame.hz.base.NameVO" />
+	<typeAlias alias = "settingVO" type= "com.kkgame.hz.base.SettingVO" />	
+	<typeAlias alias = "tagVO" type= "com.kkgame.hz.tag.TagVO" />
+	<typeAlias alias = "cityVO" type= "com.kkgame.hz.tag.CityVO" />
+	<typeAlias alias = "agentVO" type= "com.kkgame.hz.entities.AgentVO" />
+	<typeAlias alias = "portalUserVO" type= "com.kkgame.hz.entities.PortalUserVO" />
+	<typeAlias alias = "bdVO" type= "com.kkgame.hz.entities.BdVO" />
+	<typeAlias alias = "bhVO" type= "com.kkgame.hz.entities.BhVO" />
+	<typeAlias alias = "screenVO" type="com.kkgame.hz.entities.ScreenVO"/>
+	<typeAlias alias = "osVO" type="com.kkgame.hz.entities.OsVO"/>
+	<typeAlias alias = "customerVO" type="com.kkgame.hz.entities.CustomerVO"/>
+	<typeAlias alias = "productVO" type="com.kkgame.hz.entities.ProductVO"/>
+	<typeAlias alias = "projectVO" type="com.kkgame.hz.entities.ProjectVO"/>
+	<typeAlias alias = "projectFileVO" type="com.kkgame.hz.entities.ProjectFileVO"/>	
+	<typeAlias alias = "billSearchVO" type= "com.kkgame.hz.entities.BillSearchVO"/>
+	<typeAlias alias = "userRegisterVO" type= "com.kkgame.hz.entities.UserRegisterVO"/>
+	<typeAlias alias = "userDivideVO" type= "com.kkgame.hz.entities.UserDivideVO"/>
+	<typeAlias alias = "ddlDataVO" type= "com.kkgame.hz.entities.DdlDataVO"/>
+	<typeAlias alias = "specialDataVO" type= "com.kkgame.hz.entities.SpecialDataVO"/>
+	<typeAlias alias = "projectStatVO" type="com.kkgame.hz.entities.ProjectStatVO"/>
+</sqlMap>

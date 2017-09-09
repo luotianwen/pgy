@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="subscribeSqlMap">
+    <typeAlias alias="subscribeVO" type="com.kkgame.feeop.adver.bean.SubscribeVO"/>
+    <select id="getSubscribeVOListCount" parameterClass="subscribeVO" resultClass="int">
+        SELECT
+        count(id)
+        FROM subscribe
+        <dynamic prepend="WHERE">
+
+            <isNotEmpty prepend="AND" property="id">
+                ID = #id#
+            </isNotEmpty>
+
+
+            <isNotEmpty prepend="AND" property="name">
+                Name = #name#
+            </isNotEmpty>
+
+
+            <isNotEmpty prepend="AND" property="adverId">
+                AdverId = #adverId#
+            </isNotEmpty>
+
+
+            <isNotEmpty prepend="AND" property="cou">
+                cou = #cou#
+            </isNotEmpty>
+
+            <isNotEmpty prepend="AND" property="operatorId">
+                operatorId = #operatorId#
+            </isNotEmpty>
+
+            <isNotEmpty prepend="AND" property="createTime">
+                CreateTime = #createTime#
+            </isNotEmpty>
+
+
+            <isNotEmpty prepend="AND" property="status">
+                Status = #status#
+            </isNotEmpty>
+
+
+            <isNotEmpty prepend="AND" property="notes">
+                Notes = #notes#
+            </isNotEmpty>
+
+
+            <isNotEmpty prepend="AND" property="advLinkmanId">
+                advLinkmanId = #advLinkmanId#
+            </isNotEmpty>
+
+        </dynamic>
+    </select>
+    <select id="getSubscribeVOList" parameterClass="subscribeVO" resultClass="subscribeVO">
+        SELECT
+        *
+        FROM subscribe
+
+
+        <dynamic prepend="WHERE">
+
+            <isNotEmpty prepend="AND" property="id">
+                id = #id#
+            </isNotEmpty>
+
+
+            <isNotEmpty prepend="AND" property="name">
+                name = #name#
+            </isNotEmpty>
+
+
+            <isNotEmpty prepend="AND" property="adverId">
+                adverId = #adverId#
+            </isNotEmpty>
+
+
+            <isNotEmpty prepend="AND" property="redirectUrl">
+                redirectUrl = #redirectUrl#
+            </isNotEmpty>
+
+
+            <isNotEmpty prepend="AND" property="createTime">
+                createTime = #createTime#
+            </isNotEmpty>
+
+
+            <isNotEmpty prepend="AND" property="status">
+                status = #status#
+            </isNotEmpty>
+
+
+            <isNotEmpty prepend="AND" property="notes">
+                notes = #notes#
+            </isNotEmpty>
+
+
+            <isNotEmpty prepend="AND" property="advLinkmanId">
+                advLinkmanId = #advLinkmanId#
+            </isNotEmpty>
+
+        </dynamic>
+
+        <![CDATA[ LIMIT  #page.index#, #page.pageSize# ]]>
+    </select>
+
+    <select id="getSelectSubscribeVOList" parameterClass="subscribeVO" resultClass="subscribeVO">
+        SELECT
+        *
+        FROM subscribe
+    </select>
+
+
+    <select id="getSubscribeVO" parameterClass="subscribeVO" resultClass="subscribeVO">
+		SELECT
+		*
+	    
+	        FROM subscribe
+	        WHERE 
+		        ID = #id# 
+
+
+
+    </select>
+    <insert id="create" parameterClass="subscribeVO">
+        <![CDATA[
+        INSERT INTO subscribe (
+        	id ,
+        	name ,
+        	adverId ,
+        	redirectUrl ,
+        	createTime ,
+        	status ,
+        	notes ,
+        	advLinkmanId ,
+        	cou ,
+        	type ,
+        	internet ,
+        	ecpmStatus,
+        	price,
+        	manualECPM ,
+        	operatorId
+        ) VALUES (
+        	#id# ,
+        	#name# ,
+        	#adverId# ,
+        	#redirectUrl# ,
+        	now() ,
+        	#status# ,
+        	#notes# ,
+        	#advLinkmanId# ,
+        	#cou# ,
+        	#type# ,
+        	#internet# ,
+        	#ecpmStatus#,
+        	#price#,
+        	#manualECPM#,
+            #operatorId#
+        )
+    ]]>
+        <selectKey keyProperty="id" resultClass="int">
+            SELECT LAST_INSERT_ID() AS ID
+        </selectKey>
+    </insert>
+    <update id="update" parameterClass="subscribeVO">
+		<![CDATA[
+
+
+        UPDATE subscribe SET
+	        Name = #name# ,
+	        AdverId = #adverId# ,
+	        RedirectUrl = #redirectUrl# ,
+            operatorId =  #operatorId# ,
+	        Status = #status# ,
+	        Notes = #notes# ,
+	        cou = #cou#,
+	        type = #type#,
+	        price = #price#,
+            ecpmStatus = #ecpmStatus#,
+            manualECPM = #manualECPM#,
+	        internet = #internet#,
+	        advLinkmanId = #advLinkmanId# 
+        WHERE 
+	        ID = #id# 
+
+
+        ]]>
+	</update>
+    <insert id="copySubscribeVO" parameterClass="subscribeVO">
+          INSERT subscribe(name, adverId, redirectUrl,status,advLinkmanId,operatorId,cou,versionId,modelId,internet,type, createTime, ecpmStatus,price, manualECPM )
+          select name, adverId, redirectUrl,status,advLinkmanId,operatorId,cou,versionId,modelId,internet,type , createTime,ecpmStatus, price,manualECPM
+          from subscribe where
+          id = #id#
+    </insert>
+
+    <insert id="insertSubscribeVOList" parameterClass="map">
+        INSERT INTO subscribe(name, adverId, redirectUrl,status,advLinkmanId,operatorId,cou,versionId,modelId,internet,type, createTime,ecpmStatus,price, manualECPM)
+        VALUES
+        <iterate conjunction="," property="list">
+            <![CDATA[
+			(#list[].name#,#list[].adverId#,#list[].redirectUrl#,#list[].status#,#list[].advLinkmanId#,#list[].operatorId#,#list[].cou#
+			,#list[].versionId#, #list[].modelId#,#list[].internet#,#list[].type#,#list[].createTime#,#list[].ecpmStatus#,#list[].price#,#list[].manualECPM#)
+			]]>
+        </iterate>
+    </insert>
+</sqlMap>

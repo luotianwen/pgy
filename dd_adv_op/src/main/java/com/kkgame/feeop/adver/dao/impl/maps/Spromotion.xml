@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="spromotionSqlMap">
+	<typeAlias alias="spromotionVO" type="com.kkgame.feeop.adver.bean.SpromotionVO"/>
+	<select id="getSpromotionVOListCount" parameterClass="spromotionVO" resultClass="int">
+		SELECT
+		count(id)
+	        FROM s_promotion 
+	</select>
+	<select id="getSpromotionVOList" parameterClass="spromotionVO" resultClass="spromotionVO">
+		  SELECT
+
+        id ,promotionLink ,createTime ,Status ,type,cooId,notes
+
+		  FROM s_promotion 
+
+
+    	<![CDATA[ LIMIT  #page.index#, #page.pageSize# ]]> 
+	</select>
+
+
+	<select id="getSpromotionVO" parameterClass="spromotionVO" resultClass="spromotionVO">
+		SELECT
+
+        id ,promotionLink ,CreateTime ,Status ,Notes  ,type,cooId,promotionLink
+	    
+	        FROM s_promotion 
+	        WHERE 
+		        id = #id#
+
+	</select>
+	<insert id="create" parameterClass="spromotionVO">
+
+        INSERT INTO s_promotion (
+        	id ,
+        	promotionLink ,
+        	createTime ,
+        	status ,
+			type,
+			cooId,
+        	notes
+        ) VALUES (
+        	#id# ,
+        	#promotionLink# ,
+        	now(),
+        	#status# ,
+			#type#,
+			#cooId#,
+        	#notes#
+		)
+
+		<selectKey keyProperty="id" resultClass="int">
+			SELECT LAST_INSERT_ID() AS ID
+		</selectKey>
+	</insert>
+	<update id="update" parameterClass="spromotionVO">
+
+        UPDATE s_promotion SET
+	        id = #id# ,
+	        promotionLink = #promotionLink# ,
+ 	        Status = #status# ,
+	        Notes = #notes# ,
+	        type = #type# ,
+	        cooId= #cooId#
+        WHERE
+	        ID = #id# 
+
+	</update>
+	 
+</sqlMap>

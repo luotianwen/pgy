@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="offerSdkSqlMap">
+    <select id="getOfferSdkCount" resultClass="int">
+        SELECT COUNT(1) from offer_sdk;
+    </select>
+    <select id="getOfferSdkList" parameterClass="OfferSdk" resultClass="OfferSdk">
+       SELECT
+      <![CDATA[
+            id id,
+            type type,
+            promotionurl promotionUrl,
+            _promotionurl _promotionUrl,
+            imaurl imageUrl,
+            title title,
+            remark remark,
+            imaname imageName,
+            adname adName,
+            review review,
+            cou cou,
+            adverid adverId,
+            advlinkmanid advLinkManId,
+            internet internet,
+            operator operator,
+            manuecpm manuEcpm,
+            autoecpm autoEcpm,
+            ecpmstatus ecpmStatus,
+            price price,
+            cdate cdate,
+            ctr ctr,
+            status status
+        ]]>
+        from offer_sdk WHERE status = #status#
+        <isNotEmpty property="adName">
+           and adName like '%$adName$%'
+        </isNotEmpty>
+        <isNotEmpty property="cou">
+            and cou = #cou#
+        </isNotEmpty>
+        <isGreaterThan property="adverId" compareValue="0">
+            and adverId = #adverId#
+        </isGreaterThan>
+        <isGreaterThan property="advLinkManId" compareValue="0">
+            and advLinkManId = #advLinkManId#
+        </isGreaterThan>
+        <isNotEmpty property="operator">
+            and operator like '%$operator$%'
+        </isNotEmpty>
+         ORDER by cdate DESC
+        <![CDATA[ LIMIT  #page.index#, #page.pageSize# ]]>;
+    </select>
+    <insert id="saveOfferSdk">
+        INSERT offer_sdk(type, promotionurl, _promotionurl, imaurl, title,  remark, imaname, adname, review, cou, adverid,  advlinkmanid, internet, operator, manuecpm, ecpmstatus, autoecpm, price, status, cdate)
+        values
+        (#type#, #promotionUrl#, #_promotionUrl#, #imageUrl#, #title#, #remark#, #imageName#, #adName#, #review#, #cou#, #adverId#, #advLinkManId#, #internet#, #operator#, #manuEcpm#, #ecpmStatus#,#autoEcpm#, #price#, #status#, now())
+    </insert>
+    <select id="getOfferSdkById" parameterClass="OfferSdk" resultClass="OfferSdk">
+       SELECT
+      <![CDATA[
+           id id,
+            type type,
+            promotionurl promotionUrl,
+            _promotionurl _promotionUrl,
+            imaurl imageUrl,
+            title title,
+            remark remark,
+            imaname imageName,
+            adname adName,
+            review review,
+            cou cou,
+            adverid adverId,
+            advlinkmanid advLinkManId,
+            internet internet,
+            operator operator,
+            manuecpm manuEcpm,
+            autoecpm autoEcpm,
+            ecpmstatus ecpmStatus,
+            price price,
+            cdate cdate,
+            ctr ctr,
+            status status
+        ]]>
+        from offer_sdk WHERE id =#id#;
+    </select>
+    <delete id="deleteOfferSdkById" parameterClass="offerSdk">
+        delete from offer_sdk WHERE  id = #id#;
+    </delete>
+
+    <select id="getAllOfferSdkList" resultClass="offerSdk">
+             SELECT
+      <![CDATA[
+            id id,
+            type type,
+            promotionurl promotionUrl,
+            _promotionurl _promotionUrl,
+            imaurl imageUrl,
+            title title,
+            remark remark,
+            imaname imageName,
+            adname adName,
+            review review,
+            cou cou,
+            adverid adverId,
+            advlinkmanid advLinkManId,
+            internet internet,
+            operator operator,
+            manuecpm manuEcpm,
+            autoecpm autoEcpm,
+            ecpmstatus ecpmStatus,
+            price price,
+            cdate cdate,
+            ctr ctr,
+            status status
+        ]]>
+        from offer_sdk;
+    </select>
+
+    <update id="updateOfferSdk">
+        update offer_sdk set
+        <![CDATA[
+        type = #type#,
+        promotionurl = #promotionUrl#,
+        _promotionurl = #_promotionUrl#,
+        imaurl = #imageUrl#,
+        title = #title#,
+        remark =#remark#,
+        imaname = #imageName#,
+        adname=#adName#,
+        review= #review#,
+        cou=#cou#,
+        adverid=#adverId#,
+        advlinkmanid=#advLinkManId#,
+        internet= #internet#,
+        operator=#operator#,
+        manuecpm=#manuEcpm#,
+        ecpmstatus=#ecpmStatus#,
+        price=#price#,
+        status=#status#
+        ]]>
+        WHERE id = #id#
+    </update>
+</sqlMap>

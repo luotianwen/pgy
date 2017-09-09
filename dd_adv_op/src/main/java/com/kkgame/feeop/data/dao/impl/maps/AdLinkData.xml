@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="adLinkDataSqlMap">
+	<select id="getAdLinkDataVOList" parameterClass="searchVO" resultClass="adLinkDataVO">
+		SELECT IFNULL(SUM(D.noLimitClickTimes),0) noLimitClickTimes,
+				IFNULL(SUM(D.iconClickTimes),0) iconClickTimes,
+				IFNULL(SUM(D.statusBarClickTimes),0) statusBarClickTimes,
+				IFNULL(SUM(D.browserClickTimes),0) browserClickTimes,
+				IFNULL(SUM(D.totalClickTimes),0) totalClickTimes,
+				IFNULL(SUM(D.thirdClickTimes),0) thirdClickTimes,
+				IFNULL(SUM(D.linkIncome),0) linkIncome,
+				ROUND(IFNULL(SUM(D.noLimitClickTimes)*100/IFNULL(SUM(D.totalClickTimes),0),0.00),2) noLimitPercent,
+				ROUND(IFNULL(SUM(D.iconClickTimes)*100/IFNULL(SUM(D.totalClickTimes),0),0.00),2) iconPercent,
+				ROUND(IFNULL(SUM(D.statusBarClickTimes)*100/IFNULL(SUM(D.totalClickTimes),0),0.00),2) statusBarPercent,
+				ROUND(IFNULL(SUM(D.browserClickTimes)*100/IFNULL(SUM(D.totalClickTimes),0),0.00),2) browserPercent
+				<isEqual property="rowFieldVO.isShowDate" compareValue="1">  
+					,DATE_FORMAT(D.StatDate,'%Y-%m-%d') statDate
+				</isEqual>
+				<isEqual property="rowFieldVO.isShowDate" compareValue="0">  
+					,null statDate
+				</isEqual>
+				<isEqual property="rowFieldVO.isShowAd" compareValue="1">  
+					,IFNULL(D.AdId,0) adId
+					,A.Name adName
+
+				</isEqual>
+
+				<isEqual property="rowFieldVO.isShowAd" compareValue="0">  
+					,0 adId
+					,null adName
+				</isEqual>
+				,IFNULL(F.uv,0) uv
+				<isEqual property="rowFieldVO.isShowProject" compareValue="1">  
+					,IFNULL(D.ProjectId,0) projectId
+					,IFNULL(PR.Name,'未知项目') projectName
+				</isEqual>
+				<isEqual property="rowFieldVO.isShowProject" compareValue="0">  
+					,0 projectId
+					,null projectName
+				</isEqual>
+				<isEqual property="rowFieldVO.isShowInternet" compareValue="1">
+					,D.Internet
+				</isEqual>
+				<isEqual property="rowFieldVO.isShowInternet" compareValue="0">
+					,0 Internet
+				</isEqual>
+			FROM AD_DATA_LINK_$table$ D
+			LEFT JOIN kok_sdk.LinkAds2 A ON A.ID=D.AdId
+			LEFT JOIN PROJECT PR ON PR.ID=D.ProjectId
+		    LEFT JOIN ad_data_stat_link_$table$ F  ON F.adId=D.adId and  F.StatDate =D.StatDate
+
+			WHERE D.StatDate BETWEEN #startDate# AND #endDate#
+			<isGreaterThan property="adId" compareValue="0">
+				AND A.ID = #adId#
+			</isGreaterThan>
+			<isGreaterThan property="projectId" compareValue="0">
+				AND D.projectId = #projectId#
+			</isGreaterThan>
+			<dynamic  prepend =" GROUP BY ">
+				<isEqual prepend =" , " property="rowFieldVO.isShowDate" compareValue="1">  
+					DATE_FORMAT(D.StatDate,'%Y-%m-%d')
+				</isEqual>
+				<isEqual prepend =" , " property="rowFieldVO.isShowAd" compareValue="1">  
+						D.AdId
+				</isEqual>
+				<isEqual prepend =" , " property="rowFieldVO.isShowProject" compareValue="1">  
+						D.ProjectId
+				</isEqual>
+				<isEqual prepend =" , " property="rowFieldVO.isShowInternet" compareValue="1">
+					D.Internet
+				</isEqual>
+			</dynamic>
+			<dynamic  prepend =" ORDER BY ">
+				<isEqual prepend =" , " property="rowFieldVO.isShowDate" compareValue="1">  
+					D.StatDate ASC, totalClickTimes DESC
+				</isEqual>
+				<isEqual prepend =" , " property="rowFieldVO.isShowDate" compareValue="0">  
+					totalClickTimes DESC
+				</isEqual>
+			</dynamic>
+	</select>
+</sqlMap>

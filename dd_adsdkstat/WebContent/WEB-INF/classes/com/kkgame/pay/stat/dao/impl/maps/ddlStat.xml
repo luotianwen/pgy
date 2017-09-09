@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="ddlStatSqlMap">
+	<delete id="deleteClickData" parameterClass="map">
+		delete from $table$ where StatDate=#statDate#
+	</delete>
+	<delete id="deleteSaleData" parameterClass="map">
+		delete from $table$ where StatDate=#statDate#
+	</delete>
+	<insert id="insertClickData" parameterClass="map">
+		INSERT INTO $table$(StatDate,Hour,ProductId,ChannelId,ProjectId,Country,UaType,ClickCount) 
+		VALUES 
+		<iterate conjunction="," property="list">
+			<![CDATA[
+				(#list[].statDate#,#list[].hour#,#list[].productId#,#list[].channelId#,#list[].projectId#,#list[].country#,#list[].uaType#,#list[].clickCount#)
+			]]>  
+		</iterate>	
+		ON DUPLICATE KEY UPDATE ClickCount=ClickCount+VALUES(ClickCount)
+	</insert>
+	<insert id="insertValidClickData" parameterClass="map">
+		INSERT INTO $table$(StatDate,Hour,ProductId,ChannelId,ProjectId,Country,UaType,ValidClickCount) 
+		VALUES 
+		<iterate conjunction="," property="list">
+			<![CDATA[
+				(#list[].statDate#,#list[].hour#,#list[].productId#,#list[].channelId#,#list[].projectId#,#list[].country#,#list[].uaType#,#list[].validClickCount#)
+			]]>  
+		</iterate>	
+		ON DUPLICATE KEY UPDATE ValidClickCount=ValidClickCount+VALUES(ValidClickCount)
+	</insert>
+	<select id="getTotalClickList" resultClass="ddlData" parameterClass="map">
+		SELECT StatDate statDate,
+				Hour hour,
+				ProductId productId,
+				ChannelId channelId,
+				ProjectId projectId,
+				Country Country,
+				IFNULL(SUM(ClickCount),0) clickCount,
+				IFNULL(SUM(ValidClickCount),0) validClickCount
+		FROM $table$
+		WHERE StatDate=#statDate#
+		GROUP BY StatDate,hour,ProductId,ChannelId,ProjectId,Country
+	</select>
+	<select id="getSendData" parameterClass="map" resultClass="ddlData">
+		SELECT StatDate statDate,
+				ProjectId projectId,
+				IFNULL(SUM(ClickCount),0) clickCount,
+				IFNULL(SUM(ValidClickCount),0) validClickCount,
+				IFNULL(SUM(ShowSaleCount),0) showSaleCount
+		FROM $table$
+		WHERE StatDate=#statDate#
+		GROUP BY StatDate,ProjectId
+	</select>
+	<insert id="insertTotalClickData" parameterClass="map">
+		INSERT INTO $table$(StatDate,Hour,ProductId,ChannelId,ProjectId,Country,ClickCount,ValidClickCount) 
+		VALUES 
+		<iterate conjunction="," property="list">
+			<![CDATA[
+				(#list[].statDate#,#list[].hour#,#list[].productId#,#list[].channelId#,#list[].projectId#,#list[].country#,#list[].clickCount#,#list[].validClickCount#)
+			]]>  
+		</iterate>	
+		ON DUPLICATE KEY UPDATE ClickCount=VALUES(ClickCount),ValidClickCount=VALUES(ValidClickCount)
+	</insert>
+	<insert id="insertSaleData" parameterClass="map">
+		INSERT INTO $table$(StatDate,Hour,ProductId,ChannelId,ProjectId,Country,SaleCount) 
+		VALUES 
+		<iterate conjunction="," property="list">
+			<![CDATA[
+				(#list[].statDate#,#list[].hour#,#list[].productId#,#list[].channelId#,#list[].projectId#,#list[].country#,#list[].saleCount#)
+			]]>  
+		</iterate>	
+		ON DUPLICATE KEY UPDATE SaleCount=VALUES(SaleCount)
+	</insert>
+	<insert id="insertSendSaleData" parameterClass="map">
+		INSERT INTO $table$(StatDate,Hour,ProductId,ChannelId,ProjectId,Country,ShowSaleCount) 
+		VALUES 
+		<iterate conjunction="," property="list">
+			<![CDATA[
+				(#list[].statDate#,#list[].hour#,#list[].productId#,#list[].channelId#,#list[].projectId#,#list[].country#,#list[].saleCount#)
+			]]>
+		</iterate>	
+		ON DUPLICATE KEY UPDATE ShowSaleCount=VALUES(ShowSaleCount)
+	</insert>
+	<insert id="insertProductList" parameterClass="map">
+		INSERT INTO PRODUCTS(ID,Name) 
+		VALUES 
+		<iterate conjunction="," property="list">
+			<![CDATA[
+				(#list[].id#,#list[].name#)
+			]]>
+		</iterate>	
+		ON DUPLICATE KEY UPDATE Name=VALUES(Name)
+	</insert>
+	<insert id="insertChannelList" parameterClass="map">
+		INSERT INTO CHANNELS(ID,Name) 
+		VALUES 
+		<iterate conjunction="," property="list">
+			<![CDATA[
+				(#list[].id#,#list[].name#)
+			]]>
+		</iterate>	
+		ON DUPLICATE KEY UPDATE Name=VALUES(Name)
+	</insert>
+	<select id="getMonthSaleData" parameterClass="map" resultClass="ddlData">
+		SELECT #yearMonth# yearMonth,
+				ProductId productId,
+				ChannelId channelId,
+				ProjectId projectId,
+				SUM(ClickCount) clickCount,
+				SUM(ValidClickCount) validClickCount,
+				SUM(SaleCount) saleCount,
+				SUM(ShowSaleCount) showSaleCount
+		FROM $table$
+		GROUP BY ProductId,ChannelId,ProjectId
+	</select>
+	<delete id="deleteMonthSaleData" parameterClass="map" >
+			DELETE FROM DDL_SALE_DATA_MONTH WHERE YearMonth=#yearMonth#
+	</delete>
+	<insert id="insertMonthSaleData" parameterClass="map">
+		INSERT INTO DDL_SALE_DATA_MONTH(YearMonth,ProductId,ChannelId,ProjectId,ClickCount,ValidClickCount,SaleCount,ShowSaleCount) 
+		VALUES 
+		<iterate conjunction="," property="list">
+			<![CDATA[
+				(#list[].yearMonth#,#list[].productId#,#list[].channelId#,#list[].projectId#,#list[].clickCount#,#list[].validClickCount#,#list[].saleCount#,#list[].showSaleCount#)
+			]]>
+		</iterate>	
+		ON DUPLICATE KEY UPDATE ClickCount=VALUES(ClickCount),ValidClickCount=VALUES(ValidClickCount),SaleCount=VALUES(SaleCount),ShowSaleCount=VALUES(ShowSaleCount)
+	</insert>
+	<select id="getTotalSaleData" resultClass="ddlData">
+		SELECT ProjectId projectId,
+				SUM(SaleCount) saleCount
+		FROM DDL_SALE_DATA_MONTH
+		GROUP BY ProjectId
+	</select>
+</sqlMap>

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="adIncomeSqlMap">
+	<select id="getAdIncomeVOList" parameterClass="searchVO" resultClass="adIncomeVO">
+		SELECT IFNULL(SUM(D.installTotal),0) installTotal,
+				IFNULL(SUM(D.installedCount),0) installedCount,
+				IFNULL(SUM(D.silenceInstalledCount),0) silenceInstalledCount,
+				IFNULL(SUM(D.silenceShowTotal),0) silenceShowTotal,
+				IFNULL(SUM(D.showTotal),0) showTotal,
+				IFNULL(SUM(D.realTotal),0) realTotal,
+				IFNULL(SUM(D.inputTotal),0) inputTotal,
+				ROUND(IFNULL(SUM(D.inputtotal+D.realtotal)/IFNULL(SUM(D.installTotal),0),0.00),2) percent,
+				IFNULL(SUM(D.price),0.00) price,
+				IFNULL(SUM(D.income),0.00) income,
+				ROUND(IFNULL(SUM(D.installedCount*D.cpConversionRate)*D.price/SUM(D.showtotal)*1.0*1000,0.00),2) expectCpm,
+				ROUND(IFNULL(SUM(D.silenceInstalledCount*D.cpConversionRate)*D.price/SUM(D.silenceShowTotal)*1.0*1000,0.00),2) expectScpm,
+				IFNULL(SUM(D.cpConversionRate),0.00) cpConversionRate,
+				ROUND(IFNULL(SUM(D.installedCount*D.inputPercent)*D.price/SUM(D.showtotal)*1.0*1000,0.00),2) cpm,
+				ROUND(IFNULL(SUM(D.silenceInstalledCount*D.inputPercent)*D.price/SUM(D.silenceShowTotal)*1.0*1000,0.00),2) scpm
+				<isEqual property="rowFieldVO.isShowDate" compareValue="1">  
+					,DATE_FORMAT(D.sdate,'%Y-%m-%d') statDate
+				</isEqual>
+				<isEqual property="rowFieldVO.isShowDate" compareValue="0">  
+					,null statDate
+				</isEqual>
+				<isEqual property="rowFieldVO.isShowAd" compareValue="1">  
+					,IFNULL(A.id,0) adId
+					,A.AppName adName
+				</isEqual>
+				<isEqual property="rowFieldVO.isShowAd" compareValue="0">  
+					,0 adId
+					,null adName
+				</isEqual>	
+			FROM $table$ D
+			LEFT JOIN kok_sdk.A_SdkPushApk A ON A.ID=D.apkid
+			WHERE D.sdate BETWEEN #startDate# AND #endDate#
+			<isGreaterThan property="adId" compareValue="0">
+				AND A.ID = #adId#
+			</isGreaterThan>
+			<dynamic  prepend =" GROUP BY ">
+				<isEqual prepend =" , " property="rowFieldVO.isShowDate" compareValue="1">  
+					DATE_FORMAT(D.sdate,'%Y-%m-%d')
+				</isEqual>
+				<isEqual prepend =" , " property="rowFieldVO.isShowAd" compareValue="1">  
+						A.ID
+				</isEqual>
+			</dynamic>
+			HAVING showTotal>0
+			<dynamic  prepend =" ORDER BY ">
+				<isEqual prepend =" , " property="rowFieldVO.isShowDate" compareValue="1">  
+					DATE_FORMAT(D.sdate,'%Y-%m-%d') ASC ,showTotal DESC
+				</isEqual>
+				<isEqual prepend =" , " property="rowFieldVO.isShowDate" compareValue="0">  
+						showTotal DESC
+				</isEqual>
+			</dynamic>
+			
+	</select>
+</sqlMap>

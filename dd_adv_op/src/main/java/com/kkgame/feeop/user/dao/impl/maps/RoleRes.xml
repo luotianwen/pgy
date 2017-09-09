@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="roleResSqlMap">	
+	<delete id="delete" parameterClass="roleResVO">
+		DELETE FROM ROLE_RES WHERE RoleId  =#roleId# AND ResId = #resId#
+	</delete>
+	<select id="existRoleRes" parameterClass="roleResVO" resultClass="roleResVO">
+		SELECT ID id,
+				RoleId roleId,
+				ResId	resId
+		FROM ROLE_RES WHERE RoleId  =#roleId# AND ResId = #resId#
+	</select>
+	<insert id="insert" parameterClass="roleResVO">
+		INSERT INTO ROLE_RES(RoleId,ResId) VALUES(#roleId#,#resId#)
+	</insert>
+</sqlMap>

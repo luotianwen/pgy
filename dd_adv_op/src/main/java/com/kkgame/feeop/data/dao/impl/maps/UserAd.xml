@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="userAdSqlMap">
+	<select id="getUserAdVOList" parameterClass="searchVO" resultClass="userAdVO">
+		SELECT  IFNULL(SUM(D.NoUserCount),0) noUserCount,
+				IFNULL(SUM(D.AllUserCount),0) allUserCount,
+				IFNULL(SUM(D.YesUserCount),0) yesUserCount,
+				IFNULL(SUM(D.NoUserCount+D.AllUserCount+D.YesUserCount),0) totalUserCount,
+				IFNULL(ROUND(IFNULL(SUM(D.NoUserCount),0)*100.0/IFNULL(SUM(D.NoUserCount+D.AllUserCount+D.YesUserCount),0),2),0) noPercent,
+				IFNULL(ROUND(IFNULL(SUM(D.AllUserCount),0)*100.0/IFNULL(SUM(D.NoUserCount+D.AllUserCount+D.YesUserCount),0),2),0) allPercent,
+				IFNULL(ROUND(IFNULL(SUM(D.YesUserCount),0)*100.0/IFNULL(SUM(D.NoUserCount+D.AllUserCount+D.YesUserCount),0),2),0) yesPercent
+				<isEqual property="rowFieldVO.isShowDate" compareValue="1">  
+					,DATE_FORMAT(D.StatDate,'%Y-%m-%d') statDate
+				</isEqual>
+				<isEqual property="rowFieldVO.isShowDate" compareValue="0">  
+					,null statDate
+				</isEqual>
+				<isEqual property="rowFieldVO.isShowCountry" compareValue="1">  
+					,IFNULL(D.Country,0) country
+					,IFNULL(E.description,'未知国家') countryName
+				</isEqual>
+				<isEqual property="rowFieldVO.isShowCountry" compareValue="0">  
+					,0 country
+					,null countryName
+				</isEqual>
+				<isEqual property="rowFieldVO.isShowType" compareValue="1">  
+					,IFNULL(D.Type,0) type
+				</isEqual>
+				<isEqual property="rowFieldVO.isShowType" compareValue="0">
+					, 0 type
+				</isEqual>		
+			FROM USER_AD_DATA_$table$ D
+			LEFT JOIN kok_sdk.EnumerationValue E on E.id=D.Country
+			WHERE D.StatDate BETWEEN #startDate# AND #endDate#
+			<isGreaterThan property="country" compareValue="0">
+				AND D.country = #country#
+			</isGreaterThan>
+			<isGreaterThan property="type" compareValue="0">
+				AND D.Type = #type#
+			</isGreaterThan>
+			<dynamic  prepend =" GROUP BY ">
+				<isEqual prepend =" , " property="rowFieldVO.isShowDate" compareValue="1">  
+					DATE_FORMAT(D.StatDate,'%Y-%m-%d')
+				</isEqual>
+				<isEqual prepend =" , " property="rowFieldVO.isShowCountry" compareValue="1">  
+						D.Country
+				</isEqual>	
+				<isEqual prepend =" , " property="rowFieldVO.isShowType" compareValue="1">  
+						D.Type
+				</isEqual>	
+			</dynamic>
+			<dynamic  prepend =" ORDER BY ">
+				<isEqual prepend =" , " property="rowFieldVO.isShowDate" compareValue="1">  
+					DATE_FORMAT(D.StatDate,'%Y-%m-%d') ASC, totalUserCount DESC
+				</isEqual>
+				<isEqual prepend =" , " property="rowFieldVO.isShowDate" compareValue="0">  
+					totalUserCount DESC
+				</isEqual>
+			</dynamic>
+	</select>
+</sqlMap>

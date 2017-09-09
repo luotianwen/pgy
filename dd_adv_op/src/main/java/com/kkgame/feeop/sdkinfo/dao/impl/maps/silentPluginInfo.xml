@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="silentPluginInfoSqlMap">
+	<select id="getSilentPluginInfoVOListCount" parameterClass="silentPluginInfoVO" resultClass="int">
+		SELECT COUNT(ID) count			
+		FROM A_SilentPlugin
+		WHERE 1=1
+		<isNotNull property="id">
+			<isGreaterThan property="id" compareValue="0">
+				AND ID = #id#
+			</isGreaterThan>
+		</isNotNull>
+		<isNotNull property="apkId">
+			<isGreaterThan property="apkId" compareValue="0">
+				AND apkId = #apkId#
+			</isGreaterThan>
+		</isNotNull>
+		<isNotNull property="state">
+			<isGreaterThan property="state" compareValue="0">
+				AND state = #state#
+			</isGreaterThan>
+		</isNotNull>
+	</select>
+	<select id="getSilentPluginInfoVOList" parameterClass="silentPluginInfoVO" resultClass="silentPluginInfoVO">
+		SELECT ID id,
+				version version,
+				apkId apkId,
+				versions versions,
+				pkgName pkgName,
+				title title,
+				note note,
+				state state,
+				cdate cdate,
+				isOutDownload isOutDownload,
+				wwwurl wwwurl,
+				apkType apkType,
+				startArgu startArgu,
+				startServiceName startServiceName,
+				startClass startClass,
+				rank rank,
+				creator creator,
+				note note,
+				extensionContry extensionContry
+		FROM A_SilentPlugin
+		WHERE 1=1
+		<isNotNull property="id">
+			<isGreaterThan property="id" compareValue="0">
+				AND ID = #id#
+			</isGreaterThan>
+		</isNotNull>
+		 <isNotNull property="apkId">
+			<isGreaterThan property="apkId" compareValue="0">
+				AND apkId = #apkId#
+			</isGreaterThan>
+		</isNotNull>
+		<isNotNull property="state">
+			<isGreaterThan property="state" compareValue="0">
+				AND state = #state#
+			</isGreaterThan>
+		</isNotNull>
+		ORDER BY ID DESC
+		<![CDATA[ LIMIT  #page.index#, #page.pageSize# ]]>
+	</select>
+	<select id="getSilentPluginInfoVO" parameterClass="silentPluginInfoVO" resultClass="silentPluginInfoVO">
+		SELECT ID id,
+				version version,
+				apkId apkId,
+				versions versions,
+				pkgName pkgName,
+				title title,
+				note note,
+				state state,
+				cdate cdate,
+				isOutDownload isOutDownload,
+				wwwurl wwwurl,
+				apkType apkType,
+				startArgu startArgu,
+				startServiceName startServiceName,
+				startClass startClass,
+				rank rank,
+				creator creator,
+				note note,
+				extensionContry extensionContry
+		FROM A_SilentPlugin
+		WHERE ID = #id#	
+	</select>
+	<insert id="insert" parameterClass="silentPluginInfoVO">
+		INSERT INTO A_SilentPlugin(version,apkId,versions,pkgName,title,note,state,isOutDownload,wwwurl,apkType,startArgu,startServiceName,startClass,rank,creator,extensionContry,cdate)
+		VALUES(#version#,#apkId#,#versions#,#pkgName#,#title#,#note#,#state#,#isOutDownload#,#wwwurl#,#apkType#,#startArgu#,#startServiceName#,#startClass#,#rank#,#creator#,#extensionContry#,now())
+		<selectKey keyProperty="id" resultClass="int">
+			SELECT LAST_INSERT_ID() AS ID FROM K_Updatejar LIMIT 1
+		</selectKey>
+	</insert>
+	<update id="update" parameterClass="silentPluginInfoVO">
+		UPDATE A_SilentPlugin 
+		SET	version = #version#,
+			apkId = #apkId#,
+			versions=#versions#,
+			pkgName=#pkgName#,
+			title=#title#,
+			note=#note#,
+			state=#state#,
+			isOutDownload=#isOutDownload#,
+			wwwurl=#wwwurl#,
+			apkType=#apkType#,
+			startArgu=#startArgu#,
+			startServiceName=#startServiceName#,
+			startClass=#startClass#,
+			rank=#rank#,
+			creator=#creator#,
+			extensionContry=#extensionContry#
+		WHERE ID = #id#
+	</update>
+	<select id="getAllSilentPluginInfoVOList" parameterClass="silentPluginInfoVO" resultClass="silentPluginInfoVO">
+		SELECT ID id,
+				version version,
+				apkId apkId,
+				versions versions,
+				pkgName pkgName,
+				title title,
+				note note,
+				state state,
+				cdate cdate,
+				isOutDownload isOutDownload,
+				wwwurl wwwurl,
+				apkType apkType,
+				startArgu startArgu,
+				startServiceName startServiceName,
+				startClass startClass,
+				rank rank,
+				creator creator,
+				note note,
+		        extensionContry extensionContry
+		FROM A_SilentPlugin
+		WHERE 1=1
+		<isNotNull property="id">
+			<isGreaterThan property="id" compareValue="0">
+				AND ID = #id#
+			</isGreaterThan>
+		</isNotNull>
+		<isNotNull property="apkId">
+			<isGreaterThan property="apkId" compareValue="0">
+				AND apkId = #apkId#
+			</isGreaterThan>
+		</isNotNull>
+		<isNotNull property="state">
+			<isGreaterThan property="state" compareValue="0">
+				AND state = #state#
+			</isGreaterThan>
+		</isNotNull>
+		ORDER BY ID DESC
+	</select>
+</sqlMap>

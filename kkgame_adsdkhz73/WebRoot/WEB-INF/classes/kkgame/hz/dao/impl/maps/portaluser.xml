@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="portalUserSqlMap">
+	 
+<select id="getPortalUserList" parameterClass="portalUserVO"
+	resultClass="portalUserVO"> 
+	SELECT  ID	id,
+			LoginId	loginId,
+			Passwd	passwd,
+			RoleType	roleType,
+			RoleId	roleId,
+			Status	status,
+			DATE_FORMAT(CreateTime,'%Y-%m-%d %H:%i:%S')  createTime,
+			LastLogin	lastLogin
+	FROM 	PORTAL_USER 
+	WHERE RoleType = #roleType#
+<isNotNull property="searchId">      
+	<isGreaterThan property="searchId" compareValue="0">
+         AND ID  like  concat('%',#searchId#,'%')
+	</isGreaterThan>
+</isNotNull>
+<isNotNull property="searchName">  
+         AND  LoginId like  concat('%',#searchName#,'%')
+</isNotNull>
+</select>
+
+<insert id="insert" parameterClass="portalUserVO">
+	INSERT  INTO  PORTAL_USER(  LoginId,Passwd,RoleType,RoleId,Status,CreateTime,LastLogin)
+ 	VALUES (#loginId#,#passwd#,#roleType#,#roleId#,#status#,now(),#lastLogin#)								
+</insert>
+<select id="getPortalUserById" parameterClass="int" resultClass="portalUserVO">
+	SELECT	ID	id,
+			LoginId	loginId,
+			Passwd	passwd,
+			RoleType	roleType,
+			RoleId	roleId,
+			Status	status,
+			DATE_FORMAT(CreateTime,'%Y-%m-%d %H:%i:%S')  createTime,
+			LastLogin	lastLogin
+    FROM  PORTAL_USER
+	WHERE Id=#id#			
+</select>		
+<update  id="updatePortalUser" parameterClass="portalUserVO" >
+	UPDATE PORTAL_USER SET
+		LoginId	= #loginId#,
+		Passwd	= #passwd#,
+		Status	= #status#
+	WHERE ID = #id#	
+</update>	
+<update  id="updateUserLastLogin" parameterClass="portalUserVO" >
+	UPDATE PORTAL_USER SET
+		LastLogin = now()
+	WHERE ID = #id#	
+</update>		
+<update  id="updatePasswd" parameterClass="portalUserVO" >
+	UPDATE PORTAL_USER SET Passwd = #passwd# WHERE ID = #id#	
+</update>	
+<delete id="deletePortalUser" parameterClass="int">
+	DELETE FROM PORTAL_USER WHERE ID = #id#
+</delete>
+<select id="getPortalUserByCriteria" parameterClass="portalUserVO" resultClass="portalUserVO">
+		SELECT ID	id,
+			LoginId  loginId
+	   	FROM  PORTAL_USER
+			WHERE 1=1
+			<isNotEmpty property="loginId"> 
+			AND LoginId=#loginId#
+			</isNotEmpty>
+			<isGreaterThan property="id" compareValue="0">
+			AND ID != #id#
+			</isGreaterThan>
+</select>
+<select id="getPortalUserByLoginId" parameterClass="java.lang.String" resultClass="portalUserVO">
+		SELECT	ID	id,
+				LoginId	loginId,
+				Passwd	passwd,
+				RoleType	roleType,
+				RoleId	roleId,
+				Status	status,
+				DATE_FORMAT(CreateTime,'%Y-%m-%d %H:%i:%S')  createTime,
+				LastLogin	lastLogin
+	    FROM  PORTAL_USER
+		WHERE LoginId=#loginId#			
+</select>
+
+</sqlMap>

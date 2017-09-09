@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="offlinejarSqlMap">
+	<select id="getOfflinejarVOListCount" parameterClass="OfflinejarVO" resultClass="int">
+		SELECT COUNT(ID) count
+		FROM o_offlinesdkjar
+		WHERE 1=1
+		<isNotNull property="id">
+			<isGreaterThan property="id" compareValue="0">
+				AND id = #id#
+			</isGreaterThan>
+		</isNotNull>
+		<isNotNull property="status">
+			<isGreaterThan property="status" compareValue="0">
+				AND status = #status#
+			</isGreaterThan>
+		</isNotNull>
+	</select>
+	<select id="getOfflinejarVOList" parameterClass="OfflinejarVO" resultClass="OfflinejarVO">
+		select * from  o_offlinesdkjar where 1=1
+		<isNotNull property="id">
+			<isGreaterThan property="id" compareValue="0">
+				AND id = #id#
+			</isGreaterThan>
+		</isNotNull>
+		<isNotNull property="status">
+			<isGreaterThan property="status" compareValue="0">
+				AND status = #status#
+			</isGreaterThan>
+		</isNotNull>
+		ORDER BY id DESC
+		<![CDATA[ LIMIT  #page.index#, #page.pageSize# ]]>
+	</select>
+	<select id="getOfflinejarVO" parameterClass="OfflinejarVO" resultClass="OfflinejarVO">
+		SELECT * from  o_offlinesdkjar where id =#id#
+	</select>
+	<insert id="insert" parameterClass="OfflinejarVO">
+		INSERT  into o_offlinesdkjar (url, status, md5,version, cdate, startClass, startArgu, apkId)VALUES
+		(#url#, #status#, md5,#version#, now(), #startClass#, #startArgu#, #apkId#);
+	</insert>
+	<update id="update" parameterClass="OfflinejarVO">
+		UPDATE   o_offlinesdkjar set
+		url = #url#,
+		status = #status#,
+		version = #version# ,
+		startClass = #startClass# ,
+		startArgu = #startArgu# ,
+		md5 = #md5#,
+		apkId = #apkId#
+		where id = #id#
+	</update>
+</sqlMap>

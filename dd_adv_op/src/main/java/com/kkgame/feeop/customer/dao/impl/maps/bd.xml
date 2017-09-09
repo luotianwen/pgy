@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="bdSqlMap">
+	<select id="getBdList" parameterClass="bdVO"
+		resultClass="bdVO">
+		SELECT 	BD.ID	id,
+			BD.Name	name,
+			AG.Name	agentName,
+			BD.Level	level,
+			PU.LoginId loginId,
+			PU.Passwd	passwd,
+			PU.Status status,
+			PU.LastLogin lastLogin,	
+			BD.AgentId	agentId,
+			PU.ID portalUserId,
+			BD.Telephone telephone
+		FROM	BUSINESS_DEVELOPER BD  LEFT  JOIN PORTAL_USER PU  ON PU.RoleId = BD.ID 
+			LEFT  JOIN AGENT AG  ON BD.AgentId = AG.ID	
+	  	WHERE  PU.RoleType = 'BD'
+      	<isNotNull property="searchId">      
+      	<isGreaterThan property="searchId" compareValue="0">
+          	AND BD.ID  like  concat('%',#searchId#,'%')
+        </isGreaterThan>
+      	</isNotNull>
+		<isNotNull property="searchName">  
+          	AND  BD.Name like  concat('%',#searchName#,'%')
+		</isNotNull>
+	  	<isGreaterThan property="agentId" compareValue="0">
+      		AND BD.AgentId  = #agentId#
+        </isGreaterThan>
+   		ORDER BY #sortIndex#	   
+	    <isEqual property="sortType" compareValue="desc"> DESC 
+		</isEqual> 	
+	   	<![CDATA[ LIMIT  #page.index#, #page.pageSize# ]]>
+	</select>
+	<select id="getBdVOList" parameterClass="bdVO"
+		resultClass="bdVO">
+		SELECT 	BD.ID	id,
+			BD.Name	name,
+			BD.Level	level,
+			PU.LoginId loginId,
+			PU.Passwd	passwd,
+			PU.Status status,
+			PU.LastLogin lastLogin,	
+			BD.AgentId	agentId,
+			BD.Telephone telephone
+			FROM	BUSINESS_DEVELOPER BD 
+			 LEFT  JOIN PORTAL_USER PU  ON PU.RoleId = BD.ID 
+	   WHERE  PU.RoleType = 'BD'
+	</select>
+	
+	<select id="getBdListCount" parameterClass="bdVO"
+		resultClass="int">
+		SELECT 	COUNT(BD.ID) 
+		FROM BUSINESS_DEVELOPER BD  LEFT  JOIN PORTAL_USER PU  ON PU.RoleId = BD.ID  
+		LEFT  JOIN AGENT AG  ON BD.AgentId = AG.ID	
+	   	WHERE  PU.RoleType = 'BD'
+      	<isNotNull property="searchId">      
+      	<isGreaterThan property="searchId" compareValue="0">
+          	AND BD.ID  like  concat('%',#searchId#,'%')
+       	</isGreaterThan>
+      	</isNotNull>
+      	<isNotNull property="searchName">  
+          	AND  BD.Name like  concat('%',#searchName#,'%')
+		</isNotNull>
+       	<isGreaterThan property="agentId" compareValue="0">
+          AND BD.AgentId  = #agentId#
+		</isGreaterThan>	
+	</select>
+	
+	<select id="getAllBdList" parameterClass="bdVO"
+		resultClass="bdVO">
+		SELECT 	BD.ID	id,
+			BD.Name	name,
+			AG.Name	agentName,
+			BD.AgentId agentId
+		FROM	BD BD  
+		LEFT  JOIN AGENT AG  ON BD.AgentId = AG.ID	
+		WHERE   1=1
+		<isGreaterThan property="agentId" compareValue="0">
+		AND BD.AgentId = #agentId#
+		</isGreaterThan>
+		order by BD.Name
+	</select>	
+	<insert id="insert" parameterClass="bdVO">
+		INSERT  INTO  BUSINESS_DEVELOPER (  Name,AgentId,Level,Description,Telephone )
+ 		VALUES (#name#,#agentId#,#level#,#description#,#telephone#)
+ 		<selectKey resultClass="int"  keyProperty="id" >   
+        	select @@IDENTITY as value      
+		</selectKey> 											
+	</insert>
+	<select id="getBdById" parameterClass="int" resultClass="bdVO">
+		SELECT 	BD.ID	id,
+		BD.Name	name,
+		AG.Name	agentName,
+		BD.AgentId agentId
+		FROM	BD BD
+		LEFT  JOIN AGENT AG  ON BD.AgentId = AG.ID
+		where BD.ID = #id#
+	</select>
+ 	
+	<update  id="updateBd" parameterClass="bdVO" >
+		UPDATE BUSINESS_DEVELOPER  
+		SET Name = #name#,
+		 	AgentId = #agentId#,
+		 	Level = #level#,					
+		 	Description  = #description#,
+		 	Telephone =#telephone#
+ 		WHERE ID = #id#	
+	</update>
+	
+	<delete id="deleteBd" parameterClass="int">
+		DELETE FROM BUSINESS_DEVELOPER WHERE ID = #id#
+	</delete>
+ 	<select id="getBdByCriteria" parameterClass="bdVO" resultClass="bdVO">
+		SELECT ID	id,
+			Name  name
+		    FROM  BUSINESS_DEVELOPER
+		WHERE 1=1
+		<isNotEmpty property="name"> 
+			AND Name=#name#
+		</isNotEmpty>
+		<isGreaterThan property="id" compareValue="0">
+			AND ID != #id#
+		</isGreaterThan>
+	</select>	
+	 <select id="getBdByName" parameterClass="bdVO" resultClass="bdVO">
+		SELECT ID	id,
+			Name  name,
+			Telephone telephone
+	    FROM  BUSINESS_DEVELOPER
+		WHERE  Name=#name#
+	</select>
+</sqlMap>

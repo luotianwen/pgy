@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="iframeDataSqlMap">
+
+    <select id="getIframeDataVOList" parameterClass="searchVO" resultClass="iframeDataVO">
+
+        SELECT
+        sum(D.activeCount) as activeCount,
+        sum(D.showCount) as totalShowCount,
+        sum(D.income) as payout
+        <isEqual property="rowFieldVO.isShowDate" compareValue="1">
+            ,cdate as cdate
+        </isEqual>
+        <isEqual property="rowFieldVO.isShowDate" compareValue="0">
+            ,null date
+        </isEqual>
+            ,D.pid as pid
+        <isEqual property="rowFieldVO.isShowOperator" compareValue="1">
+        ,O.name as operator
+        ,O.code as operatorId
+        </isEqual>
+        <isEqual property="rowFieldVO.isShowOperator" compareValue="0">
+        ,null as operator
+          ,O.name as operator
+        </isEqual>
+        <isEqual property="rowFieldVO.isShowCountry" compareValue="1">
+            , E.description as couName
+        </isEqual>
+        <isEqual property="rowFieldVO.isShowCountry" compareValue="0">
+            , null as couName
+        </isEqual>
+        <isEqual property="rowFieldVO.isShowProject" compareValue="1">
+            , D.projectId as cidName
+        </isEqual>
+        <isEqual property="rowFieldVO.isShowProject" compareValue="0">
+            , null as cidName
+        </isEqual>
+        ,S.id as pid ,S.Name as pidName
+        FROM ad_data_iframe_$table$ D
+        LEFT join kok_sdk.promotion S on D.pid = S.id
+         LEFT join kok_sdk.operator O on D.operatorId = O.id
+        LEFT join kok_sdk.EnumerationValue E on E.id= D.cou
+        WHERE D.cdate BETWEEN #startDate# AND #endDate#
+        <isGreaterThan property="operator" compareValue="0">
+        AND D.pid = #operator#
+        </isGreaterThan>
+        <isGreaterThan property="projectId" compareValue="0">
+            AND D.cid = #projectId#
+        </isGreaterThan>
+        <isGreaterThan property="country" compareValue="0">
+            AND D.cou = #country#
+        </isGreaterThan>
+        <dynamic prepend=" GROUP BY ">
+            <isEqual prepend=" , " property="rowFieldVO.isShowDate" compareValue="1">
+                D.cdate
+            </isEqual>
+            <isEqual prepend=" , " property="rowFieldVO.isShowAd" compareValue="1">
+                D.pid
+            </isEqual>
+            <isEqual prepend=" , " property="rowFieldVO.isShowOperator" compareValue="1">
+            D.xoperator
+            </isEqual>
+            <isEqual prepend=" , " property="rowFieldVO.isShowCountry" compareValue="1">
+                D.cou
+            </isEqual>
+            <isEqual prepend=" , " property="rowFieldVO.isShowProject" compareValue="1">
+                D.cid
+            </isEqual>
+        </dynamic>
+        <dynamic prepend=" ORDER BY ">
+            <isEqual prepend=" , " property="rowFieldVO.isShowDate" compareValue="1">
+                D.cdate ASC
+            </isEqual>
+        </dynamic>
+    </select>
+</sqlMap>

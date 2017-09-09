@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="GBK"?>
+<!DOCTYPE dwr PUBLIC
+    "-//GetAhead Limited//DTD Direct Web Remoting 0.4//EN"
+    "http://www.getahead.ltd.uk/dwr/dwr.dtd">
+<dwr>
+	<!--暴露给外界调用的类-->
+	<allow>
+		<create creator="new" javascript="AgentDwr">
+			<param name="class" value="com.kkgame.hz.dwr.AgentDwr" />
+		</create>
+		<create creator="new" javascript="PortalUserDwr">
+			<param name="class" value="com.kkgame.hz.dwr.PortalUserDwr" />
+		</create>
+		<create creator="new" javascript="BdDwr">
+			<param name="class" value="com.kkgame.hz.dwr.BdDwr" />
+		</create>
+		<create creator="new" javascript="BhDwr">
+			<param name="class" value="com.kkgame.hz.dwr.BhDwr" />
+		</create>
+		<create creator="new" javascript="CustomerDwr">
+			<param name="class" value="com.kkgame.hz.dwr.CustomerDwr" />
+		</create>
+		<convert match="com.kkgame.hz.base.NameVO" converter="bean"></convert>
+		<convert match="com.kkgame.hz.entities.AgentVO"
+			converter="bean">
+		</convert>
+		<convert match="com.kkgame.hz.entities.PortalUserVO"
+			converter="bean">
+		</convert>
+		<convert match="com.kkgame.hz.entities.BdVO" converter="bean"></convert>
+		<convert match="com.kkgame.hz.entities.BhVO" converter="bean"></convert>
+		<convert match="com.kkgame.hz.entities.CustomerVO"
+			converter="bean">
+		</convert>
+	</allow>
+	<signatures>
+		<![CDATA[ 
+		import java.util.List; 
+	]]>
+	</signatures>
+</dwr>

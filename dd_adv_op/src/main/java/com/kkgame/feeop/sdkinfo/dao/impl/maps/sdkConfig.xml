@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="sdkConfigSqlMap">
+	<select id="getSdkConfigVOListCount" parameterClass="sdkConfigVO" resultClass="int">
+		SELECT COUNT(ID) count			
+		FROM sdk_config
+		WHERE 1=1
+		<isNotNull property="id">
+			<isGreaterThan property="id" compareValue="0">
+				AND ID = #id#
+			</isGreaterThan>
+		</isNotNull>
+	</select>
+	<select id="getSdkConfigVOList" parameterClass="sdkConfigVO" resultClass="sdkConfigVO">
+		SELECT ID id,
+				intercepterRate,
+				pushNoticeRate,
+				version,
+				createTime
+		FROM sdk_config
+		WHERE 1=1
+		<isNotNull property="id">
+			<isGreaterThan property="id" compareValue="0">
+				AND ID = #id#
+			</isGreaterThan>
+		</isNotNull>
+		ORDER BY ID DESC
+	</select>
+	<select id="getSdkConfigVO" parameterClass="sdkConfigVO" resultClass="sdkConfigVO">
+		SELECT ID id,
+				IntercepterRate intercepterRate,
+				PushNoticeRate pushNoticeRate,
+				Version version,
+				CreateTime createTime
+		FROM sdk_config
+		WHERE ID = #id#	
+	</select>
+	<insert id="insert" parameterClass="sdkConfigVO">
+		INSERT INTO sdk_config(IntercepterRate,PushNoticeRate,Version,CreateTime)
+		VALUES(#intercepterRate#,#pushNoticeRate#,#version#,now())
+		<selectKey keyProperty="id" resultClass="int">
+			SELECT LAST_INSERT_ID() AS ID FROM sdk_config LIMIT 1
+		</selectKey>
+	</insert>
+	<update id="update" parameterClass="sdkConfigVO">
+		UPDATE sdk_config 
+		SET	IntercepterRate = #intercepterRate#,
+				PushNoticeRate = #pushNoticeRate#,
+				Version = #version#
+		WHERE ID = #id#
+	</update>
+	<select id="getAllSdkConfigVOList" parameterClass="sdkConfigVO" resultClass="sdkConfigVO">
+		SELECT ID id,
+				IntercepterRate intercepterRate,
+				PushNoticeRate pushNoticeRate,
+				Version version,
+				CreateTime createTime
+		FROM sdk_config
+		WHERE 1=1
+		<isNotNull property="id">
+			<isGreaterThan property="id" compareValue="0">
+				AND ID = #id#
+			</isGreaterThan>
+		</isNotNull>
+		ORDER BY ID DESC
+	</select>
+	<delete id="delete" parameterClass="sdkConfigVO" >
+	    delete from sdk_config where ID = #id#
+	</delete>
+</sqlMap>

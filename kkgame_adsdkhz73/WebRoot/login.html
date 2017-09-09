@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>login</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta name="description" content="">
+		<meta name="author" content="">
+		<link href="css/bootstrap.css" rel="stylesheet">
+		<link href="css/login.css" rel="stylesheet">
+		<link href="css/main.css" rel="stylesheet">
+		<link href="css/bootstrap-responsive.css" rel="stylesheet">
+		<!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+		<!--[if lt IE 9]>
+      		<script src="js/html5shiv.js"></script>
+    	<![endif]-->
+    	<style type="text/css">
+	      html,
+	      body {
+	        height: 100%;
+	        /* The html and body elements cannot have any padding or margin. */
+	      }
+	      /* Wrapper for page content to push down footer */
+	      #wrap {
+	        min-height: 100%;
+	        height: auto !important;
+	        height: 100%;
+	        /* Negative indent footer by it's height */
+	        margin: 0 auto -60px;
+	      }
+	      /* Set the fixed height of the footer here */
+	      #push,
+	      #footer {
+	        height: 60px;
+	        max-width:960px;	        
+         	margin-right: auto; 
+         	margin-left: auto; 
+	      }
+	      /* Lastly, apply responsive CSS fixes as necessary */
+	      @media (max-width: 767px) {
+	        #footer {
+	          margin-left: -20px;
+	          margin-right: -20px;
+	          padding-left: 20px;
+	          padding-right: 20px;
+	        }
+	      }
+	      /* Custom page CSS*/
+	      /* Not required for template or sticky footer method. */
+	      .container {
+	        width: auto;	        	        
+	      }
+	      .container .credit {
+	        margin: 20px 0;
+	        text-align: center;
+	      }
+	      .form-signin {
+	        max-width: 350px;
+	        padding: 10px 29px 20px;
+	        margin: 0 auto 20px;
+	        border: 0px solid #e5e5e5;
+	      }
+	      .form-signin .form-signin-heading,
+	      .form-signin .checkbox {
+	        margin-bottom: 10px;
+	      }
+	      .form-signin input[type="text"],
+	      .form-signin input[type="password"] {
+	        font-size: 15px;
+	        height: auto;
+	        padding: 7px 9px;
+	      }
+      	</style>
+	</head>
+	<body>
+		<div id="wrap">
+		<div class="container wrap">
+			<!-- Main hero unit for a primary marketing message or call to action -->
+		  <div class="login_title">
+		  	<img src="images/login_title.png"></img>
+		  </div>
+		  <div class="login_top">		  	
+		  </div>
+	      <div class="login">	      
+	      <div>
+	      	<div class="row">
+		        <div class="login_middle_left">
+		        	<img src="images/login_logo.png"></img>
+		        </div>
+		        <form id="loginForm" class="" action="index.html">
+		        <div class="login_middle_middle">
+		        	<table width="100%">
+		        		<tr>
+		        			<td style="width: 30%">用户名：</td>
+		        			<td style="width: 70%"><input id="loginId" type="text" class="input-login" >
+		        			</td>
+		        		</tr>
+		        		<tr>
+		        			<td>密　码：</td>
+		        			<td><input id="passwd" type="password" class="input-login"></td>
+		        		</tr>
+		        		<tr>
+		        			<td></td>
+		        			<td style="text-indent: 135px"><a style="color: #004c6a;text-decoration:underline;" href="">注册</a></td>
+		        		</tr>     	
+		        	 
+		        	 
+		        	 </table>	
+		       	</div>
+		       	<div class="login_middle_separator">
+		       		<img src="images/login_separator.png"></img>
+		       	</div>
+		        <div class="login_middle_right">
+		        	<input type="submit" value="" style="background-image: url(images/login_button.png);width: 78px;height: 78px;border: 0" >
+		        </div>
+		        </form>
+	      	</div>
+	     	</div>
+	      </div>
+	      <div class="login_foot"></div>	      
+		</div>
+		</div>
+		<div id="footer">
+	      <div class="container">
+	        <p class="muted credit">Copyright © 2011-2013. KKlink All rights reserved.</p>
+	      </div>
+	    </div>
+		<script src="js/jquery.js"></script>
+	    <script src="js/bootstrap-transition.js"></script>
+	    <script src="js/bootstrap-alert.js"></script>
+	    <script src="js/bootstrap-modal.js"></script>
+	    <script src="js/bootstrap-dropdown.js"></script>
+	    <script src="js/bootstrap-scrollspy.js"></script>
+	    <script src="js/bootstrap-tab.js"></script>
+	    <script src="js/bootstrap-tooltip.js"></script>
+	    <script src="js/bootstrap-popover.js"></script>
+	    <script src="js/bootstrap-button.js"></script>
+	    <script src="js/bootstrap-collapse.js"></script>
+	    <script src="js/bootstrap-carousel.js"></script>
+	    <script src="js/bootstrap-typeahead.js"></script>
+	    <script type="text/javascript">
+	    	function login() {
+	    		var form = $("#loginForm");
+	    		var loginId = $("#loginId").val();
+	    		var passwd = $("#passwd").val();
+	    		if(""==loginId||"请输入用户名"==loginId) {
+	    			$("#loginId").val("请输入用户名");
+	    			$("#loginId").focus();
+	    			return;
+	    		}
+	    		if(""==passwd||"请输入密码"==passwd) {
+	    			$("#pwd_text").val("请输入密码");
+	    			$("#pwd_text").focus();
+	    			return;
+	    		}
+	    		form.submit();
+	    	}
+	    </script>
+	</body>
+</html>

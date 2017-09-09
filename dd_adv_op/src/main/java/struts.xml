@@ -1,0 +1,18 @@
+<!DOCTYPE struts PUBLIC 
+	"-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+	"http://struts.apache.org/dtds/struts-2.0.dtd">
+<struts>
+    <include file="conf/struts/struts_base.xml" />
+	<!-- 用户管理模块 -->
+	<include file="conf/struts/struts_user.xml"></include>
+	<include file="conf/struts/struts_customer.xml"></include>
+	<include file="conf/struts/struts_data.xml"></include>
+	<include file="conf/struts/struts_inter.xml"></include>
+	<include file="conf/struts/struts_detail.xml"></include>
+	<include file="conf/struts/struts_record.xml"></include>
+	<include file="conf/struts/struts_sdkinfo.xml"></include>
+	<include file="conf/struts/struts_adver.xml"></include>
+	<include file="conf/struts/struts_ddl.xml"></include>
+	<include file="conf/struts/struts_offline.xml"></include>
+	<include file="conf/struts/struts_offerinfo.xml"></include>
+</struts>

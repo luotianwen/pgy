@@ -1,0 +1,49 @@
+<!DOCTYPE struts PUBLIC 
+	"-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+	"http://struts.apache.org/dtds/struts-2.0.dtd">
+<struts>
+	<constant name="struts.multipart.maxSize" value="1000000000" />
+	<include file="struts-default.xml"></include>	
+	<package name="customer" namespace="/customer" extends="abroad-default">
+		<default-interceptor-ref name="crudStack"/>
+		<action name="Customer" class="com.kkgame.feeop.customer.action.CustomerAction" method="do{1}">
+			<result name="list">/pages/customer/customer_list.jsp</result>
+			<result name="create">/pages/customer/customer_create.jsp</result>
+			<result name="detail">/pages/customer/customer_detail.jsp</result>
+		</action>
+		<action name="Agent" class="com.kkgame.feeop.customer.action.AgentAction" method="do{1}">
+			<result name="list">/pages/customer/agent_list.jsp</result>
+			<result name="create">/pages/customer/agent_create.jsp</result>
+			<result name="detail">/pages/customer/agent_detail.jsp</result>
+		</action>
+		<action name="Project" class="com.kkgame.feeop.customer.action.ProjectAction" method="do{1}">
+			<result name="list">/pages/customer/project_list.jsp</result>
+			<result name="create">/pages/customer/project_create.jsp</result>
+		</action>
+		<action name="Product" class="com.kkgame.feeop.customer.action.ProductAction" method="do{1}">
+			<result name="list">/pages/customer/product_list.jsp</result>
+			<result name="create">/pages/customer/product_create.jsp</result>
+			<result name="detail">/pages/customer/product_detail.jsp</result>
+		</action>
+		<action name="CustomChannel" class="com.kkgame.feeop.customer.action.CustomChannelAction" method="do{1}">
+			<result name="list">/pages/customer/customChannel_list.jsp</result>
+			<result name="modify">/pages/customer/customChannel_create.jsp</result>
+		</action>
+		<action name="Ddl" class="com.kkgame.feeop.customer.action.DdlAction" method="do{1}">
+			<result name="modify">/pages/customer/ddl_modify.jsp</result>
+			<result name="queryClick">/pages/customer/ddl_query_click.jsp</result>
+		</action>
+		<action name="getAllCustomer" method="getAllCustomer" class="com.kkgame.feeop.customer.action.CustomerAction">
+			<result name="success">/pages/customer/getAllCustomer4Select.jsp</result>
+		</action>
+		<action name="getAllProject" method="getAllProject" class="com.kkgame.feeop.customer.action.ProjectAction">
+			<result name="success">/pages/customer/getAllProject4Select.jsp</result>
+		</action>
+		<action name="getAllAgent" method="getAllAgent" class="com.kkgame.feeop.customer.action.AgentAction">
+			<result name="success">/pages/customer/getAllAgent4Select.jsp</result>
+		</action>
+		<action name="getAllBdList" method="getAllBdList" class="com.kkgame.feeop.customer.action.BdAction">
+			<result name="success">/pages/customer/getAllBd4Select.jsp</result>
+		</action>
+	</package>
+</struts>

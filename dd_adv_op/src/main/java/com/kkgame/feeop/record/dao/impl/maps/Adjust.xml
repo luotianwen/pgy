@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="adjustSqlMap">
+    <typeAlias alias="adjustVO" type="com.kkgame.feeop.record.bean.AdjustVO"/>
+    <select id="getAdjustVOListCount" parameterClass="adjustVO" resultClass="int">
+        SELECT
+        count(id)
+        FROM a_adjust
+        where deleted=0
+        <isNotEmpty prepend="AND" property="id">
+            id = #id#
+        </isNotEmpty>
+        <isNotEmpty prepend="AND" property="version">
+            version = #version#
+        </isNotEmpty>
+        <isNotEmpty prepend="AND" property="cpname">
+            cpname = #cpname#
+        </isNotEmpty>
+        <isNotEmpty prepend="AND" property="username">
+            username = #username#
+        </isNotEmpty>
+        <isNotEmpty prepend="AND" property="passw">
+            passw = #passw#
+        </isNotEmpty>
+        <isNotEmpty prepend="AND" property="apk">
+            apk = #apk#
+        </isNotEmpty>
+        <isNotEmpty prepend="AND" property="campaign">
+            campaign = #campaign#
+        </isNotEmpty>
+        <isNotEmpty prepend="AND" property="https">
+            https = #https#
+        </isNotEmpty>
+        <isNotEmpty prepend="AND" property="sdate">
+            sdate = #sdate#
+        </isNotEmpty>
+        <isNotEmpty prepend="AND" property="psdate">
+            psdate = #psdate#
+        </isNotEmpty>
+        <isNotEmpty prepend="AND" property="status">
+            status = #status#
+        </isNotEmpty>
+
+
+        <isNotEmpty prepend="AND" property="sqr">
+            sqr = #sqr#
+        </isNotEmpty>
+
+
+        <isNotEmpty prepend="AND" property="note">
+            note = #note#
+        </isNotEmpty>
+
+
+        <isNotEmpty prepend="AND" property="yl1">
+            yl1 = #yl1#
+        </isNotEmpty>
+
+
+        <isNotEmpty prepend="AND" property="creator">
+            creator = #creator#
+        </isNotEmpty>
+
+
+    </select>
+    <select id="getAdjustVOList" parameterClass="adjustVO" resultClass="adjustVO">
+        SELECT
+        <![CDATA[
+        id ,version ,cpname ,username ,passw ,apk ,campaign ,https ,sdate ,psdate ,status ,sqr ,note ,yl1 ,creator ,deleted
+	    ]]>
+        FROM a_adjust
+        WHERE deleted=0
+
+
+        <isNotEmpty prepend="AND" property="id">
+            id = #id#
+        </isNotEmpty>
+
+
+        <isNotEmpty prepend="AND" property="version">
+            version = #version#
+        </isNotEmpty>
+
+
+        <isNotEmpty prepend="AND" property="cpname">
+            cpname = #cpname#
+        </isNotEmpty>
+
+
+        <isNotEmpty prepend="AND" property="username">
+            username = #username#
+        </isNotEmpty>
+
+
+        <isNotEmpty prepend="AND" property="passw">
+            passw = #passw#
+        </isNotEmpty>
+
+
+        <isNotEmpty prepend="AND" property="apk">
+            apk = #apk#
+        </isNotEmpty>
+
+
+        <isNotEmpty prepend="AND" property="campaign">
+            campaign = #campaign#
+        </isNotEmpty>
+
+
+        <isNotEmpty prepend="AND" property="https">
+            https = #https#
+        </isNotEmpty>
+
+
+        <isNotEmpty prepend="AND" property="sdate">
+            sdate = #sdate#
+        </isNotEmpty>
+
+
+        <isNotEmpty prepend="AND" property="psdate">
+            psdate = #psdate#
+        </isNotEmpty>
+
+
+        <isNotEmpty prepend="AND" property="status">
+            status = #status#
+        </isNotEmpty>
+
+
+        <isNotEmpty prepend="AND" property="sqr">
+            sqr = #sqr#
+        </isNotEmpty>
+
+
+        <isNotEmpty prepend="AND" property="note">
+            note = #note#
+        </isNotEmpty>
+
+
+        <isNotEmpty prepend="AND" property="yl1">
+            yl1 = #yl1#
+        </isNotEmpty>
+
+
+        <isNotEmpty prepend="AND" property="creator">
+            creator = #creator#
+        </isNotEmpty>
+
+
+        ORDER by psdate desc
+        <![CDATA[ LIMIT  #page.index#, #page.pageSize# ]]>
+    </select>
+
+    <select id="getAdjustVO" parameterClass="adjustVO" resultClass="adjustVO">
+		SELECT
+		 <![CDATA[
+        id ,version ,cpname ,username ,passw ,apk ,campaign ,https ,sdate ,psdate ,status ,sqr ,note ,yl1 ,creator ,deleted
+	    
+	        FROM a_adjust 
+	        WHERE 
+		        id = #id# 
+
+        ]]>
+    </select>
+    <insert id="create" parameterClass="adjustVO">
+        <![CDATA[
+        INSERT INTO a_adjust (
+        	version ,
+        	cpname ,
+        	username ,
+        	passw ,
+        	apk ,
+        	campaign ,
+        	https ,
+        	sdate ,
+        	psdate ,
+        	status ,
+        	sqr ,
+        	note ,
+        	yl1 ,
+        	creator ,
+        	deleted
+        ) VALUES (
+        	1 ,
+        	#cpname# ,
+        	#username# ,
+        	#passw# ,
+        	#apk# ,
+        	#campaign# ,
+        	#https# ,
+        	#sdate# ,
+        	#psdate# ,
+        	3200,
+        	#sqr# ,
+        	#note# ,
+        	#yl1# ,
+        	1 ,
+        	0
+        )
+    ]]>
+        <selectKey keyProperty="id" resultClass="int">
+            SELECT LAST_INSERT_ID() AS ID
+        </selectKey>
+    </insert>
+    <update id="update" parameterClass="adjustVO">
+		<![CDATA[
+
+        UPDATE a_adjust SET
+	        cpname = #cpname# ,
+	        username = #username# ,
+	        passw = #passw# ,
+	        apk = #apk# ,
+	        campaign = #campaign# ,
+	        https = #https# ,
+	        sdate = #sdate# ,
+	        psdate = #psdate#
+        WHERE
+	        id = #id# 
+
+        ]]>
+	</update>
+
+</sqlMap>

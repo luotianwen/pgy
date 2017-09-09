@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="linkAdverSqlMap">
+	<select id="getLinkAdverVOListCount" parameterClass="LinkAdverVO" resultClass="int">
+		SELECT COUNT(ID) count			
+		FROM link_adver
+		WHERE 1=1
+		<isNotNull property="id">
+			<isGreaterThan property="id" compareValue="0">
+				AND ID = #id#
+			</isGreaterThan>
+		</isNotNull>
+		<isNotNull property="clickType">
+			<isGreaterThan property="clickType" compareValue="0">
+				AND clickType = #clickType#
+			</isGreaterThan>
+		</isNotNull>
+		<isNotNull property="status">
+			<isGreaterThan property="status" compareValue="0">
+				AND status = #status#
+			</isGreaterThan>
+		</isNotNull>
+	</select>
+	<select id="getLinkAdverVOList" parameterClass="LinkAdverVO" resultClass="LinkAdverVO">
+		SELECT ID id,
+				Name name,
+				AdvLinkmanId advLinkmanId,
+				RedirectUrl redirectUrl,
+				AdverId adverId,
+				Status status,
+				ClickType clickType,
+				Cap cap,
+				Cpm cpm,
+				Notes notes,
+				ExtensionContry extensionContry,
+				IconUrl iconUrl,
+				CreateTime createTime
+		FROM link_adver
+		WHERE 1=1
+		<isNotNull property="id">
+			<isGreaterThan property="id" compareValue="0">
+				AND ID = #id#
+			</isGreaterThan>
+		</isNotNull>
+		<isNotNull property="status">
+			<isGreaterThan property="status" compareValue="0">
+				AND Status = #status#
+			</isGreaterThan>
+		</isNotNull>
+		<isNotEmpty property="name">
+				AND name = #name#
+		</isNotEmpty>
+		ORDER BY ID DESC
+		<![CDATA[ LIMIT  #page.index#, #page.pageSize# ]]>
+	</select>
+	<select id="getLinkAdverVO" parameterClass="LinkAdverVO" resultClass="LinkAdverVO">
+		SELECT ID id,
+				Name name,
+				AdvLinkmanId advLinkmanId,
+				RedirectUrl redirectUrl,
+				AdverId adverId,
+				Status status,
+				ClickType clickType,
+				Cap cap,
+				Cpm cpm,
+				Notes notes,
+				ExtensionContry extensionContry,
+				IconUrl iconUrl,
+				CreateTime createTime
+		FROM link_adver
+		WHERE ID = #id#	
+	</select>
+	<insert id="insert" parameterClass="LinkAdverVO">
+		INSERT INTO link_adver(name,advLinkmanId,redirectUrl,adverId,status,clickType,cap,cpm,notes,extensionContry,iconUrl,createTime)
+		VALUES(#name#,#advLinkmanId#,#redirectUrl#,#adverId#,#status#,#clickType#,#cap#,#cpm#,#notes#,#extensionContry#,#iconUrl#,now())
+		<selectKey keyProperty="id" resultClass="int">
+			SELECT LAST_INSERT_ID() AS ID FROM link_adver LIMIT 1
+		</selectKey>
+	</insert>
+	<update id="update" parameterClass="LinkAdverVO">
+		UPDATE link_adver
+		SET	  Name = #name#,
+				AdvLinkmanId = #advLinkmanId#,
+				RedirectUrl = #redirectUrl#,
+				AdverId = #adverId#,
+				Status = #status#,
+				ClickType = #clickType#,
+				Cap = #cap#,
+				Cpm = #cpm#,
+				Notes = #notes#,
+				ExtensionContry = #extensionContry#,
+				IconUrl = #iconUrl#
+		WHERE ID = #id#
+	</update>
+	<select id="getAllLinkAdverVOList" parameterClass="LinkAdverVO" resultClass="LinkAdverVO">
+		SELECT ID id,
+				Name name,
+				AdvLinkmanId advLinkmanId,
+				RedirectUrl redirectUrl,
+				AdverId adverId,
+				Status status,
+				ClickType clickType,
+				Cap cap,
+				Cpm cpm,
+				Notes notes,
+				ExtensionContry extensionContry,
+				IconUrl iconUrl,
+				CreateTime createTime
+		FROM link_adver
+		WHERE 1=1
+		<isNotNull property="id">
+			<isGreaterThan property="id" compareValue="0">
+				AND ID = #id#
+			</isGreaterThan>
+		</isNotNull>
+		<isNotNull property="clickType">
+			<isGreaterThan property="clickType" compareValue="0">
+				AND clickType = #clickType#
+			</isGreaterThan>
+		</isNotNull>
+		<isNotNull property="status">
+			<isGreaterThan property="status" compareValue="0">
+				AND status = #status#
+			</isGreaterThan>
+		</isNotNull>
+		ORDER BY ID DESC
+	</select>
+	<delete id="delete" parameterClass="LinkAdverVO" >
+	    delete from link_adver where ID = #id#
+	</delete>
+</sqlMap>

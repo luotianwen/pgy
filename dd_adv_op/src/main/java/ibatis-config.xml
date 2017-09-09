@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMapConfig PUBLIC "-//ibatis.apache.org//DTD SQL Map Config 2.0//EN"
+    "http://ibatis.apache.org/dtd/sql-map-config-2.dtd">
+<sqlMapConfig>
+	<settings cacheModelsEnabled="false" enhancementEnabled="false"
+		lazyLoadingEnabled="true" useStatementNamespaces="true" />
+	<sqlMap resource="alias.xml" />
+	<!-- 账户模块 -->
+	<sqlMap resource="com/kkgame/feeop/user/dao/impl/maps/User.xml"/>
+	<sqlMap resource="com/kkgame/feeop/user/dao/impl/maps/UserRole.xml"/>
+	<sqlMap resource="com/kkgame/feeop/user/dao/impl/maps/Role.xml"/>
+	<sqlMap resource="com/kkgame/feeop/user/dao/impl/maps/Res.xml"/>
+	<sqlMap resource="com/kkgame/feeop/user/dao/impl/maps/RoleRes.xml"/>
+	<!-- 日志 -->
+	<sqlMap resource="com/kkgame/feeop/tag/dao/impl/maps/Log.xml"/>
+	<sqlMap resource="com/kkgame/feeop/tag/dao/impl/maps/System.xml"/>
+	<sqlMap resource="com/kkgame/feeop/data/dao/impl/maps/ProjectData.xml"/>
+	<sqlMap resource="com/kkgame/feeop/data/dao/impl/maps/UserGuard.xml"/>
+	<sqlMap resource="com/kkgame/feeop/data/dao/impl/maps/ProjectDistinct.xml"/>
+	<sqlMap resource="com/kkgame/feeop/data/dao/impl/maps/AdData.xml"/>
+	<sqlMap resource="com/kkgame/feeop/data/dao/impl/maps/AdLinkData.xml"/>
+	<sqlMap resource="com/kkgame/feeop/data/dao/impl/maps/ProjectIncome.xml"/>
+	<sqlMap resource="com/kkgame/feeop/data/dao/impl/maps/AdIncome.xml"/>
+	<sqlMap resource="com/kkgame/feeop/data/dao/impl/maps/Data.xml"/>
+	<sqlMap resource="com/kkgame/feeop/data/dao/impl/maps/UserAd.xml"/>
+	<sqlMap resource="com/kkgame/feeop/data/dao/impl/maps/DdlData.xml"/>
+	<sqlMap resource="com/kkgame/feeop/data/dao/impl/maps/Retention.xml"/>
+	<sqlMap resource="com/kkgame/feeop/data/dao/impl/maps/VersionData.xml"/>
+	<sqlMap resource="com/kkgame/feeop/data/dao/impl/maps/SdkData.xml"/>
+	<sqlMap resource="com/kkgame/feeop/data/dao/impl/maps/SubData.xml"/>
+	<sqlMap resource="com/kkgame/feeop/data/dao/impl/maps/OfferSdkData.xml"/>
+	<sqlMap resource="com/kkgame/feeop/data/dao/impl/maps/IframeData.xml"/>
+	<sqlMap resource="com/kkgame/feeop/inter/dao/impl/maps/Inter.xml"/>
+
+
+	<sqlMap resource="com/kkgame/feeop/customer/dao/impl/maps/ddl.xml"/>
+	<sqlMap resource="com/kkgame/feeop/customer/dao/impl/maps/customer.xml"/>
+	<sqlMap resource="com/kkgame/feeop/customer/dao/impl/maps/bd.xml"/>
+	<sqlMap resource="com/kkgame/feeop/customer/dao/impl/maps/agent.xml"/>
+	<sqlMap resource="com/kkgame/feeop/customer/dao/impl/maps/project.xml"/>
+	<sqlMap resource="com/kkgame/feeop/customer/dao/impl/maps/product.xml"/>
+	<sqlMap resource="com/kkgame/feeop/detail/dao/impl/maps/DdlDetail.xml"/>
+	<sqlMap resource="com/kkgame/feeop/detail/dao/impl/maps/SdkDetail.xml"/>
+	<sqlMap resource="com/kkgame/feeop/detail/dao/impl/maps/AdLinkDetail.xml"/>
+	<sqlMap resource="com/kkgame/feeop/detail/dao/impl/maps/AdvFeebackListClickModel.xml"/>	
+	<sqlMap resource="com/kkgame/feeop/detail/dao/impl/maps/SdkUsersModel.xml"/>
+	<sqlMap resource="com/kkgame/feeop/detail/dao/impl/maps/AdvSentsListModel.xml"/>
+	<sqlMap resource="com/kkgame/feeop/detail/dao/impl/maps/ApkActusersModel.xml"/>
+	<sqlMap resource="com/kkgame/feeop/detail/dao/impl/maps/SdkActusersModel.xml"/>
+	<sqlMap resource="com/kkgame/feeop/detail/dao/impl/maps/ApkUsersModel.xml"/>
+	<sqlMap resource="com/kkgame/feeop/record/dao/impl/maps/ApkCphcTotalModel.xml"/>
+	<sqlMap resource="com/kkgame/feeop/record/dao/impl/maps/ProjectHzTotalModel.xml"/>
+	<sqlMap resource="com/kkgame/feeop/record/dao/impl/maps/CountryLevel.xml"/>
+	<sqlMap resource="com/kkgame/feeop/record/dao/impl/maps/Operator.xml"/>
+	<sqlMap resource="com/kkgame/feeop/sdkinfo/dao/impl/maps/sdkinfo.xml"/>	
+	<sqlMap resource="com/kkgame/feeop/sdkinfo/dao/impl/maps/apkInfo.xml"/>	
+	<sqlMap resource="com/kkgame/feeop/sdkinfo/dao/impl/maps/silentPluginInfo.xml"/>	
+	<sqlMap resource="com/kkgame/feeop/sdkinfo/dao/impl/maps/guideInfo.xml"/>	
+	<sqlMap resource="com/kkgame/feeop/sdkinfo/dao/impl/maps/silentInfo.xml"/>	
+	<sqlMap resource="com/kkgame/feeop/sdkinfo/dao/impl/maps/sdkProject.xml"/>	
+	<sqlMap resource="com/kkgame/feeop/adver/dao/impl/maps/adver.xml"/>	
+	<sqlMap resource="com/kkgame/feeop/adver/dao/impl/maps/adv.xml"/>	
+	<sqlMap resource="com/kkgame/feeop/adver/dao/impl/maps/advSdk.xml"/>	
+	<sqlMap resource="com/kkgame/feeop/ddl/dao/impl/maps/ddlChannel.xml"/>	
+	<sqlMap resource="com/kkgame/feeop/ddl/dao/impl/maps/ddlProduct.xml"/>	
+	<sqlMap resource="com/kkgame/feeop/ddl/dao/impl/maps/ddlProject.xml"/>
+	<sqlMap resource="com/kkgame/feeop/record/dao/impl/maps/Adjust.xml"/>
+	<sqlMap resource="com/kkgame/feeop/sdkinfo/dao/impl/maps/Sdkdomain.xml"/>
+	<!--XJ-->
+	<sqlMap resource="com/kkgame/feeop/sdkinfo/dao/impl/maps/threeSdk.xml"/>
+	<sqlMap resource="com/kkgame/feeop/adver/dao/impl/maps/advLinkman.xml"/>
+	<sqlMap resource="com/kkgame/feeop/adver/dao/impl/maps/Linkads2.xml"/>
+	<sqlMap resource="com/kkgame/feeop/adver/dao/impl/maps/Linkadsconfig.xml"/>
+	<sqlMap resource="com/kkgame/feeop/adver/dao/impl/maps/Webdomain.xml"/>
+
+	<sqlMap resource="com/kkgame/feeop/adver/dao/impl/maps/PromotionDomain.xml"/>
+	<sqlMap resource="com/kkgame/feeop/adver/dao/impl/maps/PromotionCustomer.xml"/>
+	<sqlMap resource="com/kkgame/feeop/adver/dao/impl/maps/Pcustomer.xml"/>
+	<sqlMap resource="com/kkgame/feeop/adver/dao/impl/maps/Promotion.xml"/>
+	<sqlMap resource="com/kkgame/feeop/adver/dao/impl/maps/Spromotion.xml"/>
+	<sqlMap resource="com/kkgame/feeop/adver/dao/impl/maps/Subscribe.xml"/>
+
+	<sqlMap resource="com/kkgame/feeop/sdkinfo/dao/impl/maps/desktopInfo.xml"/>
+	<sqlMap resource="com/kkgame/feeop/sdkinfo/dao/impl/maps/linkAdver.xml"/>
+	<sqlMap resource="com/kkgame/feeop/sdkinfo/dao/impl/maps/sdkConfig.xml"/>
+	<sqlMap resource="com/kkgame/feeop/sdkinfo/dao/impl/maps/appName.xml"/>
+
+	<sqlMap resource="com/kkgame/feeop/offline/dao/impl/maps/offlinejar.xml"/>
+	<sqlMap resource="com/kkgame/feeop/offline/dao/impl/maps/offlinesdk.xml"/>
+	<sqlMap resource="com/kkgame/feeop/offline/dao/impl/maps/offlineapk.xml"/>
+
+	<sqlMap resource="com/kkgame/feeop/offerinfo/dao/impl/maps/offersdk.xml"/>
+
+
+	<sqlMap resource="com/kkgame/feeop/adver/dao/impl/maps/video.xml"/>
+</sqlMapConfig>

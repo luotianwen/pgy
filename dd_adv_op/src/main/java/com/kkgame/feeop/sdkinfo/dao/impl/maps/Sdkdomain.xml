@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="sdkdomainSqlMap">
+	<typeAlias alias="sdkdomainVO" type="com.kkgame.feeop.sdkinfo.bean.SdkdomainVO"/>
+
+	<select id="getSdkdomainVOList" parameterClass="sdkdomainVO" resultClass="sdkdomainVO">
+		  SELECT
+
+        id ,download ,cdate
+
+		  FROM sdkdomain 
+		WHERE 1=1
+
+	</select>
+	 
+	<select id="getSdkdomainVO" parameterClass="sdkdomainVO" resultClass="sdkdomainVO">
+		SELECT
+		 <![CDATA[
+        id ,download ,cdate 
+	    
+	        FROM sdkdomain 
+	        WHERE 
+		        id = #id# 
+	    ]]>
+	</select>
+	<insert id="create" parameterClass="sdkdomainVO">
+		 <![CDATA[
+        INSERT INTO sdkdomain (
+        	id ,
+        	download ,
+        	cdate 
+        ) VALUES (
+        	#id# ,
+        	#download# ,
+        	now()
+        )
+    ]]>
+		<selectKey keyProperty="id" resultClass="int">
+			SELECT LAST_INSERT_ID() AS ID
+		</selectKey>
+	</insert>
+	<update id="update" parameterClass="sdkdomainVO">
+		<![CDATA[
+        UPDATE sdkdomain SET
+	        download = #download# ,
+	        cdate = now()
+        WHERE 
+	        id = #id# 
+    ]]>
+	</update>
+	<delete id="delete"   parameterClass="sdkdomainVO">
+		delete from sdkdomain where Id = #id#
+			</delete>
+</sqlMap>

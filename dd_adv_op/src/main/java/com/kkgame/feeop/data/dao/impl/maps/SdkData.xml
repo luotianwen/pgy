@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="sdkDataSqlMap">
+
+    <select id="getSdkDataVOList" parameterClass="searchVO" resultClass="sdkDataVO">
+        SELECT
+        SUM(D.desktopClickTimes) desktopClickTimes,
+        SUM(D.suspensionClickTimes) suspensionClickTimes,
+        SUM(D.pushClickTimes) pushClickTimes,
+        SUM(D.appClickTimes) appClickTimes,
+        SUM(D.otherappClickTimes) otherappClickTimes,
+        SUM(D.TotalClickTimes) TotalClickTimes
+        <isEqual property="rowFieldVO.isShowDate" compareValue="1">
+            ,DATE_FORMAT(D.StatDate,'%Y-%m-%d') statDate
+        </isEqual>
+        <isEqual property="rowFieldVO.isShowDate" compareValue="0">
+            ,null statDate
+        </isEqual>
+        <isEqual property="rowFieldVO.isShowAd" compareValue="1">
+            ,IFNULL(D.AdId,0) AdId
+            ,D.adName adName
+        </isEqual>
+        <isEqual property="rowFieldVO.isShowAd" compareValue="0">
+            ,0 AdId
+            ,null adName
+        </isEqual>
+        ,D.cou , D.couName
+        FROM (
+        SELECT D.desktopClickTimes ,
+        D.suspensionClickTimes,
+        D.pushClickTimes,
+        D.appClickTimes,
+        D.otherappClickTimes,
+        D.TotalClickTimes,
+        StatDate, AdId, A.Name adName
+        <isEqual property="rowFieldVO.isShowCountry" compareValue="1">
+            ,IFNULL(D.cou,0) cou
+            ,IFNULL(E.description,'未知国家') couName
+        </isEqual>
+        <isEqual property="rowFieldVO.isShowCountry" compareValue="0">
+            ,0 cou
+            ,null couName
+        </isEqual>
+        FROM
+        ad_data_dssdk_$table$ D
+        LEFT JOIN kok_sdk.EnumerationValue E on E.id=D.cou
+        LEFT JOIN kok_sdk.link_adver A ON A.ID=D.AdId
+        WHERE 1=1
+        <isGreaterThan property="country" compareValue="0">
+            AND D.cou = #country#
+        </isGreaterThan>
+        ) as D
+
+        WHERE D.StatDate BETWEEN #startDate# AND #endDate#
+
+        <dynamic prepend=" GROUP BY ">
+            <isEqual prepend=" , " property="rowFieldVO.isShowDate" compareValue="1">
+                DATE_FORMAT(D.StatDate,'%Y-%m-%d')
+            </isEqual>
+            <isEqual prepend=" , " property="rowFieldVO.isShowAd" compareValue="1">
+                D.AdId
+            </isEqual>
+            <isEqual prepend=" , " property="rowFieldVO.isShowCountry" compareValue="1">
+                D.cou
+            </isEqual>
+
+        </dynamic>
+        <dynamic prepend=" ORDER BY ">
+            <isEqual prepend=" , " property="rowFieldVO.isShowDate" compareValue="1">
+                DATE_FORMAT(D.StatDate,'%Y-%m-%d') ASC
+            </isEqual>
+        </dynamic>
+    </select>
+</sqlMap>

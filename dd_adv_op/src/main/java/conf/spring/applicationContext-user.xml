@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop" 
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:p="http://www.springframework.org/schema/p" 
+       xsi:schemaLocation="http://www.springframework.org/schema/beans 
+       		http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+       		http://www.springframework.org/schema/aop
+       		http://www.springframework.org/schema/aop/spring-aop-2.5.xsd 
+		    http://www.springframework.org/schema/tx  
+    	    http://www.springframework.org/schema/tx/spring-tx-2.5.xsd 
+            http://www.springframework.org/schema/context
+            http://www.springframework.org/schema/context/spring-context-2.5.xsd">
+ 	
+ 	<!-- 索引 -->
+ 	<bean id="userService" class="com.kkgame.feeop.user.service.impl.UserServiceImpl">
+ 		<property name="userDAO" ref="userDAO"></property>
+ 	</bean>
+ 	<bean id="userDAO" class="com.kkgame.feeop.user.dao.impl.UserDAOImpl">
+ 		<property name="sqlMapClient" ref="sqlMapClient_kkpay_data"></property>
+ 		<property name="dataSource" ref="dataSource_kkpay_data"></property>
+ 	</bean>
+ 	<bean id="userRoleService" class="com.kkgame.feeop.user.service.impl.UserRoleServiceImpl">
+ 		<property name="userRoleDAO" ref="userRoleDAO"></property>
+ 	</bean>
+ 	<bean id="userRoleDAO" class="com.kkgame.feeop.user.dao.impl.UserRoleDAOImpl">
+ 		<property name="sqlMapClient" ref="sqlMapClient_kkpay_data"></property>
+ 		<property name="dataSource" ref="dataSource_kkpay_data"></property>
+ 	</bean>
+ 	<bean id="roleService" class="com.kkgame.feeop.user.service.impl.RoleServiceImpl">
+ 		<property name="roleDAO" ref="roleDAO"></property>
+ 	</bean>
+ 	<bean id="roleDAO" class="com.kkgame.feeop.user.dao.impl.RoleDAOImpl">
+ 		<property name="sqlMapClient" ref="sqlMapClient_kkpay_data"></property>
+ 		<property name="dataSource" ref="dataSource_kkpay_data"></property>
+ 	</bean>
+ 	<bean id="roleResService" class="com.kkgame.feeop.user.service.impl.RoleResServiceImpl">
+ 		<property name="roleResDAO" ref="roleResDAO"></property>
+ 	</bean>
+ 	<bean id="roleResDAO" class="com.kkgame.feeop.user.dao.impl.RoleResDAOImpl">
+ 		<property name="sqlMapClient" ref="sqlMapClient_kkpay_data"></property>
+ 		<property name="dataSource" ref="dataSource_kkpay_data"></property>
+ 	</bean>
+ 	<bean id="resService" class="com.kkgame.feeop.user.service.impl.ResServiceImpl">
+ 		<property name="resDAO" ref="resDAO"></property>
+ 	</bean>
+ 	<bean id="resDAO" class="com.kkgame.feeop.user.dao.impl.ResDAOImpl">
+ 		<property name="sqlMapClient" ref="sqlMapClient_kkpay_data"></property>
+ 		<property name="dataSource" ref="dataSource_kkpay_data"></property>
+ 	</bean> 	
+ 	
+ 	<bean id="systemService" class="com.kkgame.feeop.tag.service.impl.SystemServiceImpl">
+ 		<property name="systemDAO" ref="systemDAO"></property>
+ 	</bean>
+ 	<bean id="systemDAO" class="com.kkgame.feeop.tag.dao.impl.SystemDAOImpl">
+ 		<property name="sqlMapClient" ref="sqlMapClient_kkpay_data"></property>
+ 		<property name="dataSource" ref="dataSource_kkpay_data"></property>
+ 	</bean>
+</beans>

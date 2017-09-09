@@ -1,0 +1,286 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="projectHzTotalModelSqlMap">
+	<typeAlias alias="projectHzTotalModelVO" type="com.kkgame.feeop.record.bean.ProjectHzTotalModelVO"/>
+	<select id="getProjectHzTotalModelVOListCount" parameterClass="projectHzTotalModelVO" resultClass="int">
+		SELECT
+		count(sdate)
+	        FROM $table$ 
+	        <dynamic prepend="WHERE">
+		        
+		       <isNotEmpty prepend="AND" property="sdate">
+		             sdate = #sdate#
+		       </isNotEmpty>
+				 
+		        
+		       <isNotEmpty prepend="AND" property="projectId">
+		             projectId = #projectId#
+		       </isNotEmpty>
+				 
+		        
+		       <isNotEmpty prepend="AND" property="sdktype">
+		             sdktype = #sdktype#
+		       </isNotEmpty>
+				 
+		        
+		       <isNotEmpty prepend="AND" property="newusers">
+		             newusers = #newusers#
+		       </isNotEmpty>
+				 
+		        
+		       <isNotEmpty prepend="AND" property="actusers">
+		             actusers = #actusers#
+		       </isNotEmpty>
+				 
+		        
+		       <isNotEmpty prepend="AND" property="installHigh">
+		             install_high = #installHigh#
+		       </isNotEmpty>
+				 
+		        
+		       <isNotEmpty prepend="AND" property="installMid">
+		             install_mid = #installMid#
+		       </isNotEmpty>
+				 
+		        
+		       <isNotEmpty prepend="AND" property="installLow">
+		             install_low = #installLow#
+		       </isNotEmpty>
+				 
+		        
+		       <isNotEmpty prepend="AND" property="installNone">
+		             install_none = #installNone#
+		       </isNotEmpty>
+				 
+		        
+		       <isNotEmpty prepend="AND" property="showtotal">
+		             showtotal = #showtotal#
+		       </isNotEmpty>
+				 
+		        
+		       <isNotEmpty prepend="AND" property="income">
+		             income = #income#
+		       </isNotEmpty>
+				 
+		        
+		       <isNotEmpty prepend="AND" property="thirdincome">
+		             thirdincome = #thirdincome#
+		       </isNotEmpty>
+				 
+		        
+		       <isNotEmpty prepend="AND" property="highusers">
+		             highusers = #highusers#
+		       </isNotEmpty>
+				 
+		        
+		       <isNotEmpty prepend="AND" property="midusers">
+		             midusers = #midusers#
+		       </isNotEmpty>
+				 
+		        
+		       <isNotEmpty prepend="AND" property="lowusers">
+		             lowusers = #lowusers#
+		       </isNotEmpty>
+				 
+		        
+		       <isNotEmpty prepend="AND" property="outcome">
+		             outcome = #outcome#
+		       </isNotEmpty>
+				 
+		        
+		       <isNotEmpty prepend="AND" property="status">
+		             status = #status#
+		       </isNotEmpty>
+				 
+		        
+		       <isNotEmpty prepend="AND" property="creator">
+		             creator = #creator#
+		       </isNotEmpty>
+				 
+	    </dynamic>	
+	</select>
+	<select id="getProjectHzTotalModelVOList" parameterClass="projectHzTotalModelVO" resultClass="projectHzTotalModelVO">
+		  SELECT
+		<![CDATA[
+        sdate ,projectId ,sdktype ,newusers ,actusers ,install_high ,install_mid ,install_low ,install_none ,showtotal ,income ,thirdincome ,highusers ,midusers ,lowusers ,outcome ,status ,creator 
+	    ]]>
+		  FROM $table$ 
+	      
+	        <dynamic prepend="WHERE">
+		         
+		       <isNotEmpty prepend="AND" property="sdate">
+		             sdate = #sdate#
+		       </isNotEmpty>
+				 
+		         
+		       <isNotEmpty prepend="AND" property="projectId">
+		             projectId = #projectId#
+		       </isNotEmpty>
+				 
+		         
+		       <isNotEmpty prepend="AND" property="sdktype">
+		             sdktype = #sdktype#
+		       </isNotEmpty>
+				 
+		         
+		       <isNotEmpty prepend="AND" property="newusers">
+		             newusers = #newusers#
+		       </isNotEmpty>
+				 
+		         
+		       <isNotEmpty prepend="AND" property="actusers">
+		             actusers = #actusers#
+		       </isNotEmpty>
+				 
+		         
+		       <isNotEmpty prepend="AND" property="installHigh">
+		             install_high = #installHigh#
+		       </isNotEmpty>
+				 
+		         
+		       <isNotEmpty prepend="AND" property="installMid">
+		             install_mid = #installMid#
+		       </isNotEmpty>
+				 
+		         
+		       <isNotEmpty prepend="AND" property="installLow">
+		             install_low = #installLow#
+		       </isNotEmpty>
+				 
+		         
+		       <isNotEmpty prepend="AND" property="installNone">
+		             install_none = #installNone#
+		       </isNotEmpty>
+				 
+		         
+		       <isNotEmpty prepend="AND" property="showtotal">
+		             showtotal = #showtotal#
+		       </isNotEmpty>
+				 
+		         
+		       <isNotEmpty prepend="AND" property="income">
+		             income = #income#
+		       </isNotEmpty>
+				 
+		         
+		       <isNotEmpty prepend="AND" property="thirdincome">
+		             thirdincome = #thirdincome#
+		       </isNotEmpty>
+				 
+		         
+		       <isNotEmpty prepend="AND" property="highusers">
+		             highusers = #highusers#
+		       </isNotEmpty>
+				 
+		         
+		       <isNotEmpty prepend="AND" property="midusers">
+		             midusers = #midusers#
+		       </isNotEmpty>
+				 
+		         
+		       <isNotEmpty prepend="AND" property="lowusers">
+		             lowusers = #lowusers#
+		       </isNotEmpty>
+				 
+		         
+		       <isNotEmpty prepend="AND" property="outcome">
+		             outcome = #outcome#
+		       </isNotEmpty>
+				 
+		         
+		       <isNotEmpty prepend="AND" property="status">
+		             status = #status#
+		       </isNotEmpty>
+				 
+		         
+		       <isNotEmpty prepend="AND" property="creator">
+		             creator = #creator#
+		       </isNotEmpty>
+				 
+	    </dynamic>	
+	    
+    	<![CDATA[ LIMIT  #page.index#, #page.pageSize# ]]> 
+	</select>
+	 
+	<select id="getProjectHzTotalModelVO" parameterClass="projectHzTotalModelVO" resultClass="projectHzTotalModelVO">
+		SELECT
+		 <![CDATA[
+        sdate ,projectId ,sdktype ,newusers ,actusers ,install_high ,install_mid ,install_low ,install_none ,showtotal ,income ,thirdincome ,highusers ,midusers ,lowusers ,outcome ,status ,creator 
+	    
+	        FROM $table$ 
+	        WHERE 
+		        sdate = #sdate#  AND 
+		        projectId = #projectId#  AND 
+		        sdktype = #sdktype# 
+	    ]]>
+	</select>
+	<insert id="create" parameterClass="projectHzTotalModelVO">
+		 <![CDATA[
+        INSERT INTO $table$ (
+        	sdate ,
+        	projectId ,
+        	sdktype ,
+        	newusers ,
+        	actusers ,
+        	install_high ,
+        	install_mid ,
+        	install_low ,
+        	install_none ,
+        	showtotal ,
+        	income ,
+        	thirdincome ,
+        	highusers ,
+        	midusers ,
+        	lowusers ,
+        	outcome ,
+        	status ,
+        	creator 
+        ) VALUES (
+        	#sdate# ,
+        	#projectId# ,
+        	#sdktype# ,
+        	#newusers# ,
+        	#actusers# ,
+        	#installHigh# ,
+        	#installMid# ,
+        	#installLow# ,
+        	#installNone# ,
+        	#showtotal# ,
+        	#income# ,
+        	#thirdincome# ,
+        	#highusers# ,
+        	#midusers# ,
+        	#lowusers# ,
+        	#outcome# ,
+        	#status# ,
+        	#creator# 
+        )
+    ]]>
+		 
+	</insert>
+	<update id="update" parameterClass="projectHzTotalModelVO">
+		<![CDATA[
+        UPDATE $table$ SET
+	        newusers = #newusers# ,
+	        actusers = #actusers# ,
+	        install_high = #installHigh# ,
+	        install_mid = #installMid# ,
+	        install_low = #installLow# ,
+	        install_none = #installNone# ,
+	        showtotal = #showtotal# ,
+	        income = #income# ,
+	        thirdincome = #thirdincome# ,
+	        highusers = #highusers# ,
+	        midusers = #midusers# ,
+	        lowusers = #lowusers# ,
+	        outcome = #outcome# ,
+	        status = #status# ,
+	        creator = #creator# 
+        WHERE 
+	        sdate = #sdate#  AND 
+	        projectId = #projectId#  AND 
+	        sdktype = #sdktype# 
+    ]]>
+	</update>
+	 
+</sqlMap>

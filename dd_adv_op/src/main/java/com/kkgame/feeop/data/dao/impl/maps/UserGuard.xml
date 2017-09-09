@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="userGuardSqlMap">
+	<select id="getUserGuardDataList" parameterClass="searchVO" resultClass="projectDataVO">
+		SELECT  IFNULL(SUM(D.UserCount),0) userCount,
+				IFNULL(SUM(D.ProjectUserCount),0) projectUserCount,
+				IFNULL(SUM(D.ActiveCount),0) activeCount
+				<isEqual property="rowFieldVO.isShowDate" compareValue="1">  
+					,DATE_FORMAT(D.StatDate,'%Y-%m-%d') statDate
+				</isEqual>
+				<isEqual property="rowFieldVO.isShowDate" compareValue="0">  
+					,null statDate
+				</isEqual>
+				<isEqual property="rowFieldVO.isShowAgent" compareValue="1">  
+					,IFNULL(A.ID,0) agentId
+					,A.Name agentName
+				</isEqual>
+				<isEqual property="rowFieldVO.isShowAgent" compareValue="0">  
+					,null agentName
+					,0 agentId
+				</isEqual>
+				<isEqual property="rowFieldVO.isShowBd" compareValue="1">  
+					,IFNULL(B.ID,0) bdId
+					,B.Name bdName
+				</isEqual>
+				<isEqual property="rowFieldVO.isShowBd" compareValue="0">  
+					,null bdName
+					,0 bdId
+				</isEqual>
+				<isEqual property="rowFieldVO.isShowCustomer" compareValue="1">  
+					,IFNULL(C.ID,0) customerId
+					,IFNULL(C.Name,'未知客户') customerName
+				</isEqual>
+				<isEqual property="rowFieldVO.isShowCustomer" compareValue="0">  
+					,null customerName
+					,0 customerId
+				</isEqual>
+				<isEqual property="rowFieldVO.isShowProject" compareValue="1">  
+					,IFNULL(D.ProjectId,0) projectId
+					,IFNULL(PR.Name,'未知项目') projectName
+				</isEqual>
+				<isEqual property="rowFieldVO.isShowProject" compareValue="0">  
+					,0 projectId
+					,null projectName
+				</isEqual>
+			FROM GUARD_USER_DATA_$table$ D
+			LEFT JOIN PROJECT PR ON PR.ID=D.ProjectId
+			LEFT JOIN PRODUCT PT ON PT.ID = PR.ProductId
+			LEFT JOIN CUSTOMER C ON C.ID = PR.CustomerId
+			LEFT JOIN BD B ON C.BdId = B.ID
+			LEFT JOIN AGENT A ON A.ID=B.AgentId
+			WHERE D.StatDate BETWEEN #startDate# AND #endDate#
+			<isGreaterThan property="agentId" compareValue="0">
+				AND A.ID = #agentId#
+			</isGreaterThan>
+			<isGreaterThan property="bdId" compareValue="0">
+				AND B.ID = #bdId#
+			</isGreaterThan>
+			<isGreaterThan property="customerId" compareValue="0">
+				AND C.ID = #customerId#
+			</isGreaterThan>
+			<isGreaterThan property="projectId" compareValue="0">
+				AND D.projectId = #projectId#
+			</isGreaterThan>
+			<dynamic  prepend =" GROUP BY ">
+				<isEqual prepend =" , " property="rowFieldVO.isShowDate" compareValue="1">  
+					DATE_FORMAT(D.StatDate,'%Y-%m-%d')
+				</isEqual>
+				<isEqual prepend =" , " property="rowFieldVO.isShowAgent" compareValue="1">  
+						A.ID
+				</isEqual>	
+				<isEqual prepend =" , " property="rowFieldVO.isShowBd" compareValue="1">  
+						B.ID
+				</isEqual>	
+				<isEqual prepend =" , " property="rowFieldVO.isShowCustomer" compareValue="1">  
+						C.ID
+				</isEqual>	
+				<isEqual prepend =" , " property="rowFieldVO.isShowProject" compareValue="1">  
+						D.ProjectId
+				</isEqual>
+				<isEqual prepend =" , " property="rowFieldVO.isShowProduct" compareValue="1">  
+						PT.ID
+				</isEqual>
+			</dynamic>
+			<dynamic  prepend =" ORDER BY ">
+				<isEqual prepend =" , " property="rowFieldVO.isShowDate" compareValue="1">  
+					DATE_FORMAT(D.StatDate,'%Y-%m-%d') ASC, userCount DESC
+				</isEqual>
+				<isEqual prepend =" , " property="rowFieldVO.isShowDate" compareValue="0">  
+					userCount DESC
+				</isEqual>
+			</dynamic>
+	</select>
+	<select id="getUserGuardSuccDataList" parameterClass="searchVO" resultClass="projectDataVO">
+		SELECT  IFNULL(D.GuardPluginId,0) guardPluginId,
+				IFNULL(SUM(D.AllUserCount),0) allUserCount,
+				IFNULL(SUM(D.SuccUserCount),0) succUserCount,
+				IFNULL(ROUND(IFNULL(SUM(D.SuccUserCount),0)*100.0/IFNULL(SUM(D.AllUserCount),0),2),0) guardPercent
+				<isEqual property="rowFieldVO.isShowDate" compareValue="1">  
+					,DATE_FORMAT(D.StatDate,'%Y-%m-%d') statDate
+				</isEqual>
+				<isEqual property="rowFieldVO.isShowDate" compareValue="0">  
+					,null statDate
+				</isEqual>
+				<isEqual property="rowFieldVO.isShowAgent" compareValue="1">  
+					,IFNULL(A.ID,0) agentId
+					,A.Name agentName
+				</isEqual>
+				<isEqual property="rowFieldVO.isShowAgent" compareValue="0">  
+					,null agentName
+					,0 agentId
+				</isEqual>
+				<isEqual property="rowFieldVO.isShowBd" compareValue="1">  
+					,IFNULL(B.ID,0) bdId
+					,B.Name bdName
+				</isEqual>
+				<isEqual property="rowFieldVO.isShowBd" compareValue="0">  
+					,null bdName
+					,0 bdId
+				</isEqual>
+				<isEqual property="rowFieldVO.isShowCustomer" compareValue="1">  
+					,IFNULL(C.ID,0) customerId
+					,IFNULL(C.Name,'未知客户') customerName
+				</isEqual>
+				<isEqual property="rowFieldVO.isShowCustomer" compareValue="0">  
+					,null customerName
+					,0 customerId
+				</isEqual>
+				<isEqual property="rowFieldVO.isShowProject" compareValue="1">  
+					,IFNULL(D.ProjectId,0) projectId
+					,IFNULL(PR.Name,'未知项目') projectName
+				</isEqual>
+				<isEqual property="rowFieldVO.isShowProject" compareValue="0">  
+					,0 projectId
+					,null projectName
+				</isEqual>
+			FROM GUARD_DATA_$table$ D 
+			LEFT JOIN PROJECT PR ON PR.ID=D.ProjectId
+			LEFT JOIN PRODUCT PT ON PT.ID = PR.ProductId
+			LEFT JOIN CUSTOMER C ON C.ID = PR.CustomerId
+			LEFT JOIN BD B ON C.BdId = B.ID
+			LEFT JOIN AGENT A ON A.ID=B.AgentId
+			WHERE D.StatDate BETWEEN #startDate# AND #endDate#
+			<isGreaterThan property="agentId" compareValue="0">
+				AND A.ID = #agentId#
+			</isGreaterThan>
+			<isGreaterThan property="bdId" compareValue="0">
+				AND B.ID = #bdId#
+			</isGreaterThan>
+			<isGreaterThan property="customerId" compareValue="0">
+				AND C.ID = #customerId#
+			</isGreaterThan>
+			<isGreaterThan property="projectId" compareValue="0">
+				AND D.projectId = #projectId#
+			</isGreaterThan>
+			<isGreaterThan property="guardPluginId" compareValue="0">
+			    AND D.GuardPluginId=#guardPluginId#
+			</isGreaterThan>
+			GROUP BY D.GuardPluginId
+				<isEqual prepend =" , " property="rowFieldVO.isShowDate" compareValue="1">  
+					DATE_FORMAT(D.StatDate,'%Y-%m-%d')
+				</isEqual>
+				<isEqual prepend =" , " property="rowFieldVO.isShowAgent" compareValue="1">  
+						A.ID
+				</isEqual>	
+				<isEqual prepend =" , " property="rowFieldVO.isShowBd" compareValue="1">  
+						B.ID
+				</isEqual>	
+				<isEqual prepend =" , " property="rowFieldVO.isShowCustomer" compareValue="1">  
+						C.ID
+				</isEqual>	
+				<isEqual prepend =" , " property="rowFieldVO.isShowProject" compareValue="1">  
+						D.ProjectId
+				</isEqual>
+			ORDER BY D.GuardPluginId
+	</select>
+</sqlMap>

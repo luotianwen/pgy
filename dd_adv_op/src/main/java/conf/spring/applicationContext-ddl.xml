@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop" 
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:p="http://www.springframework.org/schema/p" 
+       xsi:schemaLocation="http://www.springframework.org/schema/beans 
+       		http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+       		http://www.springframework.org/schema/aop
+       		http://www.springframework.org/schema/aop/spring-aop-2.5.xsd 
+		    http://www.springframework.org/schema/tx  
+    	    http://www.springframework.org/schema/tx/spring-tx-2.5.xsd 
+            http://www.springframework.org/schema/context
+            http://www.springframework.org/schema/context/spring-context-2.5.xsd">
+ 	
+ 	<!-- 索引 -->
+ 	<bean id="ddlProductService" class="com.kkgame.feeop.ddl.service.impl.DdlProductServiceImpl">
+ 		<property name="ddlProductDAO" ref="ddlProductDAO"></property>
+ 	</bean>
+ 	<bean id="ddlProductDAO" class="com.kkgame.feeop.ddl.dao.impl.DdlProductDAOImpl">
+ 		<property name="sqlMapClient" ref="sqlMapClient_kkpay_ddl"></property>
+ 		<property name="dataSource" ref="dataSource_kkpay_ddl"></property>
+ 	</bean>
+ 	
+ 	<bean id="ddlProjectService" class="com.kkgame.feeop.ddl.service.impl.DdlProjectServiceImpl">
+ 		<property name="ddlProjectDAO" ref="ddlProjectDAO"></property>
+ 	</bean>
+ 	<bean id="ddlProjectDAO" class="com.kkgame.feeop.ddl.dao.impl.DdlProjectDAOImpl">
+ 		<property name="sqlMapClient" ref="sqlMapClient_kkpay_ddl"></property>
+ 		<property name="dataSource" ref="dataSource_kkpay_ddl"></property>
+ 	</bean>
+ 	
+ 	<bean id="ddlChannelService" class="com.kkgame.feeop.ddl.service.impl.DdlChannelServiceImpl">
+ 		<property name="ddlChannelDAO" ref="ddlChannelDAO"></property>
+ 	</bean>
+ 	<bean id="ddlChannelDAO" class="com.kkgame.feeop.ddl.dao.impl.DdlChannelDAOImpl">
+ 		<property name="sqlMapClient" ref="sqlMapClient_kkpay_ddl"></property>
+ 		<property name="dataSource" ref="dataSource_kkpay_ddl"></property>
+ 	</bean>
+</beans>

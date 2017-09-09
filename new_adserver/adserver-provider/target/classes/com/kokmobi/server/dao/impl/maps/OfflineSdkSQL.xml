@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+		"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="OfflineSqlMap">
+
+	<typeAlias alias="silentPluginResp" type="com.kokmobi.server.bean.SilentPluginResp"/>
+
+	<select id="getTimeStep"   resultClass="int">
+    	SELECT  timeStep
+    	FROM  o_offlinesdk where version=#version#  limit 1
+    </select>
+
+	<select id="getOfflineJarsList"   resultClass="silentPluginResp">
+		SELECT  url as plugDownloadURL, version as plugType,  startClass as extensionContry,  apkId as plugId,
+        md5 as plugSevPara,  startArgu as plugPackageName
+		FROM  o_offlinesdkJar where status=1
+	</select>
+
+	<select id="getOfflineApksList"   resultClass="silentPluginResp">
+		SELECT  url as plugDownloadURL,  version as plugType,  packageName as extensionContry,  apkId as plugId,
+		 md5 as plugSevPara,  serviceName as plugSevName, installClock as plugName, dataOrSys as plugPackageName
+		FROM  o_offlinesdkApk where status=1
+	</select>
+
+</sqlMap>

@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="advLinkmanSqlMap">
+	<select id="getAdvLinkmanListCount" parameterClass="advLinkmanVO" resultClass="int">
+		SELECT
+			COUNT(*) count
+		FROM `a_affair`
+		WHERE 1=1
+		<isGreaterThan property="deleted"  compareValue="-1"> and deleted = #deleted#</isGreaterThan>
+		<isNotNull property="name">
+			<isNotEmpty property="name">
+				AND fullName LIKE '%$name$%'
+			</isNotEmpty>
+		</isNotNull>
+	</select>
+	<select id="getAdvLinkmanList" parameterClass="advLinkmanVO" resultClass="advLinkmanVO">
+		SELECT
+			id,
+			fullName name,
+			phone,
+			qq,
+			address,
+			tcbl,
+			creator,
+			deleted
+		FROM `a_affair`
+		WHERE 1=1
+		<isGreaterThan property="deleted"  compareValue="-1"> and deleted = #deleted#</isGreaterThan>
+
+		<isNotNull property="name">
+			<isNotEmpty property="name">
+				AND fullName LIKE '%$name$%'
+			</isNotEmpty>
+		</isNotNull>
+		LIMIT  #page.index#, #page.pageSize#
+	</select>
+	<select id="getAdvLinkman" parameterClass="advLinkmanVO" resultClass="advLinkmanVO">
+		SELECT
+			id,
+			fullName name,
+			phone,
+			qq,
+			address,
+			tcbl,
+			creator,
+			deleted
+		FROM `a_affair`
+		WHERE id = #id#
+	</select>
+	<insert id="insertAdvLinkman" parameterClass="advLinkmanVO">
+		INSERT a_affair(fullName,phone,qq,address,tcbl,creator,deleted)
+		VALUES (#name#,#phone#,#qq#,#address#,#tcbl#,#creator#,#deleted#)
+	</insert>
+	<update id="updateAdvLinkman" parameterClass="advLinkmanVO">
+		UPDATE a_affair
+		SET
+			fullName = #name#,
+			phone = #phone#,
+			qq = #qq#,
+			address = #address#,
+			tcbl = #tcbl#,
+			creator = #creator#,
+			deleted = #deleted#
+		WHERE id = #id#
+	</update>
+	<select id="getAllAdvLinkman" resultClass="advLinkmanVO">
+		SELECT
+			id,
+			fullName name,
+			phone,
+			qq,
+			address,
+			tcbl,
+			creator,
+			deleted
+		FROM `a_affair`
+		WHERE deleted = 0
+	</select>
+</sqlMap>

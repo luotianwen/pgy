@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="osSqlMap">
+	<select id="getAllOs" parameterClass="osVO" resultClass="osVO">
+		SELECT  OS.ID id,
+				OS.Name name,
+				OS.Intro intro
+			FROM OS OS
+	</select>
+	<select id="getOsList" parameterClass="osVO" resultClass="osVO">
+		SELECT  OS.ID id,
+				OS.Name name,
+				OS.Intro intro
+			FROM OS OS
+			WHERE 1=1
+			<isNotNull property="id">
+				<isGreaterThan property="id" compareValue="0">
+					AND OS.ID = #id#
+				</isGreaterThan>
+			</isNotNull>
+			ORDER BY OS.id DESC
+			<![CDATA[ LIMIT  #page.index#, #page.pageSize# ]]>
+	</select>
+	<select id="getOsListCount" parameterClass="osVO" resultClass="int">
+		SELECT  count(*)
+			FROM OS OS
+			WHERE 1=1
+			<isNotNull property="id">
+				<isGreaterThan property="id" compareValue="0">
+					AND OS.ID = #id#
+				</isGreaterThan>
+			</isNotNull>
+	</select>
+	<select id="getOsById" parameterClass="osVO" resultClass="osVO">
+		SELECT  OS.ID id,
+				OS.Name name,
+				OS.Intro intro
+			FROM OS OS
+			WHERE OS.ID = #id#
+	</select>
+	<select id="getOsByName" parameterClass="osVO" resultClass="osVO">
+		SELECT  OS.ID id,
+				OS.Name name,
+				OS.Intro intro
+			FROM OS OS
+			WHERE OS.Name = #name# AND Id!=#id#
+	</select>
+	<insert id="insertOs" parameterClass="osVO">
+		INSERT INTO OS( Name, Intro)
+		VALUES(#name#,#intro#)
+	</insert>
+	<delete id="deleteOs" parameterClass="osVO">
+		DELETE FROM OS WHERE ID = #id#
+	</delete>
+	<update id="updateOs" parameterClass="osVO">
+		UPDATE OS OS SET OS.Name =#name#, OS.Intro=#intro#
+		WHERE OS.ID = #id#
+	</update>
+	
+</sqlMap>

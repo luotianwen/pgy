@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="ddlSqlMap">
+	<select id="getClickDataList" resultClass="ddlData" parameterClass="map">
+		SELECT #statDate# statDate,
+				Hour hour,
+				ProductId productId,
+				ChannelId channelId,
+				IFNULL(subId,0) projectId,
+				Country country,
+				UaType uaType,
+				Count(*) clickCount
+		FROM $table$
+		GROUP BY hour,ProductId,ChannelId,subId,Country,uaType
+	</select>
+	<select id="getValidClickDataList" resultClass="ddlData" parameterClass="map">
+		SELECT #statDate# statDate,
+				Hour hour,
+				ProductId productId,
+				ChannelId channelId,
+				IFNULL(subId,0) projectId,
+				Country country,
+				UaType uaType,
+				Count(*) validClickCount
+		FROM $table$
+		WHERE IsValid=1
+		GROUP BY hour,ProductId,ChannelId,subId,Country,uaType
+	</select>
+	<select id="getSaleDataList" resultClass="ddlData" parameterClass="map">
+		SELECT #statDate# statDate,
+				Hour hour,
+				ProductId productId,
+				ChannelId channelId,
+				IFNULL(Coo_id,0) projectId,
+				IFNULL(CountryId,0) country,
+				Count(*) saleCount
+		FROM $table$
+		GROUP BY hour,ProductId,ChannelId,Coo_id,CountryId
+	</select>
+	<select id="getSendSaleDataList" resultClass="ddlData" parameterClass="map">
+		SELECT #statDate# statDate,
+				Hour hour,
+				ProductId productId,
+				ChannelId channelId,
+				IFNULL(Coo_id,0) projectId,
+				IFNULL(CountryId,0) country,
+				Count(*) saleCount
+		FROM $table$
+		WHERE Status=3200
+		GROUP BY hour,ProductId,ChannelId,Coo_id,CountryId
+	</select>
+	<select id="getProductList" resultClass="nameVO">
+		SELECT id id,
+				name name
+		FROM PRODUCTS
+	</select>
+	<select id="getChannelList" resultClass="nameVO">
+		SELECT id id,
+				name name
+		FROM CHANNELS
+	</select>
+	
+	<update id="updateTotalSaleData" parameterClass="ddlData">
+		UPDATE PRODUCT_CHANNEL_LINKS SET isAllSale=3200 WHERE coo_id=#projectId# and countSale<![CDATA[<]]>#saleCount#
+	</update>
+</sqlMap>

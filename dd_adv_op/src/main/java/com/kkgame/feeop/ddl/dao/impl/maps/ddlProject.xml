@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="ddlProjectSqlMap">
+	<select id="getDdlProjectVOListCount" parameterClass="ddlProjectVO" resultClass="int">
+		SELECT COUNT(ID) count			
+		FROM PRODUCT_CHANNEL_LINKS
+		WHERE 1=1
+		<isNotNull property="id">
+			<isGreaterThan property="id" compareValue="0">
+				AND ID = #id#
+			</isGreaterThan>
+		</isNotNull>
+		<isNotNull property="coo_id">
+			<isGreaterThan property="coo_id" compareValue="0">
+				AND coo_id = #coo_id#
+			</isGreaterThan>
+		</isNotNull>
+		 <isNotNull property="name">
+				  <isNotEmpty property="name">
+					AND Name like concat('%',#name#,'%')
+				</isNotEmpty>
+		</isNotNull>
+		<isNotNull property="status">
+			<isGreaterThan property="status" compareValue="0">
+				AND Status = #status#
+			</isGreaterThan>
+		</isNotNull>
+	</select>
+	<select id="getDdlProjectVOList" parameterClass="ddlProjectVO" resultClass="ddlProjectVO">
+		SELECT PCL.ID id,
+				PCL.productId productId,
+				PCL.channelId channelId,
+				PCL.clickUrl clickUrl,
+				PCL.redirectUrl redirectUrl,
+				PCL.saleUrl saleUrl,
+				PCL.coo_id coo_id,
+				PCL.countSale countSale,
+				PCL.isAllSale isAllSale,
+				PCL.rate rate,
+				PCL.version version,
+				PCL.CreateTime createTime,
+				PCL.uaTypes uaTypes,
+				IFNULL(PCL.Status,3201) status,
+				P.Name productName,
+				C.Name channelName
+		FROM PRODUCT_CHANNEL_LINKS PCL
+		LEFT JOIN PRODUCTS P ON P.ID = PCL.ProductId
+		LEFT JOIN CHANNELS C ON C.ID = PCL.ChannelId
+		WHERE 1=1
+		<isNotNull property="id">
+			<isGreaterThan property="id" compareValue="0">
+				AND PCL.ID = #id#
+			</isGreaterThan>
+		</isNotNull>
+		<isNotNull property="coo_id">
+			<isGreaterThan property="coo_id" compareValue="0">
+				AND PCL.coo_id = #coo_id#
+			</isGreaterThan>
+		</isNotNull>
+		 <isNotNull property="name">
+				  <isNotEmpty property="name">
+					AND PCL.Name like concat('%',#name#,'%')
+				</isNotEmpty>
+		</isNotNull>
+		<isNotNull property="status">
+			<isGreaterThan property="status" compareValue="0">
+				AND PCL.Status = #status#
+			</isGreaterThan>
+		</isNotNull>
+		ORDER BY PCL.ID DESC
+		<![CDATA[ LIMIT  #page.index#, #page.pageSize# ]]>
+	</select>
+	<select id="getDdlProjectVO" parameterClass="ddlProjectVO" resultClass="ddlProjectVO">
+		SELECT PCL.ID id,
+				PCL.productId productId,
+				PCL.channelId channelId,
+				PCL.clickUrl clickUrl,
+				PCL.redirectUrl redirectUrl,
+				PCL.saleUrl saleUrl,
+				PCL.coo_id coo_id,
+				PCL.countSale countSale,
+				PCL.isAllSale isAllSale,
+				PCL.rate rate,
+				PCL.version version,
+				PCL.CreateTime createTime,
+				PCL.uaTypes uaTypes,
+				IFNULL(PCL.Status,3201) status,
+				P.Name productName,
+				C.Name channelName
+		FROM PRODUCT_CHANNEL_LINKS PCL
+		LEFT JOIN PRODUCTS P ON P.ID = PCL.ProductId
+		LEFT JOIN CHANNELS C ON C.ID = PCL.ChannelId
+		WHERE PCL.ID = #id#	
+	</select>
+	<insert id="insert" parameterClass="ddlProjectVO">
+		INSERT INTO PRODUCT_CHANNEL_LINKS(productId,channelId,clickUrl,redirectUrl,saleUrl,coo_id,uaTypes,countSale,isAllSale,rate,version,status,createTime)
+		VALUES(#productId#,#channelId#,#clickUrl#,#redirectUrl#,#saleUrl#,#coo_id#,#uaTypes#,#countSale#,#isAllSale#,#rate#,#version#,#status#,now())
+		<selectKey keyProperty="id" resultClass="int">
+			SELECT LAST_INSERT_ID() AS ID FROM PRODUCT_CHANNEL_LINKS LIMIT 1
+		</selectKey>
+	</insert>
+	<update id="update" parameterClass="ddlProjectVO">
+		UPDATE PRODUCT_CHANNEL_LINKS 
+		SET	productId = #productId#,
+			channelId = #channelId#,
+			clickUrl = #clickUrl#,
+			redirectUrl = #redirectUrl#,
+			saleUrl = #saleUrl#,
+			coo_id = #coo_id#,
+			countSale = #countSale#,
+			isAllSale = #isAllSale#,
+			rate = #rate#,
+			uaTypes=#uaTypes#,
+			version = #version#,
+			status=#status#
+		WHERE ID = #id#
+	</update>
+	<update id="updateStatus" parameterClass="ddlProjectVO">
+		UPDATE PRODUCT_CHANNEL_LINKS 
+		SET	Status=#status#
+		WHERE ID = #id#
+	</update>
+	<select id="getAllDdlProjectVO" parameterClass="ddlProjectVO" resultClass="ddlProjectVO">
+		SELECT PCL.ID id,
+				PCL.productId productId,
+				PCL.channelId channelId,
+				PCL.clickUrl clickUrl,
+				PCL.redirectUrl redirectUrl,
+				PCL.saleUrl saleUrl,
+				PCL.coo_id coo_id,
+				PCL.countSale countSale,
+				PCL.isAllSale isAllSale,
+				PCL.rate rate,
+				PCL.version version,
+				PCL.CreateTime createTime,
+				PCL.uaTypes uaTypes,
+				IFNULL(PCL.Status,3201) status,
+				P.Name productName,
+				C.Name channelName
+		FROM PRODUCT_CHANNEL_LINKS PCL
+		LEFT JOIN PRODUCTS P ON P.ID = PCL.ProductId
+		LEFT JOIN CHANNELS C ON C.ID = PCL.ChannelId
+		WHERE 1=1
+		<isNotNull property="id">
+			<isGreaterThan property="id" compareValue="0">
+				AND PCL.ID = #id#
+			</isGreaterThan>
+		</isNotNull>
+		<isNotNull property="coo_id">
+			<isGreaterThan property="coo_id" compareValue="0">
+				AND PCL.coo_id = #coo_id#
+			</isGreaterThan>
+		</isNotNull>
+		 <isNotNull property="name">
+				  <isNotEmpty property="name">
+					AND PCL.Name like concat('%',#name#,'%')
+				</isNotEmpty>
+		</isNotNull>
+		<isNotNull property="status">
+			<isGreaterThan property="status" compareValue="0">
+				AND PCL.Status = #status#
+			</isGreaterThan>
+		</isNotNull>
+		ORDER BY PCL.ID DESC
+	</select>
+	<select id="getAllDomainVO" resultClass="domainVO">
+		SELECT
+			d.id,
+			d.version,
+			d.wwwdomain wwwDomain,
+			d.downdomain downDomain,
+			DATE_FORMAT(d.cdate,'%Y-%m-%d') cdate,
+			d.`status`,
+			d.creator
+		FROM
+			Domain d
+	</select>
+	<select id="getDomainVO" parameterClass="int" resultClass="domainVO">
+		SELECT
+			d.id,
+			d.version,
+			d.wwwdomain wwwDomain,
+			d.downdomain downDomain,
+			DATE_FORMAT(d.cdate,'%Y-%m-%d') cdate,
+			d.`status`,
+			d.creator
+		FROM
+			Domain d
+		WHERE d.id = #id#
+	</select>
+	<insert id="insertDomain" parameterClass="domainVO">
+		INSERT INTO Domain (version, wwwdomain, downdomain, cdate, status, creator)
+		VALUES (#version#, #wwwDomain#, #downDomain#, #cdate#, #status#, #creator#)
+	</insert>
+	<update id="updateDomain" parameterClass="domainVO">
+		UPDATE Domain SET wwwdomain = #wwwDomain#, downdomain = #downDomain#, status = #status# WHERE id = #id#
+	</update>
+</sqlMap>

@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="sdkUsersModelSqlMap">
+	<typeAlias alias="sdkUsersModelVO"
+		type="com.kkgame.feeop.detail.bean.SdkUsersModelVO" />
+
+	<select id="getSdkUsersModelVOList" parameterClass="sdkUsersModelVO"
+		resultClass="sdkUsersModelVO">
+		SELECT
+		 coo_id as cooId ,imei ,channelid ,cdate ,xc_coo_id as
+		xcCooId,xmodel ,xversion ,ximsi ,xinternet ,xoperator ,(select description from kok_sdk.EnumerationValue where id=xcou)as xcou , sdate
+		,sdkversion
+		FROM kok_sdk.$table$
+
+
+		<dynamic prepend="WHERE">
+
+
+
+
+			<isNotEmpty prepend="AND" property="cooId">
+				coo_id = #cooId#
+		       </isNotEmpty>
+
+
+			<isNotEmpty prepend="AND" property="imei">
+				imei = #imei#
+		       </isNotEmpty>
+
+
+			<isNotEmpty prepend="AND" property="channelid">
+				channelid = #channelid#
+		       </isNotEmpty>
+
+
+			<isNotEmpty prepend="AND" property="sdk">
+				sdk = #sdk#
+		       </isNotEmpty>
+
+
+
+
+			<isNotEmpty prepend="AND" property="xcCooId">
+				xc_coo_id = #xcCooId#
+		       </isNotEmpty>
+
+
+			<isNotEmpty prepend="AND" property="xmodel">
+				xmodel = #xmodel#
+		       </isNotEmpty>
+
+
+			<isNotEmpty prepend="AND" property="xversion">
+				xversion = #xversion#
+		       </isNotEmpty>
+
+
+			<isNotEmpty prepend="AND" property="ximsi">
+				ximsi = #ximsi#
+		       </isNotEmpty>
+
+
+			<isNotEmpty prepend="AND" property="xinternet">
+				xinternet = #xinternet#
+		       </isNotEmpty>
+
+
+			<isNotEmpty prepend="AND" property="xoperator">
+				xoperator = #xoperator#
+		       </isNotEmpty>
+
+
+			<isNotEmpty prepend="AND" property="xcou">
+				xcou = #xcou#
+		       </isNotEmpty>
+
+
+			<isNotEmpty prepend="AND" property="creator">
+				creator = #creator#
+		       </isNotEmpty>
+
+
+			<isNotEmpty prepend="AND" property="sdate">
+				sdate = #sdate#
+		       </isNotEmpty>
+
+
+			<isNotEmpty prepend="AND" property="sdkversion">
+				sdkversion = #sdkversion#
+		       </isNotEmpty>
+
+		</dynamic>
+
+		order by cdate desc
+		LIMIT 20
+	</select>
+
+	<select id="getSdkUsersModelProjectValidList" parameterClass="sdkUsersModelVO"
+			resultClass="sdkUsersModelVO">
+		SELECT count(imei)as xcou
+		FROM kok_sdk.$table$
+		WHERE imei REGEXP '[a-z]+'
+              and coo_id=#cooId#
+	</select>
+
+<select id="getSdkUsersModelProjectList" parameterClass="sdkUsersModelVO"
+		resultClass="sdkUsersModelVO">
+		SELECT coo_id as cooId ,imei  ,scoo_id as xcCooId ,xdate as cdate,sdkversion
+		FROM kok_sdk.$table$
+				WHERE coo_id = #imei#
+				and coo_id!=scoo_id
+	</select>
+
+</sqlMap>

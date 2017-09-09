@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop" 
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:p="http://www.springframework.org/schema/p" 
+       xsi:schemaLocation="http://www.springframework.org/schema/beans 
+       		http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+       		http://www.springframework.org/schema/aop
+       		http://www.springframework.org/schema/aop/spring-aop-2.5.xsd 
+		    http://www.springframework.org/schema/tx  
+    	    http://www.springframework.org/schema/tx/spring-tx-2.5.xsd 
+            http://www.springframework.org/schema/context
+            http://www.springframework.org/schema/context/spring-context-2.5.xsd">
+ 	
+ 	
+ 	<bean id="projectDataService" class="com.kkgame.feeop.data.service.impl.ProjectDataServiceImpl">
+ 		<property name="projectDataDAO" ref="projectDataDAO"></property>
+ 	</bean>
+ 	<bean id="projectDataDAO" class="com.kkgame.feeop.data.dao.impl.ProjectDataDAOImpl">
+ 		<property name="sqlMapClient" ref="sqlMapClient_kkpay_data"></property>
+ 		<property name="dataSource" ref="dataSource_kkpay_data"></property>
+ 	</bean>
+ 	<bean id="projectDistinctService" class="com.kkgame.feeop.data.service.impl.ProjectDistinctServiceImpl">
+ 		<property name="projectDistinctDAO" ref="projectDistinctDAO"></property>
+ 	</bean>
+ 	<bean id="projectDistinctDAO" class="com.kkgame.feeop.data.dao.impl.ProjectDistinctDAOImpl">
+ 		<property name="sqlMapClient" ref="sqlMapClient_kkpay_data"></property>
+ 		<property name="dataSource" ref="dataSource_kkpay_data"></property>
+ 	</bean>
+ 	<bean id="adDataService" class="com.kkgame.feeop.data.service.impl.AdDataServiceImpl">
+ 		<property name="adDataDAO" ref="adDataDAO"></property>
+ 	</bean>
+ 	<bean id="adDataDAO" class="com.kkgame.feeop.data.dao.impl.AdDataDAOImpl">
+ 		<property name="sqlMapClient" ref="sqlMapClient_kkpay_data"></property>
+ 		<property name="dataSource" ref="dataSource_kkpay_data"></property>
+ 	</bean>
+ 	<bean id="userAdService" class="com.kkgame.feeop.data.service.impl.UserAdServiceImpl">
+ 		<property name="userAdDAO" ref="userAdDAO"></property>
+ 	</bean>
+ 	<bean id="userAdDAO" class="com.kkgame.feeop.data.dao.impl.UserAdDAOImpl">
+ 		<property name="sqlMapClient" ref="sqlMapClient_kkpay_data"></property>
+ 		<property name="dataSource" ref="dataSource_kkpay_data"></property>
+ 	</bean>
+ 	<bean id="versionDataService" class="com.kkgame.feeop.data.service.impl.VersionDataServiceImpl">
+ 		<property name="versionDataDAO" ref="versionDataDAO"></property>
+ 	</bean>
+ 	<bean id="versionDataDAO" class="com.kkgame.feeop.data.dao.impl.VersionDataDAOImpl">
+ 		<property name="sqlMapClient" ref="sqlMapClient_kkpay_data"></property>
+ 		<property name="dataSource" ref="dataSource_kkpay_data"></property>
+ 	</bean>
+ 	<bean id="projectIncomeService" class="com.kkgame.feeop.data.service.impl.ProjectIncomeServiceImpl">
+ 		<property name="projectIncomeDAO" ref="projectIncomeDAO"></property>
+ 	</bean>
+ 	<bean id="projectIncomeDAO" class="com.kkgame.feeop.data.dao.impl.ProjectIncomeDAOImpl">
+ 		<property name="sqlMapClient" ref="sqlMapClient_kkpay_data"></property>
+ 		<property name="dataSource" ref="dataSource_kkpay_data"></property>
+ 	</bean>
+ 	<bean id="adIncomeService" class="com.kkgame.feeop.data.service.impl.AdIncomeServiceImpl">
+ 		<property name="adIncomeDAO" ref="adIncomeDAO"></property>
+ 	</bean>
+ 	<bean id="adIncomeDAO" class="com.kkgame.feeop.data.dao.impl.AdIncomeDAOImpl">
+ 		<property name="sqlMapClient" ref="sqlMapClient_kkpay_data"></property>
+ 		<property name="dataSource" ref="dataSource_kkpay_data"></property>
+ 	</bean>
+ 	<bean id="dataService" class="com.kkgame.feeop.data.service.impl.DataServiceImpl">
+ 		<property name="dataDAO" ref="dataDAO"></property>
+		<property name="threeSdkDAO" ref="threeSdkDAO"/>
+ 	</bean>
+ 	<bean id="dataDAO" class="com.kkgame.feeop.data.dao.impl.DataDAOImpl">
+ 		<property name="sqlMapClient" ref="sqlMapClient_kkpay_data"></property>
+ 		<property name="dataSource" ref="dataSource_kkpay_data"></property>
+ 	</bean>
+ 	<bean id="retentionService" class="com.kkgame.feeop.data.service.impl.RetentionServiceImpl">
+ 		<property name="retentionDAO" ref="retentionDAO"></property>
+ 	</bean>
+ 	<bean id="retentionDAO" class="com.kkgame.feeop.data.dao.impl.RetentionDAOImpl">
+ 		<property name="sqlMapClient" ref="sqlMapClient_kkpay_data"></property>
+ 		<property name="dataSource" ref="dataSource_kkpay_data"></property>
+ 	</bean>
+ 	<bean id="ddlDataService" class="com.kkgame.feeop.data.service.impl.DdlDataServiceImpl">
+ 		<property name="ddlDataDAO" ref="ddlDataDAO"></property>
+ 	</bean>
+ 	<bean id="ddlDataDAO" class="com.kkgame.feeop.data.dao.impl.DdlDataDAOImpl">
+ 		<property name="sqlMapClient" ref="sqlMapClient_kkpay_data"></property>
+ 		<property name="dataSource" ref="dataSource_kkpay_data"></property>
+ 	</bean>
+ 	<bean id="adLinkDataService" class="com.kkgame.feeop.data.service.impl.AdLinkDataServiceImpl">
+ 		<property name="adLinkDataDAO" ref="adLinkDataDAO"></property>
+ 	</bean>
+ 	<bean id="adLinkDataDAO" class="com.kkgame.feeop.data.dao.impl.AdLinkDataDAOImpl">
+ 		<property name="sqlMapClient" ref="sqlMapClient_kkpay_data"></property>
+ 		<property name="dataSource" ref="dataSource_kkpay_data"></property>
+ 	</bean>
+ 	
+ 	<bean id="userGuardService" class="com.kkgame.feeop.data.service.impl.UserGuardServiceImpl">
+ 		<property name="userGuardDAO" ref="userGuardDAO"></property>
+ 	</bean>
+ 	<bean id="userGuardDAO" class="com.kkgame.feeop.data.dao.impl.UserGuardDAOImpl">
+ 		<property name="sqlMapClient" ref="sqlMapClient_kkpay_data"></property>
+ 		<property name="dataSource" ref="dataSource_kkpay_data"></property>
+ 	</bean>
+	<bean id="sdkDataService" class="com.kkgame.feeop.data.service.impl.SdkDataServiceImpl">
+		<property name="sdkDataDAO" ref="sdkDataDAO"></property>
+	</bean>
+	<bean id="sdkDataDAO" class="com.kkgame.feeop.data.dao.impl.SdkDataDAOImpl">
+		<property name="sqlMapClient" ref="sqlMapClient_kkpay_data"></property>
+		<property name="dataSource" ref="dataSource_kkpay_data"></property>
+	</bean>
+	<bean id="subDataService" class="com.kkgame.feeop.data.service.impl.SubDataServiceImpl">
+		<property name="subDataDAO" ref="subDataDAO"></property>
+	</bean>
+	<bean id="subDataDAO" class="com.kkgame.feeop.data.dao.impl.SubDataDAOImpl">
+		<property name="sqlMapClient" ref="sqlMapClient_kkpay_data"></property>
+		<property name="dataSource" ref="dataSource_kkpay_data"></property>
+	</bean>
+	<bean id="offerSdkDataService" class="com.kkgame.feeop.data.service.impl.OfferSdkDataServiceImpl">
+		<property name="offerSdkDataDAO" ref="offerSdkDataDAO"></property>
+	</bean>
+	<bean id="offerSdkDataDAO" class="com.kkgame.feeop.data.dao.impl.OfferSdkDataDAOImpl">
+		<property name="sqlMapClient" ref="sqlMapClient_kkpay_data"></property>
+		<property name="dataSource" ref="dataSource_kkpay_data"></property>
+	</bean>
+	<bean id="iframeDataService" class="com.kkgame.feeop.data.service.impl.IframeDataServiceImpl">
+		<property name="iframeDataDAO" ref="iframeDataDAO"></property>
+	</bean>
+	<bean id="iframeDataDAO" class="com.kkgame.feeop.data.dao.impl.IframeDataDAOImpl">
+		<property name="sqlMapClient" ref="sqlMapClient_kkpay_data"></property>
+		<property name="dataSource" ref="dataSource_kkpay_data"></property>
+	</bean>
+</beans>

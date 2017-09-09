@@ -1,0 +1,368 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="sdkProjectSqlMap">
+	<select id="getSdkProjectVOListCount" parameterClass="sdkProjectVO" resultClass="int">
+		SELECT COUNT(ID) count			
+		FROM A_product
+		WHERE 1=1
+		<isNotNull property="coo_id">
+			<isGreaterThan property="coo_id" compareValue="0">
+				AND coo_id = #coo_id#
+			</isGreaterThan>
+		</isNotNull>
+		 <isNotNull property="apkName">
+				  <isNotEmpty property="apkName">
+					AND apkName like concat('%',#apkName#,'%')
+				</isNotEmpty>
+		</isNotNull>
+	</select>
+	<select id="getSdkProjectVOList" parameterClass="sdkProjectVO" resultClass="sdkProjectVO">
+		SELECT ID id,
+				version version,
+				coo_id coo_id,
+				apkName apkName,
+				apkType apkType,
+				member member,
+				advType advType,
+				stauts stauts,
+				exe exe,
+				DATE_FORMAT(cdate,'%Y-%m-%d') cdate,
+				pass pass,
+				deleted deleted,
+				htdownload htdownload,
+				changeState changeState,
+				xuhao xuhao,
+				deletes deletes,
+				dalyTime dalyTime,
+				isOpen isOpen,
+				issyndata issyndata,
+				klbl klbl,
+				isopen100 isopen100,
+				isfull100 isfull100,
+				isseloper isseloper,
+				fulls fulls,
+				day day,
+				issale issale,
+				saleurl saleurl,
+				isPush  isPush,
+				isPlaque isPlaque,
+				isBrowserHold  isBrowserHold,
+				isAppHold  isAppHold,
+				isLevitate  isLevitate,
+				isCreateIcon  isCreateIcon,
+				isUpdate  isUpdate,
+				isOfflionSdk  isOfflionSdk,
+				isVideo isVideo
+		FROM A_product
+		WHERE 1=1
+		<isNotNull property="coo_id">
+			<isGreaterThan property="coo_id" compareValue="0">
+				AND coo_id = #coo_id#
+			</isGreaterThan>
+		</isNotNull>
+		 <isNotNull property="apkName">
+				  <isNotEmpty property="apkName">
+					AND apkName like concat('%',#apkName#,'%')
+				</isNotEmpty>
+		</isNotNull>
+		ORDER BY cdate DESC,coo_id DESC
+		<![CDATA[ LIMIT  #page.index#, #page.pageSize# ]]>
+	</select>
+	<select id="getSdkProjectVO" parameterClass="sdkProjectVO" resultClass="sdkProjectVO">
+		SELECT ID id,
+				version version,
+				coo_id coo_id,
+				apkName apkName,
+				apkType apkType,
+				member member,
+				advType advType,
+				stauts stauts,
+				exe exe,
+				DATE_FORMAT(cdate,'%Y-%m-%d') cdate,
+				pass pass,
+				creator creator,
+				deleted deleted,
+				htdownload htdownload,
+				changeState changeState,
+				xuhao xuhao,
+				deletes deletes,
+				dalyTime dalyTime,
+				isOpen isOpen,
+				issyndata issyndata,
+				klbl klbl,
+				isopen100 isopen100,
+				isfull100 isfull100,
+				isseloper isseloper,
+				fulls fulls,
+				day day,
+				issale issale,
+				saleurl saleurl,
+				isPush  isPush,
+				isPlaque isPlaque,
+				isBrowserHold  isBrowserHold,
+				isAppHold  isAppHold,
+				isLevitate  isLevitate,
+				isCreateIcon  isCreateIcon,
+				isUpdate  isUpdate,
+				isOfflionSdk  isOfflionSdk,
+				isVideo isVideo
+		FROM A_product
+		WHERE ID = #id#	
+	</select>
+	<insert id="insert" parameterClass="sdkProjectVO">
+		INSERT INTO A_product(version,coo_id,apkName,apkType,member,advType,
+		stauts,exe,cdate,pass,creator,deleted,htdownload,
+		changeState,xuhao,deletes,dalyTime,isOpen,issyndata,klbl,isopen100,
+		isfull100,isseloper,fulls,day,issale,saleurl,isPush,isPlaque,isBrowserHold,isAppHold,isLevitate,isCreateIcon,isUpdate, isOfflionSdk,isVideo)
+		VALUES(#version#,#coo_id#,#apkName#,#apkType#,#member#,#advType#,
+		#stauts#,#exe#,now(),#pass#,#creator#,#deleted#,#htdownload#,
+		#changeState#,#xuhao#,#deletes#,#dalyTime#,#isOpen#,#issyndata#,#klbl#,#isopen100#,
+		#isfull100#,#isseloper#,#fulls#,#day#,#issale#,#saleurl#,#isPush#,#isPlaque#,#isBrowserHold#,#isAppHold#,#isLevitate#,#isCreateIcon#,#isUpdate#,#isOfflionSdk#,#isVideo#)
+		<selectKey keyProperty="id" resultClass="int">
+			SELECT LAST_INSERT_ID() AS ID FROM A_product LIMIT 1
+		</selectKey>
+	</insert>
+	<update id="update" parameterClass="sdkProjectVO">
+		UPDATE A_product 
+		SET		version = #version#,
+				coo_id = #coo_id#,
+				apkName = #apkName#,
+				apkType = #apkType#,
+				member = #member#,
+				advType = #advType#,
+				stauts = #stauts#,
+				exe = #exe#,
+				pass = #pass#,
+				creator = #creator#,
+				deleted = #deleted#,
+				htdownload = #htdownload#,
+				changeState = #changeState#,
+				xuhao = #xuhao#,
+				deletes = #deletes#,
+				dalyTime = #dalyTime#,
+				saleurl = #saleurl#,
+				isOpen = #isOpen#,
+				issyndata = #issyndata#,
+				klbl = #klbl#,
+				isopen100 = #isopen100#,
+				isfull100 = #isfull100#,
+				isseloper = #isseloper#,
+				fulls = #fulls#,
+				day = #day#,
+				issale = #issale#,
+				isPush = #isPush#,
+				isPlaque = #isPlaque#,
+				isBrowserHold = #isBrowserHold#,
+				isAppHold = #isAppHold#,
+				isLevitate = #isLevitate#,
+				isCreateIcon = #isCreateIcon#,
+				isUpdate = #isUpdate#,
+				isOfflionSdk = #isOfflionSdk#,
+				isVideo=#isVideo#
+		WHERE ID = #id#
+	</update>
+	<select id="getAllSdkProjectVOList" parameterClass="sdkProjectVO" resultClass="sdkProjectVO">
+		SELECT ID id,
+				version version,
+				coo_id coo_id,
+				apkName apkName,
+				apkType apkType,
+				member member,
+				advType advType,
+				stauts stauts,
+				exe exe,
+				DATE_FORMAT(cdate,'%Y-%m-%d') cdate,
+				pass pass,
+				creator creator,
+				deleted deleted,
+				htdownload htdownload,
+				changeState changeState,
+				xuhao xuhao,
+				deletes deletes,
+				dalyTime dalyTime,
+				isOpen isOpen,
+				issyndata issyndata,
+				klbl klbl,
+				isopen100 isopen100,
+				isfull100 isfull100,
+				isseloper isseloper,
+				fulls fulls,
+				day day,
+				issale issale,
+				saleurl saleurl,
+				isPush  isPush,
+				isPlaque isPlaque,
+				isBrowserHold  isBrowserHold,
+				isAppHold  isAppHold,
+				isLevitate  isLevitate,
+				isCreateIcon  isCreateIcon,
+				isUpdate  isUpdate,
+				isOfflionSdk  isOfflionSdk,
+				isVideo isVideo
+		FROM A_product
+		WHERE 1=1
+		<isNotNull property="coo_id">
+			<isGreaterThan property="coo_id" compareValue="0">
+				AND coo_id = #coo_id#
+			</isGreaterThan>
+		</isNotNull>
+		 <isNotNull property="apkName">
+				  <isNotEmpty property="apkName">
+					AND apkName like concat('%',#apkName#,'%')
+				</isNotEmpty>
+		</isNotNull>
+		ORDER BY coo_id DESC
+	</select>
+	
+	
+	<select id="getAdvSdkProjectVOListCount" parameterClass="sdkProjectVO" resultClass="int">
+		SELECT COUNT(A.ID) count			
+		FROM A_advSet A 
+		LEFT JOIN A_product P ON P.ID = A.apk
+		WHERE 1=1
+		<isNotNull property="coo_id">
+			<isGreaterThan property="coo_id" compareValue="0">
+				AND P.coo_id = #coo_id#
+			</isGreaterThan>
+		</isNotNull>
+		 <isNotNull property="apkName">
+				  <isNotEmpty property="apkName">
+					AND P.apkName like concat('%',#apkName#,'%')
+				</isNotEmpty>
+		</isNotNull>
+	</select>
+	<select id="getAdvSdkProjectVOList" parameterClass="sdkProjectVO" resultClass="sdkProjectVO">
+		SELECT 	A.ID id,
+				P.coo_id coo_id,
+				P.apkName apkName,
+				A.status status,
+				A.version version,
+				A.timss timss,
+				A.lower lower,
+				A.member member,
+				A.advType advType,
+				A.apk apk,
+				A.ydownload ydownload,
+				A.type type,
+				A.pass pass,
+				DATE_FORMAT(A.passdate,'%Y-%m-%d') passdate,
+				
+				A.passnote passnote,
+				A.isNotice isNotice,
+				A.isPops isPops,
+				A.isReturnDebug isReturnDebug,
+				A.isGame isGame,
+				A.creator creator,
+				A.country country,
+				A.isTablePlaque isTablePlaque,
+				A.isTablePlaqueDown isTablePlaqueDown,
+				A.isCjTablePlaque isCjTablePlaque,
+				A.isCjPush isCjPush,
+				A.tablePlaqueLower tablePlaqueLower,
+				A.tablePlaqueTimss tablePlaqueTimss,
+				A.isOpen isOpen
+		FROM A_advSet A
+		LEFT JOIN A_product P ON P.ID = A.apk
+		WHERE 1=1
+		<isNotNull property="coo_id">
+			<isGreaterThan property="coo_id" compareValue="0">
+				AND P.coo_id = #coo_id#
+			</isGreaterThan>
+		</isNotNull>
+		 <isNotNull property="apkName">
+				  <isNotEmpty property="apkName">
+					AND P.apkName like concat('%',#apkName#,'%')
+				</isNotEmpty>
+		</isNotNull>
+		ORDER BY P.coo_id DESC
+		<![CDATA[ LIMIT  #page.index#, #page.pageSize# ]]>
+	</select>
+	<select id="getAdvSdkProjectVO" parameterClass="sdkProjectVO" resultClass="sdkProjectVO">
+		SELECT A.ID id,
+				P.coo_id coo_id,
+				P.apkName apkName,
+				A.status status,
+				A.version version,
+				A.timss timss,
+				A.lower lower,
+				A.member member,
+				A.advType advType,
+				A.apk apk,
+				A.ydownload ydownload,
+				A.type type,
+				A.pass pass,
+				DATE_FORMAT(A.passdate,'%Y-%m-%d') passdate,
+				A.passnote passnote,
+				A.isNotice isNotice,
+				A.isPops isPops,
+				A.isReturnDebug isReturnDebug,
+				A.isGame isGame,
+				A.creator creator,
+				A.country country,
+				A.isTablePlaque isTablePlaque,
+				A.isTablePlaqueDown isTablePlaqueDown,
+				A.isCjTablePlaque isCjTablePlaque,
+				A.isCjPush isCjPush,
+				A.tablePlaqueLower tablePlaqueLower,
+				A.tablePlaqueTimss tablePlaqueTimss,
+				A.isOpen isOpen,
+				A.isLink   ,
+				A.noBrowserTimes ,
+				A.noBrowserInterval ,
+				A.statusBarTimes,
+				A.statusBarInterval,
+				A.desktopTimes,
+				A.desktopInterval
+		FROM A_advSet A
+		LEFT JOIN A_product P ON P.ID = A.apk
+		WHERE A.ID = #id#	
+	</select>
+	<insert id="insertAdv" parameterClass="sdkProjectVO">
+		INSERT INTO A_advSet(version,status,timss,lower,member,advType,
+		apk,ydownload,type,pass,passdate,passnote,isNotice,
+		isPops,isReturnDebug,isGame,creator,country,isTablePlaque,isTablePlaqueDown,
+		isCjTablePlaque,isCjPush,tablePlaqueLower,tablePlaqueTimss,isOpen )
+		VALUES(#version#,#status#,#timss#,#lower#,#member#,#advType#,
+		#apk#,#ydownload#,#type#,#pass#,#passdate#,#passnote#,#isNotice#,
+		#isPops#,#isReturnDebug#,#isGame#,#creator#,#country#,#isTablePlaque#,#isTablePlaqueDown#,
+		#isCjTablePlaque#,#isCjPush#,#tablePlaqueLower#,#tablePlaqueTimss#,#isOpen#
+		)
+		<selectKey keyProperty="id" resultClass="int">
+			SELECT LAST_INSERT_ID() AS ID FROM A_advSet LIMIT 1
+		</selectKey>
+	</insert>
+	<update id="updateAdv" parameterClass="sdkProjectVO">
+		UPDATE A_advSet 
+		SET		version = #version#,
+				status = #status#,
+				timss = #timss#,
+				lower = #lower#,
+				member = #member#,
+				advType = #advType#,
+				apk = #apk#,
+				ydownload = #ydownload#,
+				type = #type#,
+				pass = #pass#,
+				isNotice = #isNotice#,
+				isPops = #isPops#,
+				isReturnDebug = #isReturnDebug#,
+				isGame = #isGame#,
+				creator = #creator#,
+				country = #country#,
+				isTablePlaque = #isTablePlaque#,
+				isTablePlaqueDown = #isTablePlaqueDown#,
+				isCjTablePlaque = #isCjTablePlaque#,
+				isCjPush = #isCjPush#,
+				tablePlaqueLower = #tablePlaqueLower#,
+				tablePlaqueTimss = #tablePlaqueTimss#,
+				isOpen = #isOpen# ,
+				isLink  = #isLink# ,
+				noBrowserTimes  = #noBrowserTimes# ,
+				noBrowserInterval  = #noBrowserInterval# ,
+				statusBarTimes		= #statusBarTimes# ,
+				statusBarInterval  = #statusBarInterval# ,
+				desktopTimes	= #desktopTimes# ,
+				desktopInterval		= #desktopInterval#
+		WHERE ID = #id#
+	</update>
+</sqlMap>

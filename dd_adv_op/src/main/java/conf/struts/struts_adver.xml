@@ -1,0 +1,101 @@
+<!DOCTYPE struts PUBLIC 
+	"-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+	"http://struts.apache.org/dtds/struts-2.0.dtd">
+<struts>
+	<constant name="struts.multipart.maxSize" value="1000000000" />
+	<include file="struts-default.xml"></include>
+	
+	<package name="adver" namespace="/adver" extends="abroad-default">
+		<default-interceptor-ref name="crudStack"/>
+
+
+		<action name="Video" class="com.kkgame.feeop.adver.action.VideoAction" method="do{1}">
+			<result name="list">/pages/adver/testVideo.jsp</result>
+			<result name="create">/pages/adver/video_create.jsp</result>
+		</action>
+
+		<action name="Adver" class="com.kkgame.feeop.adver.action.AdverAction" method="do{1}">
+			<result name="list">/pages/adver/adver_list.jsp</result>
+			<result name="create">/pages/adver/adver_create.jsp</result>
+		</action>
+		<action name="Adv" class="com.kkgame.feeop.adver.action.AdvAction" method="do{1}">
+			<result name="list">/pages/adver/adv_list.jsp</result>
+			<result name="create">/pages/adver/adv_create.jsp</result>
+		</action>
+		<action name="AdvSdk" class="com.kkgame.feeop.adver.action.AdvSdkAction" method="do{1}">
+			<result name="list">/pages/adver/adv_sdk_list.jsp</result>
+			<result name="create">/pages/adver/adv_sdk_create.jsp</result>
+			<result name="upload">/pages/adver/adv_sdk_upload.jsp</result>
+			<result name="view">/pages/adver/adv_sdk_view.jsp</result>
+			<result name="country">/pages/adver/adv_country_list.jsp</result>
+		</action>
+		<action name="AdvLinkman" class="com.kkgame.feeop.adver.action.AdvLinkmanAction" method="do{1}">
+			<result name="list">/pages/adver/adv_linkman_list.jsp</result>
+			<result name="create">/pages/adver/adv_linkman_create.jsp</result>
+			<result name="modify">/pages/adver/adv_linkman_create.jsp</result>
+			<result name="all"></result>
+		</action>
+		<action name="getAllAdvLinkman" class="com.kkgame.feeop.adver.action.AdvLinkmanAction" method="getAllAdvLinkman">
+			<result name="success">/pages/adver/getAllAdvLinkman4Select.jsp</result>
+		</action>
+		<action name="Linkads2" class="com.kkgame.feeop.adver.action.Linkads2Action" method="do{1}">
+			<result name="list">/pages/adver/linkads2_list.jsp</result>
+			<result name="create">/pages/adver/linkads2_create.jsp</result>
+			<result name="detail">/pages/adver/linkads2_detail.jsp</result>
+		</action>
+		<action name="Linkadsconfig" class="com.kkgame.feeop.adver.action.LinkadsconfigAction" method="do{1}">
+			<result name="list">/pages/adver/linkadsconfig_list.jsp</result>
+			<result name="create">/pages/adver/linkadsconfig_create.jsp</result>
+			<result name="detail">/pages/adver/linkadsconfig_detail.jsp</result>
+		</action>
+		<action name="Webdomain" class="com.kkgame.feeop.adver.action.WebdomainAction" method="do{1}">
+			<result name="list">/pages/adver/webdomain_list.jsp</result>
+			<result name="create">/pages/adver/webdomain_create.jsp</result>
+			<result name="detail">/pages/adver/webdomain_detail.jsp</result>
+		</action>
+		<action name="PromotionDomain" class="com.kkgame.feeop.adver.action.PromotionDomainAction" method="do{1}">
+			<result name="list">/pages/adver/promotionDomain_list.jsp</result>
+			<result name="create">/pages/adver/promotionDomain_create.jsp</result>
+			<result name="detail">/pages/adver/promotionDomain_detail.jsp</result>
+			<result name="iframelist">/pages/adver/promotionDomain_iframe_list.jsp</result>
+			<result name="iframecreate">/pages/adver/promotionDomain_iframe_create.jsp</result>
+			<result name="iframedetail">/pages/adver/promotionDomain_iframe_detail.jsp</result>
+		</action>
+		<action name="Promotion" class="com.kkgame.feeop.adver.action.PromotionAction" method="do{1}">
+			<result name="list">/pages/adver/promotion_list.jsp</result>
+			<result name="create">/pages/adver/promotion_create.jsp</result>
+			<result name="iframelist">/pages/adver/promotion_iframe_list.jsp</result>
+			<result name="iframecreate">/pages/adver/promotion_iframe_create.jsp</result>
+
+			<result name="detail">/pages/adver/promotion_detail.jsp</result>
+		</action>
+		<action name="Subscribe" class="com.kkgame.feeop.adver.action.SubscribeAction" method="do{1}">
+			<result name="list">/pages/adver/subscribe_list.jsp</result>
+			<result name="create">/pages/adver/subscribe_create.jsp</result>
+		</action>
+		<action name="getAllSubscribeList" method="doSelectList" class="com.kkgame.feeop.adver.action.SubscribeAction">
+			<result name="list">/pages/customer/sub4Select.jsp</result>
+		</action>
+		<action name="PromotionCustomer" class="com.kkgame.feeop.adver.action.PromotionCustomerAction" method="do{1}">
+			<result name="list">/pages/adver/promotionCustomer_list.jsp</result>
+			<result name="create">/pages/adver/promotionCustomer_create.jsp</result>
+			<result name="detail">/pages/adver/promotionCustomer_detail.jsp</result>
+		</action>
+
+		<action name="Pcustomer" class="com.kkgame.feeop.adver.action.PcustomerAction" method="do{1}">
+			<result name="iframelist">/pages/adver/pcustomer_iframe_list.jsp</result>
+			<result name="createiframe">/pages/adver/pcustomer_iframe_create.jsp</result>
+			<result name="list">/pages/adver/pcustomer_list.jsp</result>
+			<result name="create">/pages/adver/pcustomer_create.jsp</result>
+			<result name="detail">/pages/adver/pcustomer_detail.jsp</result>
+		</action>
+		<action name="Spromotion" class="com.kkgame.feeop.adver.action.SpromotionAction" method="do{1}">
+			<result name="list">/pages/adver/spromotion_list.jsp</result>
+			<result name="create">/pages/adver/spromotion_create.jsp</result>
+		</action>
+
+
+
+
+	</package>
+</struts>

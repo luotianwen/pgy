@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMapConfig PUBLIC "-//ibatis.apache.org//DTD SQL Map Config 2.0//EN"
+    "http://ibatis.apache.org/dtd/sql-map-config-2.dtd">
+<sqlMapConfig>
+	<settings cacheModelsEnabled="false" enhancementEnabled="false"
+		lazyLoadingEnabled="true" useStatementNamespaces="true" />
+	<sqlMap resource="alias.xml" />
+	<sqlMap resource="com/kkgame/pay/stat/dao/impl/maps/stat.xml"/>
+	<sqlMap resource="com/kkgame/pay/stat/dao/impl/maps/fee.xml"/>
+	<!-- 
+	<sqlMap resource="com/kkgame/pay/stat/dao/impl/maps/ddlStat.xml"/>
+	<sqlMap resource="com/kkgame/pay/stat/dao/impl/maps/ddlFee.xml"/> -->
+</sqlMapConfig>

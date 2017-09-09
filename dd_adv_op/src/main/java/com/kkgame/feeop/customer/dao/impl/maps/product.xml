@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="productSqlMap">
+	<select id="getAllProductVOList" parameterClass="productVO" resultClass="productVO">
+		SELECT  ID id,
+			Name name,
+			CustomerId customerId,
+			HighPrice highPrice,
+			LowPrice lowPrice,
+			MidPrice midPrice
+		FROM PRODUCT
+	</select>
+	<select id="getProductVOListByProductIds" parameterClass="java.lang.String" resultClass="productVO">
+		SELECT  ID id,
+			Name name,
+			CustomerId customerId,
+			HighPrice highPrice,
+			LowPrice lowPrice,
+			MidPrice midPrice
+		FROM PRODUCT
+		WHERE ID IN ($productIds$)
+	</select>
+	<select id="getProductVOList" parameterClass="productVO" resultClass="productVO">
+		SELECT  ID id,
+			Name name,
+			CustomerId customerId,
+			HighPrice highPrice,
+			LowPrice lowPrice,
+			MidPrice midPrice
+		FROM PRODUCT
+		WHERE 1=1
+			<isNotNull property="id">
+				<isGreaterThan property="id" compareValue="0">
+					AND ID = #id#
+				</isGreaterThan>
+			</isNotNull>
+			<isNotNull property="name">
+				<isNotEmpty property="name">
+					AND Name like concat('%',#name#,'%')
+				</isNotEmpty>
+			</isNotNull>
+			ORDER BY ID DESC
+			<![CDATA[ LIMIT  #page.index#, #page.pageSize# ]]>
+	</select>
+	<select id="getProductVOListCount" parameterClass="productVO" resultClass="int">
+		SELECT  count(*)
+			FROM PRODUCT
+			WHERE 1=1
+			<isNotNull property="id">
+				<isGreaterThan property="id" compareValue="0">
+					AND ID = #id#
+				</isGreaterThan>
+			</isNotNull>
+			<isNotNull property="name">
+				<isNotEmpty property="name">
+					AND Name like concat('%',#name#,'%')
+				</isNotEmpty>
+			</isNotNull>
+	</select>
+	<select id="getProductVO" parameterClass="productVO" resultClass="productVO">
+		SELECT  ID id,
+			Name name,
+			CustomerId customerId,
+			HighPrice highPrice,
+			LowPrice lowPrice,
+			MidPrice midPrice
+		FROM PRODUCT
+		WHERE ID = #id#
+	</select>
+	<select id="getProductVOByName" parameterClass="productVO" resultClass="productVO">
+		SELECT  ID id,
+				Name name
+		FROM PRODUCT
+		WHERE Name = #name# AND Id!=#id#
+	</select>
+	<insert id="insert" parameterClass="productVO">
+		INSERT INTO PRODUCT(Name,CustomerId,HighPrice,MidPrice,LowPrice)
+		VALUES(#name#,#customerId#,#highPrice#,#midPrice#,#midPrice#)
+		<selectKey keyProperty="id" resultClass="int">
+			SELECT LAST_INSERT_ID() AS ID FROM PRODUCT LIMIT 1
+		</selectKey>
+	</insert>
+	<delete id="delete" parameterClass="productVO">
+		DELETE FROM PRODUCT WHERE ID = #id#
+	</delete>
+	<update id="update" parameterClass="productVO">
+		UPDATE PRODUCT SET Name = #name#, 
+		HighPrice=#highPrice#,
+		MidPrice=#midPrice#,
+		LowPrice=#lowPrice#
+		WHERE ID = #id#
+	</update>	
+</sqlMap>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+
+<beans>
+	<bean id="incomeStatisticsService" class="com.kkgame.pay.stat.service.impl.IncomeStatisticsServiceImpl">
+		<property name="feeDao" ref="feeDao" />
+		<property name="statisticsDao" ref="statisticsDao" />
+		<property name="masterDao" ref="masterDao" />
+	</bean>
+	<bean id="userDataStatisticsService" class="com.kkgame.pay.stat.service.impl.UserDataStatisticsServiceImpl">
+		<property name="feeDao" ref="feeDao" />
+		<property name="statisticsDao" ref="statisticsDao" />
+		<property name="masterDao" ref="masterDao" />
+	</bean>
+	<bean id="userRetentionStatisticsService" class="com.kkgame.pay.stat.service.impl.UserRetentionStatisticsServiceImpl">
+		<property name="feeDao" ref="feeDao" />
+		<property name="statisticsDao" ref="statisticsDao" />
+		<property name="masterDao" ref="masterDao" />
+	</bean>
+	<bean id="adDataStatisticsService" class="com.kkgame.pay.stat.service.impl.AdDataStatisticsServiceImpl">
+		<property name="feeDao" ref="feeDao" />
+		<property name="statisticsDao" ref="statisticsDao" />
+		<property name="masterDao" ref="masterDao" />
+	</bean>
+	<!-- 
+	<bean id="ddlStatisticsService" class="com.kkgame.pay.stat.service.impl.DdlStatisticsServiceImpl">
+		<property name="ddlFeeDao" ref="ddlFeeDao" />
+		<property name="ddlStatisticsDao" ref="ddlStatisticsDao" />
+		<property name="ddlMasterFeeDao" ref="ddlMasterFeeDao" />
+	</bean> -->
+</beans>

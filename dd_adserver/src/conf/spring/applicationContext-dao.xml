@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="
+  http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+  http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.5.xsd
+  http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.5.xsd" default-autowire="byName">
+
+	<bean id="sdkDao" class="com.kokmobi.server.dao.impl.SdkDaoImpl">
+		<property name="sqlMapClient" ref="sqlMapClient"></property>
+		<property name="dataSource" ref="dataSource"></property>
+	</bean>	
+	<bean id="projectDao" class="com.kokmobi.server.dao.impl.ProjectDaoImpl">
+		<property name="sqlMapClient" ref="sqlMapClient"></property>
+		<property name="dataSource" ref="dataSource"></property>
+	</bean>	
+	<bean id="apkInfoDao" class="com.kokmobi.server.dao.impl.ApkInfoDaoImpl">
+		<property name="sqlMapClient" ref="sqlMapClient"></property>
+		<property name="dataSource" ref="dataSource"></property>
+	</bean>	
+	
+	<bean id="sdkDataDao" class="com.kokmobi.server.dao.impl.SdkDataDaoImpl">
+		<property name="sqlMapClient" ref="sqlMapClient_data"></property>
+		<property name="dataSource" ref="dataSource_data"></property>
+	</bean>
+</beans>

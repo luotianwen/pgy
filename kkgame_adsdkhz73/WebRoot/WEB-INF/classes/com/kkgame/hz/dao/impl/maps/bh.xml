@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="bhSqlMap">
+	<select id="getBhList" parameterClass="bhVO" resultClass="bhVO">
+		SELECT 	BH.ID	id,
+				BH.Name	name,
+				BD.Name	businessDeveloperName,
+				PU.LoginId loginId,
+				PU.Passwd	passwd,
+				PU.Status status,
+				PU.LastLogin lastLogin,	
+				BH.BusinessDeveloperId	businessDeveloperId,
+				PU.ID portalUserId
+		FROM	BUSINESS_HELPER BH  
+		LEFT  JOIN PORTAL_USER PU  ON PU.RoleId = BH.ID 
+		LEFT  JOIN BUSINESS_DEVELOPER BD  ON BH.BusinessDeveloperId = BD.ID	
+	   	WHERE  PU.RoleType = 'BH'
+      	<isNotNull property="searchId">      
+      	<isGreaterThan property="searchId" compareValue="0">
+          	AND BH.ID  like  concat('%',#searchId#,'%')
+        </isGreaterThan>
+      	</isNotNull>
+		<isNotNull property="searchName">  
+          	AND  BH.Name like  concat('%',#searchName#,'%')
+    	</isNotNull>
+ 		<isGreaterThan property="businessDeveloperId" compareValue="0">
+          	AND BH.BusinessDeveloperId  = #businessDeveloperId#
+       	</isGreaterThan>	                 
+	   		ORDER BY #sortIndex#	   	     
+		<isEqual property="sortType" compareValue="desc"> DESC 
+		</isEqual>
+	   	<![CDATA[ LIMIT  #page.index#, #page.pageSize# ]]>
+	</select>
+	
+	<select id="getBhListCount" parameterClass="bhVO" resultClass="int">
+		SELECT 	COUNT(BH.ID) 
+		FROM BUSINESS_HELPER BH  LEFT  JOIN PORTAL_USER PU  ON PU.RoleId = BH.ID  
+		LEFT  JOIN BUSINESS_DEVELOPER BD  ON BH.BusinessDeveloperId = BD.ID	
+	  	WHERE  PU.RoleType = 'BH'   
+		<isNotNull property="searchId">      
+			<isGreaterThan property="searchId" compareValue="0">
+          		AND BH.ID  like  concat('%',#searchId#,'%')
+          	</isGreaterThan>
+		</isNotNull>
+		<isNotNull property="searchName">  
+          	AND  BH.Name like  concat('%',#searchName#,'%')
+		</isNotNull>
+		<isGreaterThan property="businessDeveloperId" compareValue="0">
+         	AND BH.BusinessDeveloperId  = #businessDeveloperId#
+          </isGreaterThan>	
+	</select>
+	<insert id="insert" parameterClass="bhVO">
+		INSERT  INTO  BUSINESS_HELPER(Name,BusinessDeveloperId,IfOwn ,Description )
+ 		VALUES (#name#,#businessDeveloperId#,#ifOwn#,#description#)
+ 		<selectKey resultClass="int"  keyProperty="id" >   
+        	select @@IDENTITY as value      
+		</selectKey> 											
+	</insert>
+	<select id="getBhById" parameterClass="int" resultClass="bhVO">
+		SELECT   BH.ID  id,
+				 BH.Name  name,
+				 BH.BusinessDeveloperId businessDeveloperId,
+				 BH.Description  description,
+				 BD.Name  BusinessDeveloperName,
+				 BH.IfOwn	ifOwn
+		FROM  BUSINESS_HELPER BH 
+		LEFT  JOIN BUSINESS_DEVELOPER BD  ON BH.BusinessDeveloperId = BD.ID	
+		WHERE BH.Id=#id#			
+	</select>
+ 	
+	<update  id="updateBh" parameterClass="bhVO" >
+		UPDATE BUSINESS_HELPER  SET
+					 Name = #name#,
+					 BusinessDeveloperId = #businessDeveloperId#,
+					 IfOwn	=	#ifOwn#,
+					 Description  = #description#
+ 		WHERE ID = #id#	
+	</update>
+	
+	<delete id="deleteBh" parameterClass="int">
+		DELETE FROM BUSINESS_HELPER WHERE ID = #id#
+	</delete>
+ 	<select id="getBhByCriteria" parameterClass="bhVO" resultClass="bhVO">
+		SELECT ID id,
+				Name name
+    	FROM BUSINESS_HELPER
+		WHERE 1=1
+		<isNotEmpty property="name"> 
+			AND Name=#name#
+		</isNotEmpty>
+		<isGreaterThan property="id" compareValue="0">
+			AND ID != #id#
+		</isGreaterThan>
+	</select>
+</sqlMap>

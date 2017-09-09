@@ -1,0 +1,2121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="statSqlMap">
+    <delete id="deleteTempUserData" parameterClass="map">
+		delete from REGISTER_DATA_TEMP where StatDate=#statDate#
+	</delete>
+    <delete id="deleteTempVersionUserData" parameterClass="map">
+		delete from VERSION_DATA_TEMP where StatDate=#statDate#
+	</delete>
+    <insert id="insertTempUserData" parameterClass="map">
+		INSERT INTO $table$ SELECT * FROM REGISTER_DATA_TEMP Where StatDate=#statDate#
+	</insert>
+    <insert id="insertTempVersionUserData" parameterClass="map">
+		INSERT INTO $table$ SELECT * FROM VERSION_DATA_TEMP Where StatDate=#statDate#
+	</insert>
+    <insert id="insertTempRetentionUserData" parameterClass="map">
+		INSERT INTO $table$(StatDate,ProjectId,ChannelId,PluginId,Type,Country,CountryLevel,UserCount,ActiveCount,TotalActiveCount) 
+		SELECT StatDate statDate,
+			ProjectId projectId,
+			ChannelId channelId,
+			PluginId pluginId,
+			Type type,
+			Country country,
+			CountryLevel countryLevel,
+			UserCount userCount,
+			ActiveCount activeCount,
+			TotalActiveCount totalActiveCount
+		FROM REGISTER_DATA_TEMP Where StatDate=#statDate#
+		ON DUPLICATE KEY UPDATE UserCount=VALUES(UserCount),ActiveCount=VALUES(ActiveCount),TotalActiveCount=VALUES(TotalActiveCount)
+	</insert>
+    <insert id="insertTempAdProjectData" parameterClass="map">
+		INSERT INTO $table$ SELECT * FROM AD_DATA_TEMP Where StatDate=#statDate#
+	</insert>
+    <delete id="deleteAdData" parameterClass="map">
+		delete from $table$ where StatDate=#statDate#
+	</delete>
+    <insert id="insertTempAdData" parameterClass="map">
+		INSERT INTO $table$ 
+		SELECT StatDate,AdId,Type,Country,CountryLevel,
+				SUM(SendCount) SendCount,
+				SUM(SendTimes) SendTimes,
+				SUM(ReceiveCount) ReceiveCount,
+				SUM(ReceiveTimes) ReceiveTimes,
+				SUM(ShowCount) ShowCount,
+				SUM(ShowTimes) ShowTimes,
+				SUM(ClickCount) ClickCount,
+				SUM(ClickTimes) ClickTimes,
+				SUM(DownloadCount) DownloadCount,
+				SUM(DownloadTimes) DownloadTimes,
+				SUM(InstallCount) InstallCount,
+				SUM(InstallTimes) InstallTimes,
+				SUM(InstallCustomerCount) InstallCustomerCount,
+				SUM(InstallCustomerTimes) InstallCustomerTimes,
+				0 Percent,
+				SUM(PushSendCount) PushSendCount,
+				SUM(PushSendTimes) PushSendTimes,
+				SUM(PushReceiveCount) PushReceiveCount,
+				SUM(PushReceiveTimes) PushReceiveTimes,
+				SUM(PushShowCount) PushShowCount,
+				SUM(PushShowTimes) PushShowTimes,
+				SUM(PushClickCount) PushClickCount,
+				SUM(PushClickTimes) PushClickTimes,
+				SUM(PushDownloadCount) PushDownloadCount,
+				SUM(PushDownloadTimes) PushDownloadTimes,
+				SUM(PushInstallCount) PushInstallCount,
+				SUM(PushInstallTimes) PushInstallTimes,
+				SUM(SinkSendCount) SinkSendCount,
+				SUM(SinkSendTimes) SinkSendTimes,
+				SUM(SinkReceiveCount) SinkReceiveCount,
+				SUM(SinkReceiveTimes) SinkReceiveTimes,
+				SUM(SinkShowCount) SinkShowCount,
+				SUM(SinkShowTimes) SinkShowTimes,
+				SUM(SinkClickCount) SinkClickCount,
+				SUM(SinkClickTimes) SinkClickTimes,
+				SUM(SinkDownloadCount) SinkDownloadCount,
+				SUM(SinkDownloadTimes) SinkDownloadTimes,
+				SUM(SinkInstallCount) SinkInstallCount,
+				SUM(SinkInstallTimes) SinkInstallTimes,
+				SUM(LeadSendCount) LeadSendCount,
+				SUM(LeadSendTimes) LeadSendTimes,
+				SUM(LeadReceiveCount) LeadReceiveCount,
+				SUM(LeadReceiveTimes) LeadReceiveTimes,
+				SUM(LeadShowCount) LeadShowCount,
+				SUM(LeadShowTimes) LeadShowTimes,
+				SUM(LeadClickCount) LeadClickCount,
+				SUM(LeadClickTimes) LeadClickTimes,
+				SUM(LeadDownloadCount) LeadDownloadCount,
+				SUM(LeadDownloadTimes) LeadDownloadTimes,
+				SUM(LeadInstallCount) LeadInstallCount,
+				SUM(LeadInstallTimes) LeadInstallTimes,
+				SUM(SilenceInstallCount) SilenceInstallCount,
+				SUM(SilenceInstallTimes) SilenceInstallTimes,
+				SUM(PushSilenceInstallCount) PushSilenceInstallCount,
+				SUM(PushSilenceInstallTimes) PushSilenceInstallTimes,
+				SUM(ActivateCount) ActivateCount,
+				SUM(ActivateTimes) ActivateTimes,
+				SUM(SilenceSendCount) SilenceSendCount,
+				SUM(SilenceSendTimes) SilenceSendTimes,
+				SUM(SilenceReceiveCount) SilenceReceiveCount,
+				SUM(SilenceReceiveTimes) SilenceReceiveTimes,
+				SUM(SilenceShowCount) SilenceShowCount,
+				SUM(SilenceShowTimes) SilenceShowTimes,
+				SUM(SilenceClickCount) SilenceClickCount,
+				SUM(SilenceClickTimes) SilenceClickTimes,
+				SUM(SilenceDownloadCount) SilenceDownloadCount,
+				SUM(SilenceDownloadTimes) SilenceDownloadTimes
+		FROM AD_DATA_TEMP 
+		Where StatDate=#statDate#
+		GROUP BY StatDate,AdId,Type,Country,CountryLevel
+	</insert>
+    <!--<insert id="insertTempOfferSdkData" parameterClass="map">-->
+        <!--INSERT INTO $table$-->
+        <!--SELECT StatDate,AdId,adType,cou,projectId,-->
+        <!--SUM(SendCount) SendCount,-->
+        <!--SUM(SendTimes) SendTimes,-->
+        <!--SUM(ShowCount) ShowCount,-->
+        <!--SUM(ShowTimes) ShowTimes,-->
+        <!--SUM(ClickCount) ClickCount,-->
+        <!--SUM(ClickTimes) ClickTimes,-->
+        <!--0 Percent-->
+        <!--FROM AD_DATA_OFFERSDK_TEMP-->
+        <!--Where StatDate=#statDate#-->
+        <!--GROUP BY StatDate,AdId,adType,cou,projectId-->
+    <!--</insert>-->
+    <delete id="deleteUserData" parameterClass="map">
+		delete from $table$ where StatDate=#statDate#
+	</delete>
+    <delete id="deleteVersionUserData" parameterClass="map">
+		delete from $table$ where StatDate=#statDate#
+	</delete>
+    <delete id="deleteUserActiveData" parameterClass="map">
+		delete from $table$ where StatDate=#statDate#
+	</delete>
+    <delete id="deleteRetentionUserData" parameterClass="map">
+		delete from $table$ where StatDate=#statDate#
+	</delete>
+    <insert id="insertUserData" parameterClass="map">
+        INSERT INTO $table$(StatDate,ProjectId,ChannelId,PluginId,Type,Country,CountryLevel,UserCount)
+        VALUES
+        <iterate conjunction="," property="list">
+            <![CDATA[
+				(#list[].statDate#,#list[].projectId#,#list[].channelId#,#list[].pluginId#,#list[].type#,#list[].country#,#list[].countryLevel#,#list[].userCount#)
+			]]>
+        </iterate>
+        ON DUPLICATE KEY UPDATE UserCount=VALUES(UserCount)
+    </insert>
+    <insert id="insertUserDataProject" parameterClass="map">
+        INSERT INTO $table$(StatDate,ProjectId,ChannelId,PluginId,Type,Country,CountryLevel,ProjectUserCount)
+        VALUES
+        <iterate conjunction="," property="list">
+            <![CDATA[
+				(#list[].statDate#,#list[].projectId#,#list[].channelId#,#list[].pluginId#,#list[].type#,#list[].country#,#list[].countryLevel#,#list[].userCount#)
+			]]>
+        </iterate>
+        ON DUPLICATE KEY UPDATE ProjectUserCount=VALUES(ProjectUserCount)
+    </insert>
+    <insert id="insertVersionUserData" parameterClass="map">
+        INSERT INTO $table$(StatDate,Type,Version,UserCount)
+        VALUES
+        <iterate conjunction="," property="list">
+            <![CDATA[
+				(#list[].statDate#,#list[].type#,#list[].version#,#list[].userCount#)
+			]]>
+        </iterate>
+        ON DUPLICATE KEY UPDATE UserCount=VALUES(UserCount)
+    </insert>
+    <insert id="insertVersionProjectUserData" parameterClass="map">
+        INSERT INTO $table$(StatDate,Type,Version,ProjectUserCount)
+        VALUES
+        <iterate conjunction="," property="list">
+            <![CDATA[
+				(#list[].statDate#,#list[].type#,#list[].version#,#list[].userCount#)
+			]]>
+        </iterate>
+        ON DUPLICATE KEY UPDATE ProjectUserCount=VALUES(ProjectUserCount)
+    </insert>
+    <insert id="insertRetentionUserData" parameterClass="map">
+        INSERT INTO $table$(StatDate,ProjectId,ChannelId,PluginId,Type,Country,CountryLevel,UserCount)
+        VALUES
+        <iterate conjunction="," property="list">
+            <![CDATA[
+				(#list[].statDate#,#list[].projectId#,#list[].channelId#,#list[].pluginId#,#list[].type#,#list[].country#,#list[].countryLevel#,#list[].userCount#)
+			]]>
+        </iterate>
+        ON DUPLICATE KEY UPDATE UserCount=VALUES(UserCount)
+    </insert>
+    <insert id="insertUserActiveData" parameterClass="map">
+        INSERT INTO $table$(StatDate,ProjectId,ChannelId,PluginId,Type,Country,CountryLevel,ActiveCount)
+        VALUES
+        <iterate conjunction="," property="list">
+            <![CDATA[
+				(#list[].statDate#,#list[].projectId#,#list[].channelId#,#list[].pluginId#,#list[].type#,#list[].country#,#list[].countryLevel#,#list[].activeCount#)
+			]]>
+        </iterate>
+        ON DUPLICATE KEY UPDATE ActiveCount=VALUES(ActiveCount)
+    </insert>
+    <insert id="insertVersionUserActiveData" parameterClass="map">
+        INSERT INTO $table$(StatDate,Type,Version,ActiveCount)
+        VALUES
+        <iterate conjunction="," property="list">
+            <![CDATA[
+				(#list[].statDate#,#list[].type#,#list[].version#,#list[].activeCount#)
+			]]>
+        </iterate>
+        ON DUPLICATE KEY UPDATE ActiveCount=VALUES(ActiveCount)
+    </insert>
+    <insert id="insertUserProjectActiveData" parameterClass="map">
+        INSERT INTO $table$(StatDate,ProjectId,ChannelId,PluginId,Type,Country,CountryLevel,ProjectActiveCount)
+        VALUES
+        <iterate conjunction="," property="list">
+            <![CDATA[
+				(#list[].statDate#,#list[].projectId#,#list[].channelId#,#list[].pluginId#,#list[].type#,#list[].country#,#list[].countryLevel#,#list[].projectActiveCount#)
+			]]>
+        </iterate>
+        ON DUPLICATE KEY UPDATE ProjectActiveCount=VALUES(ProjectActiveCount)
+    </insert>
+    <insert id="insertVersionUserProjectActiveData" parameterClass="map">
+        INSERT INTO $table$(StatDate,Type,Version,ProjectActiveCount)
+        VALUES
+        <iterate conjunction="," property="list">
+            <![CDATA[
+				(#list[].statDate#,#list[].type#,#list[].version#,#list[].projectActiveCount#)
+			]]>
+        </iterate>
+        ON DUPLICATE KEY UPDATE ProjectActiveCount=VALUES(ProjectActiveCount)
+    </insert>
+    <insert id="insertTotalUserActiveData" parameterClass="map">
+        INSERT INTO $table$(StatDate,ProjectId,ChannelId,PluginId,Type,Country,CountryLevel,TotalActiveCount)
+        VALUES
+        <iterate conjunction="," property="list">
+            <![CDATA[
+				(#list[].statDate#,#list[].projectId#,#list[].channelId#,#list[].pluginId#,#list[].type#,#list[].country#,#list[].countryLevel#,#list[].activeCount#)
+			]]>
+        </iterate>
+        ON DUPLICATE KEY UPDATE TotalActiveCount=VALUES(TotalActiveCount)
+    </insert>
+    <insert id="insertTotalVersionUserActiveData" parameterClass="map">
+        INSERT INTO $table$(StatDate,Type,Version,TotalActiveCount)
+        VALUES
+        <iterate conjunction="," property="list">
+            <![CDATA[
+				(#list[].statDate#,#list[].type#,#list[].version#,#list[].activeCount#)
+			]]>
+        </iterate>
+        ON DUPLICATE KEY UPDATE TotalActiveCount=VALUES(TotalActiveCount)
+    </insert>
+    <delete id="deleteBackData" parameterClass="map">
+		delete from $table$ where StatDate=#statDate#
+	</delete>
+    <insert id="insertShowData" parameterClass="map">
+        INSERT INTO $table$(StatDate,AdId,ProjectId,ChannelId,PluginId,Type,Country,CountryLevel,ShowCount,ShowTimes)
+        VALUES
+        <iterate conjunction="," property="list">
+            <![CDATA[
+				(#list[].statDate#,#list[].adId#,#list[].projectId#,#list[].channelId#,#list[].pluginId#,#list[].type#,#list[].country#,#list[].countryLevel#,#list[].showCount#,#list[].showTimes#)
+			]]>
+        </iterate>
+        ON DUPLICATE KEY UPDATE ShowCount=VALUES(ShowCount),ShowTimes=VALUES(ShowTimes)
+    </insert>
+    <insert id="insertClickData" parameterClass="map">
+        INSERT INTO $table$(StatDate,AdId,ProjectId,ChannelId,PluginId,Type,Country,CountryLevel,ClickCount,ClickTimes)
+        VALUES
+        <iterate conjunction="," property="list">
+            <![CDATA[
+				(#list[].statDate#,#list[].adId#,#list[].projectId#,#list[].channelId#,#list[].pluginId#,#list[].type#,#list[].country#,#list[].countryLevel#,#list[].clickCount#,#list[].clickTimes#)
+			]]>
+        </iterate>
+        ON DUPLICATE KEY UPDATE ClickCount=VALUES(ClickCount),ClickTimes=VALUES(ClickTimes)
+    </insert>
+    <insert id="insertOfferSdkShowData" parameterClass="map">
+        INSERT INTO $table$(StatDate,AdId,ProjectId,adType,cou,xoperator,showCount,showTimes,income)
+        VALUES
+        <iterate conjunction="," property="list">
+            <![CDATA[
+				(#list[].statDate#,#list[].adId#,#list[].projectId#,#list[].adType#,#list[].country#,#list[].operatorId#,#list[].showCount#,#list[].showTimes#,#list[].income#)
+			]]>
+        </iterate>
+        ON DUPLICATE KEY UPDATE showCount=VALUES(showCount),showTimes=VALUES(showTimes)
+    </insert>
+    <insert id="insertOfferSdkClickData" parameterClass="map">
+        INSERT INTO $table$(StatDate,AdId,ProjectId,adType,cou,xoperator,clickCount,clickTimes, activateTimes ,income)
+        VALUES
+        <iterate conjunction="," property="list">
+            <![CDATA[
+				(#list[].statDate#,#list[].adId#,#list[].projectId#,#list[].adType#,#list[].country#,#list[].operatorId#,#list[].clickCount#,#list[].clickTimes#,#list[].activateTimes#,#list[].income#)
+			]]>
+        </iterate>
+        ON DUPLICATE KEY UPDATE clickCount=VALUES(clickCount),clickTimes=VALUES(clickTimes)
+    </insert>
+    <insert id="insertOfferSdkSendData" parameterClass="map">
+        INSERT INTO $table$(StatDate,AdId,ProjectId,adType,cou,xoperator,sendCount,sendTimes)
+        VALUES
+        <iterate conjunction="," property="list">
+            <![CDATA[
+				(#list[].statDate#,#list[].adId#,#list[].projectId#,#list[].adType#,#list[].country#,#list[].operatorId#,#list[].sendCount#,#list[].sendTimes#)
+			]]>
+        </iterate>
+        ON DUPLICATE KEY UPDATE sendCount=VALUES(sendCount),sendTimes=VALUES(sendTimes)
+    </insert>
+    <insert id="insertDownloadData" parameterClass="map">
+        INSERT INTO
+        $table$(StatDate,AdId,ProjectId,ChannelId,PluginId,Type,Country,CountryLevel,DownloadCount,DownloadTimes)
+        VALUES
+        <iterate conjunction="," property="list">
+            <![CDATA[
+				(#list[].statDate#,#list[].adId#,#list[].projectId#,#list[].channelId#,#list[].pluginId#,#list[].type#,#list[].country#,#list[].countryLevel#,#list[].downloadCount#,#list[].downloadTimes#)
+			]]>
+        </iterate>
+        ON DUPLICATE KEY UPDATE DownloadCount=VALUES(DownloadCount),DownloadTimes=VALUES(DownloadTimes)
+    </insert>
+    <insert id="insertInstallData" parameterClass="map">
+        INSERT INTO
+        $table$(StatDate,AdId,ProjectId,ChannelId,PluginId,Type,Country,CountryLevel,InstallCount,InstallTimes)
+        VALUES
+        <iterate conjunction="," property="list">
+            <![CDATA[
+				(#list[].statDate#,#list[].adId#,#list[].projectId#,#list[].channelId#,#list[].pluginId#,#list[].type#,#list[].country#,#list[].countryLevel#,#list[].installCount#,#list[].installTimes#)
+			]]>
+        </iterate>
+        ON DUPLICATE KEY UPDATE InstallCount=VALUES(InstallCount),InstallTimes=VALUES(InstallTimes)
+    </insert>
+    <insert id="insertActiveData" parameterClass="map">
+        INSERT INTO
+        $table$(StatDate,AdId,ProjectId,ChannelId,PluginId,Type,Country,CountryLevel,ActivateCount,ActivateTimes)
+        VALUES
+        <iterate conjunction="," property="list">
+            <![CDATA[
+				(#list[].statDate#,#list[].adId#,#list[].projectId#,#list[].channelId#,#list[].pluginId#,#list[].type#,#list[].country#,#list[].countryLevel#,#list[].activateCount#,#list[].activateTimes#)
+			]]>
+        </iterate>
+        ON DUPLICATE KEY UPDATE ActivateCount=VALUES(ActivateCount),ActivateTimes=VALUES(ActivateTimes)
+    </insert>
+    <insert id="insertPushShowData" parameterClass="map">
+        INSERT INTO
+        $table$(StatDate,AdId,ProjectId,ChannelId,PluginId,Type,Country,CountryLevel,PushShowCount,PushShowTimes)
+        VALUES
+        <iterate conjunction="," property="list">
+            <![CDATA[
+				(#list[].statDate#,#list[].adId#,#list[].projectId#,#list[].channelId#,#list[].pluginId#,#list[].type#,#list[].country#,#list[].countryLevel#,#list[].showCount#,#list[].showTimes#)
+			]]>
+        </iterate>
+        ON DUPLICATE KEY UPDATE PushShowCount=VALUES(PushShowCount),PushShowTimes=VALUES(PushShowTimes)
+    </insert>
+    <insert id="insertPushClickData" parameterClass="map">
+        INSERT INTO
+        $table$(StatDate,AdId,ProjectId,ChannelId,PluginId,Type,Country,CountryLevel,PushClickCount,PushClickTimes)
+        VALUES
+        <iterate conjunction="," property="list">
+            <![CDATA[
+				(#list[].statDate#,#list[].adId#,#list[].projectId#,#list[].channelId#,#list[].pluginId#,#list[].type#,#list[].country#,#list[].countryLevel#,#list[].clickCount#,#list[].clickTimes#)
+			]]>
+        </iterate>
+        ON DUPLICATE KEY UPDATE PushClickCount=VALUES(PushClickCount),PushClickTimes=VALUES(PushClickTimes)
+    </insert>
+    <insert id="insertPushDownloadData" parameterClass="map">
+        INSERT INTO
+        $table$(StatDate,AdId,ProjectId,ChannelId,PluginId,Type,Country,CountryLevel,PushDownloadCount,PushDownloadTimes)
+        VALUES
+        <iterate conjunction="," property="list">
+            <![CDATA[
+				(#list[].statDate#,#list[].adId#,#list[].projectId#,#list[].channelId#,#list[].pluginId#,#list[].type#,#list[].country#,#list[].countryLevel#,#list[].downloadCount#,#list[].downloadTimes#)
+			]]>
+        </iterate>
+        ON DUPLICATE KEY UPDATE PushDownloadCount=VALUES(PushDownloadCount),PushDownloadTimes=VALUES(PushDownloadTimes)
+    </insert>
+    <insert id="insertPushInstallData" parameterClass="map">
+        INSERT INTO
+        $table$(StatDate,AdId,ProjectId,ChannelId,PluginId,Type,Country,CountryLevel,PushInstallCount,PushInstallTimes)
+        VALUES
+        <iterate conjunction="," property="list">
+            <![CDATA[
+				(#list[].statDate#,#list[].adId#,#list[].projectId#,#list[].channelId#,#list[].pluginId#,#list[].type#,#list[].country#,#list[].countryLevel#,#list[].installCount#,#list[].installTimes#)
+			]]>
+        </iterate>
+        ON DUPLICATE KEY UPDATE PushInstallCount=VALUES(PushInstallCount),PushInstallTimes=VALUES(PushInstallTimes)
+    </insert>
+
+    <insert id="insertSilenceShowData" parameterClass="map">
+        INSERT INTO
+        $table$(StatDate,AdId,ProjectId,ChannelId,PluginId,Type,Country,CountryLevel,SilenceShowCount,SilenceShowTimes)
+        VALUES
+        <iterate conjunction="," property="list">
+            <![CDATA[
+				(#list[].statDate#,#list[].adId#,#list[].projectId#,#list[].channelId#,#list[].pluginId#,#list[].type#,#list[].country#,#list[].countryLevel#,#list[].showCount#,#list[].showTimes#)
+			]]>
+        </iterate>
+        ON DUPLICATE KEY UPDATE SilenceShowCount=VALUES(SilenceShowCount),SilenceShowTimes=VALUES(SilenceShowTimes)
+    </insert>
+    <insert id="insertSilenceClickData" parameterClass="map">
+        INSERT INTO
+        $table$(StatDate,AdId,ProjectId,ChannelId,PluginId,Type,Country,CountryLevel,SilenceClickCount,SilenceClickTimes)
+        VALUES
+        <iterate conjunction="," property="list">
+            <![CDATA[
+				(#list[].statDate#,#list[].adId#,#list[].projectId#,#list[].channelId#,#list[].pluginId#,#list[].type#,#list[].country#,#list[].countryLevel#,#list[].clickCount#,#list[].clickTimes#)
+			]]>
+        </iterate>
+        ON DUPLICATE KEY UPDATE SilenceClickCount=VALUES(SilenceClickCount),SilenceClickTimes=VALUES(SilenceClickTimes)
+    </insert>
+    <insert id="insertSilenceDownloadData" parameterClass="map">
+        INSERT INTO
+        $table$(StatDate,AdId,ProjectId,ChannelId,PluginId,Type,Country,CountryLevel,SilenceDownloadCount,SilenceDownloadTimes)
+        VALUES
+        <iterate conjunction="," property="list">
+            <![CDATA[
+				(#list[].statDate#,#list[].adId#,#list[].projectId#,#list[].channelId#,#list[].pluginId#,#list[].type#,#list[].country#,#list[].countryLevel#,#list[].downloadCount#,#list[].downloadTimes#)
+			]]>
+        </iterate>
+        ON DUPLICATE KEY UPDATE
+        SilenceDownloadCount=VALUES(SilenceDownloadCount),SilenceDownloadTimes=VALUES(SilenceDownloadTimes)
+    </insert>
+    <insert id="insertSilenceInstallData" parameterClass="map">
+        INSERT INTO
+        $table$(StatDate,AdId,ProjectId,ChannelId,PluginId,Type,Country,CountryLevel,SilenceInstallCount,SilenceInstallTimes)
+        VALUES
+        <iterate conjunction="," property="list">
+            <![CDATA[
+				(#list[].statDate#,#list[].adId#,#list[].projectId#,#list[].channelId#,#list[].pluginId#,#list[].type#,#list[].country#,#list[].countryLevel#,#list[].installCount#,#list[].installTimes#)
+			]]>
+        </iterate>
+        ON DUPLICATE KEY UPDATE
+        SilenceInstallCount=VALUES(SilenceInstallCount),SilenceInstallTimes=VALUES(SilenceInstallTimes)
+    </insert>
+    <insert id="insertSinkShowData" parameterClass="map">
+        INSERT INTO
+        $table$(StatDate,AdId,ProjectId,ChannelId,PluginId,Type,Country,CountryLevel,SinkShowCount,SinkShowTimes)
+        VALUES
+        <iterate conjunction="," property="list">
+            <![CDATA[
+				(#list[].statDate#,#list[].adId#,#list[].projectId#,#list[].channelId#,#list[].pluginId#,#list[].type#,#list[].country#,#list[].countryLevel#,#list[].showCount#,#list[].showTimes#)
+			]]>
+        </iterate>
+        ON DUPLICATE KEY UPDATE SinkShowCount=VALUES(SinkShowCount),SinkShowTimes=VALUES(SinkShowTimes)
+    </insert>
+    <insert id="insertSinkClickData" parameterClass="map">
+        INSERT INTO
+        $table$(StatDate,AdId,ProjectId,ChannelId,PluginId,Type,Country,CountryLevel,SinkClickCount,SinkClickTimes)
+        VALUES
+        <iterate conjunction="," property="list">
+            <![CDATA[
+				(#list[].statDate#,#list[].adId#,#list[].projectId#,#list[].channelId#,#list[].pluginId#,#list[].type#,#list[].country#,#list[].countryLevel#,#list[].clickCount#,#list[].clickTimes#)
+			]]>
+        </iterate>
+        ON DUPLICATE KEY UPDATE SinkClickCount=VALUES(SinkClickCount),SinkClickTimes=VALUES(SinkClickTimes)
+    </insert>
+    <insert id="insertSinkDownloadData" parameterClass="map">
+        INSERT INTO
+        $table$(StatDate,AdId,ProjectId,ChannelId,PluginId,Type,Country,CountryLevel,SinkDownloadCount,SinkDownloadTimes)
+        VALUES
+        <iterate conjunction="," property="list">
+            <![CDATA[
+				(#list[].statDate#,#list[].adId#,#list[].projectId#,#list[].channelId#,#list[].pluginId#,#list[].type#,#list[].country#,#list[].countryLevel#,#list[].downloadCount#,#list[].downloadTimes#)
+			]]>
+        </iterate>
+        ON DUPLICATE KEY UPDATE SinkDownloadCount=VALUES(SinkDownloadCount),SinkDownloadTimes=VALUES(SinkDownloadTimes)
+    </insert>
+    <insert id="insertSinkInstallData" parameterClass="map">
+        INSERT INTO
+        $table$(StatDate,AdId,ProjectId,ChannelId,PluginId,Type,Country,CountryLevel,SinkInstallCount,SinkInstallTimes)
+        VALUES
+        <iterate conjunction="," property="list">
+            <![CDATA[
+				(#list[].statDate#,#list[].adId#,#list[].projectId#,#list[].channelId#,#list[].pluginId#,#list[].type#,#list[].country#,#list[].countryLevel#,#list[].installCount#,#list[].installTimes#)
+			]]>
+        </iterate>
+        ON DUPLICATE KEY UPDATE SinkInstallCount=VALUES(SinkInstallCount),SinkInstallTimes=VALUES(SinkInstallTimes)
+    </insert>
+
+    <insert id="insertLeadShowData" parameterClass="map">
+        INSERT INTO
+        $table$(StatDate,AdId,ProjectId,ChannelId,PluginId,Type,Country,CountryLevel,LeadShowCount,LeadShowTimes)
+        VALUES
+        <iterate conjunction="," property="list">
+            <![CDATA[
+				(#list[].statDate#,#list[].adId#,#list[].projectId#,#list[].channelId#,#list[].pluginId#,#list[].type#,#list[].country#,#list[].countryLevel#,#list[].showCount#,#list[].showTimes#)
+			]]>
+        </iterate>
+        ON DUPLICATE KEY UPDATE LeadShowCount=VALUES(LeadShowCount),LeadShowTimes=VALUES(LeadShowTimes)
+    </insert>
+    <insert id="insertLeadClickData" parameterClass="map">
+        INSERT INTO
+        $table$(StatDate,AdId,ProjectId,ChannelId,PluginId,Type,Country,CountryLevel,LeadClickCount,LeadClickTimes)
+        VALUES
+        <iterate conjunction="," property="list">
+            <![CDATA[
+				(#list[].statDate#,#list[].adId#,#list[].projectId#,#list[].channelId#,#list[].pluginId#,#list[].type#,#list[].country#,#list[].countryLevel#,#list[].clickCount#,#list[].clickTimes#)
+			]]>
+        </iterate>
+        ON DUPLICATE KEY UPDATE LeadClickCount=VALUES(LeadClickCount),LeadClickTimes=VALUES(LeadClickTimes)
+    </insert>
+    <insert id="insertLeadDownloadData" parameterClass="map">
+        INSERT INTO
+        $table$(StatDate,AdId,ProjectId,ChannelId,PluginId,Type,Country,CountryLevel,LeadDownloadCount,LeadDownloadTimes)
+        VALUES
+        <iterate conjunction="," property="list">
+            <![CDATA[
+				(#list[].statDate#,#list[].adId#,#list[].projectId#,#list[].channelId#,#list[].pluginId#,#list[].type#,#list[].country#,#list[].countryLevel#,#list[].downloadCount#,#list[].downloadTimes#)
+			]]>
+        </iterate>
+        ON DUPLICATE KEY UPDATE LeadDownloadCount=VALUES(LeadDownloadCount),LeadDownloadTimes=VALUES(LeadDownloadTimes)
+    </insert>
+    <insert id="insertLeadInstallData" parameterClass="map">
+        INSERT INTO
+        $table$(StatDate,AdId,ProjectId,ChannelId,PluginId,Type,Country,CountryLevel,LeadInstallCount,LeadInstallTimes)
+        VALUES
+        <iterate conjunction="," property="list">
+            <![CDATA[
+				(#list[].statDate#,#list[].adId#,#list[].projectId#,#list[].channelId#,#list[].pluginId#,#list[].type#,#list[].country#,#list[].countryLevel#,#list[].installCount#,#list[].installTimes#)
+			]]>
+        </iterate>
+        ON DUPLICATE KEY UPDATE LeadInstallCount=VALUES(LeadInstallCount),LeadInstallTimes=VALUES(LeadInstallTimes)
+    </insert>
+    <insert id="insertFirstUserData" parameterClass="map">
+        INSERT INTO $table$(StatDate,ProjectId,ChannelId,PluginId,Type,Country,CountryLevel,FirstCount)
+        VALUES
+        <iterate conjunction="," property="list">
+            <![CDATA[
+				(#list[].statDate#,#list[].projectId#,#list[].channelId#,#list[].pluginId#,#list[].type#,#list[].country#,#list[].countryLevel#,#list[].activeCount#)
+			]]>
+        </iterate>
+        ON DUPLICATE KEY UPDATE FirstCount=VALUES(FirstCount)
+    </insert>
+    <insert id="insertSecondUserData" parameterClass="map">
+        INSERT INTO $table$(StatDate,ProjectId,ChannelId,PluginId,Type,Country,CountryLevel,SecondCount)
+        VALUES
+        <iterate conjunction="," property="list">
+            <![CDATA[
+				(#list[].statDate#,#list[].projectId#,#list[].channelId#,#list[].pluginId#,#list[].type#,#list[].country#,#list[].countryLevel#,#list[].activeCount#)
+			]]>
+        </iterate>
+        ON DUPLICATE KEY UPDATE SecondCount=VALUES(SecondCount)
+    </insert>
+    <insert id="insertThirdUserData" parameterClass="map">
+        INSERT INTO $table$(StatDate,ProjectId,ChannelId,PluginId,Type,Country,CountryLevel,ThirdCount)
+        VALUES
+        <iterate conjunction="," property="list">
+            <![CDATA[
+				(#list[].statDate#,#list[].projectId#,#list[].channelId#,#list[].pluginId#,#list[].type#,#list[].country#,#list[].countryLevel#,#list[].activeCount#)
+			]]>
+        </iterate>
+        ON DUPLICATE KEY UPDATE ThirdCount=VALUES(ThirdCount)
+    </insert>
+    <insert id="insertFourthUserData" parameterClass="map">
+        INSERT INTO $table$(StatDate,ProjectId,ChannelId,PluginId,Type,Country,CountryLevel,FourthCount)
+        VALUES
+        <iterate conjunction="," property="list">
+            <![CDATA[
+				(#list[].statDate#,#list[].projectId#,#list[].channelId#,#list[].pluginId#,#list[].type#,#list[].country#,#list[].countryLevel#,#list[].activeCount#)
+			]]>
+        </iterate>
+        ON DUPLICATE KEY UPDATE FourthCount=VALUES(FourthCount)
+    </insert>
+    <insert id="insertFifthUserData" parameterClass="map">
+        INSERT INTO $table$(StatDate,ProjectId,ChannelId,PluginId,Type,Country,CountryLevel,FifthCount)
+        VALUES
+        <iterate conjunction="," property="list">
+            <![CDATA[
+				(#list[].statDate#,#list[].projectId#,#list[].channelId#,#list[].pluginId#,#list[].type#,#list[].country#,#list[].countryLevel#,#list[].activeCount#)
+			]]>
+        </iterate>
+        ON DUPLICATE KEY UPDATE FifthCount=VALUES(FifthCount)
+    </insert>
+    <insert id="insertSixthUserData" parameterClass="map">
+        INSERT INTO $table$(StatDate,ProjectId,ChannelId,PluginId,Type,Country,CountryLevel,SixthCount)
+        VALUES
+        <iterate conjunction="," property="list">
+            <![CDATA[
+				(#list[].statDate#,#list[].projectId#,#list[].channelId#,#list[].pluginId#,#list[].type#,#list[].country#,#list[].countryLevel#,#list[].activeCount#)
+			]]>
+        </iterate>
+        ON DUPLICATE KEY UPDATE SixthCount=VALUES(SixthCount)
+    </insert>
+    <insert id="insertSeventhUserData" parameterClass="map">
+        INSERT INTO $table$(StatDate,ProjectId,ChannelId,PluginId,Type,Country,CountryLevel,SeventhCount)
+        VALUES
+        <iterate conjunction="," property="list">
+            <![CDATA[
+				(#list[].statDate#,#list[].projectId#,#list[].channelId#,#list[].pluginId#,#list[].type#,#list[].country#,#list[].countryLevel#,#list[].activeCount#)
+			]]>
+        </iterate>
+        ON DUPLICATE KEY UPDATE SeventhCount=VALUES(SeventhCount)
+    </insert>
+    <insert id="insertFiftyUserData" parameterClass="map">
+        INSERT INTO $table$(StatDate,ProjectId,ChannelId,PluginId,Type,Country,CountryLevel,FiftyCount)
+        VALUES
+        <iterate conjunction="," property="list">
+            <![CDATA[
+				(#list[].statDate#,#list[].projectId#,#list[].channelId#,#list[].pluginId#,#list[].type#,#list[].country#,#list[].countryLevel#,#list[].activeCount#)
+			]]>
+        </iterate>
+        ON DUPLICATE KEY UPDATE FiftyCount=VALUES(FiftyCount)
+    </insert>
+    <insert id="insertThirtyUserData" parameterClass="map">
+        INSERT INTO $table$(StatDate,ProjectId,ChannelId,PluginId,Type,Country,CountryLevel,ThirtyCount)
+        VALUES
+        <iterate conjunction="," property="list">
+            <![CDATA[
+				(#list[].statDate#,#list[].projectId#,#list[].channelId#,#list[].pluginId#,#list[].type#,#list[].country#,#list[].countryLevel#,#list[].activeCount#)
+			]]>
+        </iterate>
+        ON DUPLICATE KEY UPDATE ThirtyCount=VALUES(ThirtyCount)
+    </insert>
+
+    <delete id="deleteAdSendData" parameterClass="map">
+		delete from $table$ where StatDate=#statDate#
+	</delete>
+    <delete id="deleteTempAdSendData" parameterClass="map">
+		delete from AD_DATA_TEMP where StatDate=#statDate#
+	</delete>
+    <delete id="deleteTempAdSubData" parameterClass="map">
+        delete from $table$ where statDate=#statDate#
+    </delete>
+    <delete id="deleteTempAdOfferSdkData" parameterClass="map">
+        delete from $table$ where statDate=#statDate#
+    </delete>
+    <insert id="insertAdSendData" parameterClass="map">
+        INSERT INTO $table$(StatDate,AdId,ProjectId,ChannelId,PluginId,Type,Country,CountryLevel,SendCount,SendTimes)
+        VALUES
+        <iterate conjunction="," property="list">
+            <![CDATA[
+				(#list[].statDate#,#list[].adId#,#list[].projectId#,#list[].channelId#,#list[].pluginId#,#list[].type#,#list[].country#,#list[].countryLevel#,#list[].sendCount#,#list[].sendTimes#)
+			]]>
+        </iterate>
+        ON DUPLICATE KEY UPDATE SendCount=VALUES(SendCount),SendTimes=VALUES(SendTimes)
+    </insert>
+    <insert id="insertAdReceiveData" parameterClass="map">
+        INSERT INTO
+        $table$(StatDate,AdId,ProjectId,ChannelId,PluginId,Type,Country,CountryLevel,ReceiveCount,ReceiveTimes)
+        VALUES
+        <iterate conjunction="," property="list">
+            <![CDATA[
+				(#list[].statDate#,#list[].adId#,#list[].projectId#,#list[].channelId#,#list[].pluginId#,#list[].type#,#list[].country#,#list[].countryLevel#,#list[].receiveCount#,#list[].receiveTimes#)
+			]]>
+        </iterate>
+        ON DUPLICATE KEY UPDATE ReceiveCount=VALUES(ReceiveCount),ReceiveTimes=VALUES(ReceiveTimes)
+    </insert>
+    <insert id="insertAdPushSendData" parameterClass="map">
+        INSERT INTO
+        $table$(StatDate,AdId,ProjectId,ChannelId,PluginId,Type,Country,CountryLevel,PushSendCount,PushSendTimes)
+        VALUES
+        <iterate conjunction="," property="list">
+            <![CDATA[
+				(#list[].statDate#,#list[].adId#,#list[].projectId#,#list[].channelId#,#list[].pluginId#,#list[].type#,#list[].country#,#list[].countryLevel#,#list[].sendCount#,#list[].sendTimes#)
+			]]>
+        </iterate>
+        ON DUPLICATE KEY UPDATE PushSendCount=VALUES(PushSendCount),PushSendTimes=VALUES(PushSendTimes)
+    </insert>
+    <insert id="insertAdSilenceSendData" parameterClass="map">
+        INSERT INTO
+        $table$(StatDate,AdId,ProjectId,ChannelId,PluginId,Type,Country,CountryLevel,SilenceSendCount,SilenceSendTimes)
+        VALUES
+        <iterate conjunction="," property="list">
+            <![CDATA[
+				(#list[].statDate#,#list[].adId#,#list[].projectId#,#list[].channelId#,#list[].pluginId#,#list[].type#,#list[].country#,#list[].countryLevel#,#list[].sendCount#,#list[].sendTimes#)
+			]]>
+        </iterate>
+        ON DUPLICATE KEY UPDATE SilenceSendCount=VALUES(SilenceSendCount),SilenceSendTimes=VALUES(SilenceSendTimes)
+    </insert>
+    <insert id="insertAdPushReceiveData" parameterClass="map">
+        INSERT INTO
+        $table$(StatDate,AdId,ProjectId,ChannelId,PluginId,Type,Country,CountryLevel,PushReceiveCount,PushReceiveTimes)
+        VALUES
+        <iterate conjunction="," property="list">
+            <![CDATA[
+				(#list[].statDate#,#list[].adId#,#list[].projectId#,#list[].channelId#,#list[].pluginId#,#list[].type#,#list[].country#,#list[].countryLevel#,#list[].receiveCount#,#list[].receiveTimes#)
+			]]>
+        </iterate>
+        ON DUPLICATE KEY UPDATE PushReceiveCount=VALUES(PushReceiveCount),PushReceiveTimes=VALUES(PushReceiveTimes)
+    </insert>
+
+    <insert id="insertAdSilenceReceiveData" parameterClass="map">
+        INSERT INTO
+        $table$(StatDate,AdId,ProjectId,ChannelId,PluginId,Type,Country,CountryLevel,SilenceReceiveCount,SilenceReceiveTimes)
+        VALUES
+        <iterate conjunction="," property="list">
+            <![CDATA[
+				(#list[].statDate#,#list[].adId#,#list[].projectId#,#list[].channelId#,#list[].pluginId#,#list[].type#,#list[].country#,#list[].countryLevel#,#list[].receiveCount#,#list[].receiveTimes#)
+			]]>
+        </iterate>
+        ON DUPLICATE KEY UPDATE
+        SilenceReceiveCount=VALUES(SilenceReceiveCount),SilenceReceiveTimes=VALUES(SilenceReceiveTimes)
+    </insert>
+    <insert id="insertAdSinkSendData" parameterClass="map">
+        INSERT INTO
+        $table$(StatDate,AdId,ProjectId,ChannelId,PluginId,Type,Country,CountryLevel,SinkSendCount,SinkSendTimes)
+        VALUES
+        <iterate conjunction="," property="list">
+            <![CDATA[
+				(#list[].statDate#,#list[].adId#,#list[].projectId#,#list[].channelId#,#list[].pluginId#,#list[].type#,#list[].country#,#list[].countryLevel#,#list[].sendCount#,#list[].sendTimes#)
+			]]>
+        </iterate>
+        ON DUPLICATE KEY UPDATE SinkSendCount=VALUES(SinkSendCount),SinkSendTimes=VALUES(SinkSendTimes)
+    </insert>
+    <insert id="insertAdSinkReceiveData" parameterClass="map">
+        INSERT INTO
+        $table$(StatDate,AdId,ProjectId,ChannelId,PluginId,Type,Country,CountryLevel,SinkReceiveCount,SinkReceiveTimes)
+        VALUES
+        <iterate conjunction="," property="list">
+            <![CDATA[
+				(#list[].statDate#,#list[].adId#,#list[].projectId#,#list[].channelId#,#list[].pluginId#,#list[].type#,#list[].country#,#list[].countryLevel#,#list[].receiveCount#,#list[].receiveTimes#)
+			]]>
+        </iterate>
+        ON DUPLICATE KEY UPDATE SinkReceiveCount=VALUES(SinkReceiveCount),SinkReceiveTimes=VALUES(SinkReceiveTimes)
+    </insert>
+
+    <insert id="insertAdLeadSendData" parameterClass="map">
+        INSERT INTO
+        $table$(StatDate,AdId,ProjectId,ChannelId,PluginId,Type,Country,CountryLevel,LeadSendCount,LeadSendTimes)
+        VALUES
+        <iterate conjunction="," property="list">
+            <![CDATA[
+				(#list[].statDate#,#list[].adId#,#list[].projectId#,#list[].channelId#,#list[].pluginId#,#list[].type#,#list[].country#,#list[].countryLevel#,#list[].sendCount#,#list[].sendTimes#)
+			]]>
+        </iterate>
+        ON DUPLICATE KEY UPDATE LeadSendCount=VALUES(LeadSendCount),LeadSendTimes=VALUES(LeadSendTimes)
+    </insert>
+    <insert id="insertAdLeadReceiveData" parameterClass="map">
+        INSERT INTO
+        $table$(StatDate,AdId,ProjectId,ChannelId,PluginId,Type,Country,CountryLevel,LeadReceiveCount,LeadReceiveTimes)
+        VALUES
+        <iterate conjunction="," property="list">
+            <![CDATA[
+				(#list[].statDate#,#list[].adId#,#list[].projectId#,#list[].channelId#,#list[].pluginId#,#list[].type#,#list[].country#,#list[].countryLevel#,#list[].receiveCount#,#list[].receiveTimes#)
+			]]>
+        </iterate>
+        ON DUPLICATE KEY UPDATE LeadReceiveCount=VALUES(LeadReceiveCount),LeadReceiveTimes=VALUES(LeadReceiveTimes)
+    </insert>
+    <delete id="deleteMonthUserData" parameterClass="map">
+		delete from REGISTER_DATA_MONTH WHERE YearMonth=#yearMonth#
+	</delete>
+    <select id="getMonthUserDataList" parameterClass="map" resultClass="userData">
+		SELECT #yearMonth# yearMonth,
+				ProjectId projectId,
+				Type type,
+				SUM(UserCount) userCount,
+				SUM(InstallTimes) installTimes,
+				SUM(PushInstallTimes) pushInstallTimes,
+				SUM(LeadInstallTimes) leadInstallTimes,
+				SUM(SinkInstallTimes) sinkInstallTimes,
+				SUM(SilenceInstallTimes) silenceInstallTimes,
+				SUM(PushSilenceInstallTimes) pushSilenceInstallTimes
+		FROM $table$
+		GROUP BY ProjectId,Type
+		HAVING (userCount+installTimes+pushInstallTimes+leadInstallTimes+sinkInstallTimes+silenceInstallTimes+pushSilenceInstallTimes)>0
+	</select>
+    <select id="getMonthUserActiveDataList" parameterClass="map" resultClass="userData">
+		SELECT #yearMonth# yearMonth,
+				ProjectId projectId,
+				Type type,
+				SUM(TotalActiveCount) activeCount,
+				SUM(ProjectActiveCount) projectActiveCount
+		FROM $table$
+		WHERE StatDate=#statDate#
+		GROUP BY ProjectId,Type
+		HAVING (activeCount+projectActiveCount)>0
+	</select>
+    <select id="getMonthUserIncomeDataList" parameterClass="map" resultClass="userData">
+		SELECT #yearMonth# yearMonth,
+				ProjectId projectId,
+				SUM(HighUsers) highUsers,
+				SUM(MidUsers) midUsers,
+				SUM(LowUsers) lowUsers,
+				SUM(income) income,
+				SUM(thirdIncome) thirdIncome,
+				SUM(outcome) outcome
+		FROM $table$
+		GROUP BY ProjectId
+		HAVING (highUsers+midUsers+lowUsers+income+thirdIncome+outcome)>0
+	</select>
+    <insert id="insertMonthUserData" parameterClass="map">
+        INSERT INTO
+        REGISTER_DATA_MONTH(YearMonth,ProjectId,UserCount,InstallTimes,PushInstallTimes,LeadInstallTimes,SinkInstallTimes,SilenceInstallTimes,PushSilenceInstallTimes)
+        VALUES
+        <iterate conjunction="," property="list">
+            <![CDATA[
+				(#list[].yearMonth#,#list[].projectId#,#list[].userCount#,#list[].installTimes#,#list[].pushInstallTimes#,#list[].leadInstallTimes#,#list[].sinkInstallTimes#,#list[].silenceInstallTimes#,#list[].pushSilenceInstallTimes#)
+			]]>
+        </iterate>
+        ON DUPLICATE KEY UPDATE UserCount=VALUES(UserCount),InstallTimes=VALUES(InstallTimes),
+        PushInstallTimes=VALUES(PushInstallTimes),LeadInstallTimes=VALUES(LeadInstallTimes),
+        SinkInstallTimes=VALUES(SinkInstallTimes),SilenceInstallTimes=VALUES(SilenceInstallTimes),
+        PushSilenceInstallTimes=VALUES(PushSilenceInstallTimes)
+    </insert>
+    <insert id="insertApkMonthUserData" parameterClass="map">
+        INSERT INTO
+        REGISTER_DATA_MONTH(YearMonth,ProjectId,ApkUserCount,ApkInstallTimes,ApkPushInstallTimes,ApkLeadInstallTimes,ApkSinkInstallTimes,ApkSilenceInstallTimes,ApkPushSilenceInstallTimes)
+        VALUES
+        <iterate conjunction="," property="list">
+            <![CDATA[
+				(#list[].yearMonth#,#list[].projectId#,#list[].userCount#,#list[].installTimes#,#list[].pushInstallTimes#,#list[].leadInstallTimes#,#list[].sinkInstallTimes#,#list[].silenceInstallTimes#,#list[].pushSilenceInstallTimes#)
+			]]>
+        </iterate>
+        ON DUPLICATE KEY UPDATE ApkUserCount=VALUES(ApkUserCount),ApkInstallTimes=VALUES(ApkInstallTimes),
+        ApkPushInstallTimes=VALUES(ApkPushInstallTimes),ApkLeadInstallTimes=VALUES(ApkLeadInstallTimes),
+        ApkSinkInstallTimes=VALUES(ApkSinkInstallTimes),ApkSilenceInstallTimes=VALUES(ApkSilenceInstallTimes),
+        ApkPushSilenceInstallTimes=VALUES(ApkPushSilenceInstallTimes)
+    </insert>
+    <insert id="insertLeadMonthUserData" parameterClass="map">
+        INSERT INTO
+        REGISTER_DATA_MONTH(YearMonth,ProjectId,LeadUserCount,LeadTypeInstallTimes,LeadPushInstallTimes,LeadLeadInstallTimes,LeadSinkInstallTimes,LeadSilenceInstallTimes,LeadPushSilenceInstallTimes)
+        VALUES
+        <iterate conjunction="," property="list">
+            <![CDATA[
+				(#list[].yearMonth#,#list[].projectId#,#list[].userCount#,#list[].installTimes#,#list[].pushInstallTimes#,#list[].leadInstallTimes#,#list[].sinkInstallTimes#,#list[].silenceInstallTimes#,#list[].pushSilenceInstallTimes#)
+			]]>
+        </iterate>
+        ON DUPLICATE KEY UPDATE LeadUserCount=VALUES(LeadUserCount),LeadTypeInstallTimes=VALUES(LeadTypeInstallTimes),
+        LeadPushInstallTimes=VALUES(LeadPushInstallTimes),LeadLeadInstallTimes=VALUES(LeadLeadInstallTimes),
+        LeadSinkInstallTimes=VALUES(LeadSinkInstallTimes),LeadSilenceInstallTimes=VALUES(LeadSilenceInstallTimes),
+        LeadPushSilenceInstallTimes=VALUES(LeadPushSilenceInstallTimes)
+    </insert>
+    <insert id="insertSilenceMonthUserData" parameterClass="map">
+        INSERT INTO
+        REGISTER_DATA_MONTH(YearMonth,ProjectId,SilenceUserCount,SilenceTypeInstallTimes,SilencePushInstallTimes,SilenceLeadInstallTimes,SilenceSinkInstallTimes,SilenceSilenceInstallTimes,SilencePushSilenceInstallTimes)
+        VALUES
+        <iterate conjunction="," property="list">
+            <![CDATA[
+				(#list[].yearMonth#,#list[].projectId#,#list[].userCount#,#list[].installTimes#,#list[].pushInstallTimes#,#list[].leadInstallTimes#,#list[].sinkInstallTimes#,#list[].silenceInstallTimes#,#list[].pushSilenceInstallTimes#)
+			]]>
+        </iterate>
+        ON DUPLICATE KEY UPDATE
+        SilenceUserCount=VALUES(SilenceUserCount),SilenceTypeInstallTimes=VALUES(SilenceTypeInstallTimes),
+        SilencePushInstallTimes=VALUES(SilencePushInstallTimes),SilenceLeadInstallTimes=VALUES(SilenceLeadInstallTimes),
+        SilenceSinkInstallTimes=VALUES(SilenceSinkInstallTimes),SilenceSilenceInstallTimes=VALUES(SilenceSilenceInstallTimes),
+        SilencePushSilenceInstallTimes=VALUES(SilencePushSilenceInstallTimes)
+    </insert>
+    <insert id="insertMonthUserActiveData" parameterClass="map">
+        INSERT INTO REGISTER_DATA_MONTH(YearMonth,ProjectId,ActiveCount,ProjectActiveCount)
+        VALUES
+        <iterate conjunction="," property="list">
+            <![CDATA[
+				(#list[].yearMonth#,#list[].projectId#,#list[].activeCount#,#list[].projectActiveCount#)
+			]]>
+        </iterate>
+        ON DUPLICATE KEY UPDATE ActiveCount=VALUES(ActiveCount),ProjectActiveCount=VALUES(ProjectActiveCount)
+    </insert>
+    <insert id="insertApkMonthUserActiveData" parameterClass="map">
+        INSERT INTO REGISTER_DATA_MONTH(YearMonth,ProjectId,ApkActiveCount,ApkProjectActiveCount)
+        VALUES
+        <iterate conjunction="," property="list">
+            <![CDATA[
+				(#list[].yearMonth#,#list[].projectId#,#list[].activeCount#,#list[].projectActiveCount#)
+			]]>
+        </iterate>
+        ON DUPLICATE KEY UPDATE
+        ApkActiveCount=VALUES(ApkActiveCount),ApkProjectActiveCount=VALUES(ApkProjectActiveCount)
+    </insert>
+    <insert id="insertLeadMonthUserActiveData" parameterClass="map">
+        INSERT INTO REGISTER_DATA_MONTH(YearMonth,ProjectId,LeadActiveCount,LeadProjectActiveCount)
+        VALUES
+        <iterate conjunction="," property="list">
+            <![CDATA[
+				(#list[].yearMonth#,#list[].projectId#,#list[].activeCount#,#list[].projectActiveCount#)
+			]]>
+        </iterate>
+        ON DUPLICATE KEY UPDATE
+        LeadActiveCount=VALUES(LeadActiveCount),LeadProjectActiveCount=VALUES(LeadProjectActiveCount)
+    </insert>
+    <insert id="insertSilenceMonthUserActiveData" parameterClass="map">
+        INSERT INTO REGISTER_DATA_MONTH(YearMonth,ProjectId,SilenceActiveCount,SilenceProjectActiveCount)
+        VALUES
+        <iterate conjunction="," property="list">
+            <![CDATA[
+				(#list[].yearMonth#,#list[].projectId#,#list[].activeCount#,#list[].projectActiveCount#)
+			]]>
+        </iterate>
+        ON DUPLICATE KEY UPDATE
+        SilenceActiveCount=VALUES(SilenceActiveCount),SilenceProjectActiveCount=VALUES(SilenceProjectActiveCount)
+    </insert>
+    <insert id="insertMonthUserIncomeData" parameterClass="map">
+        INSERT INTO REGISTER_DATA_MONTH(YearMonth,ProjectId,HighUsers,MidUsers,LowUsers,Income,ThirdIncome,Outcome)
+        VALUES
+        <iterate conjunction="," property="list">
+            <![CDATA[
+				(#list[].yearMonth#,#list[].projectId#,#list[].highUsers#,#list[].midUsers#,#list[].lowUsers#,#list[].income#,#list[].thirdIncome#,#list[].outcome#)
+			]]>
+        </iterate>
+        ON DUPLICATE KEY UPDATE
+        HighUsers=VALUES(HighUsers),MidUsers=VALUES(MidUsers),LowUsers=VALUES(LowUsers),Income=VALUES(Income),ThirdIncome=VALUES(ThirdIncome),Outcome=VALUES(Outcome)
+    </insert>
+
+    <select id="getTotalUserData" resultClass="userData">
+		SELECT ProjectId projectId,
+				SUM(UserCount) userCount
+		FROM REGISTER_DATA_MONTH
+		GROUP BY ProjectId
+		HAVING userCount>0
+	</select>
+    <select id="getDaySendData" parameterClass="map" resultClass="data">
+		SELECT #statDate# statDate,
+			AdId adId,
+			SUM(ReceiveTimes) showTimes,
+			SUM(PushReceiveTimes) pushShowTimes,
+			SUM(SilenceReceiveTimes)silenceInstallTimes
+		FROM $table$
+		WHERE StatDate=#statDate#
+		GROUP BY AdId
+	</select>
+
+    <select id="getLinkPv" parameterClass="map" resultClass="data">
+		SELECT #statDate# statDate,
+		AdId adId,
+		SUM(TotalClickTimes)clickTimes
+		FROM $table$
+		WHERE StatDate=#statDate#
+        GROUP  BY    AdId
+	</select>
+    <select id="getDSPv" parameterClass="map" resultClass="data">
+		SELECT #statDate# statDate,
+		AdId adId,
+		SUM(TotalClickTimes)clickTimes
+		FROM $table$
+		WHERE StatDate=#statDate#
+		GROUP  BY    AdId
+	</select>
+
+    <delete id="deleteProjectData" parameterClass="map">
+		delete from $table$ where StatDate=#statDate#
+	</delete>
+    <insert id="insertProjectShowData" parameterClass="map">
+        INSERT INTO $table$(StatDate,ProjectId,ChannelId,PluginId,Type,Country,CountryLevel,ShowCount,ShowTimes)
+        VALUES
+        <iterate conjunction="," property="list">
+            <![CDATA[
+				(#list[].statDate#,#list[].projectId#,#list[].channelId#,#list[].pluginId#,#list[].type#,#list[].country#,#list[].countryLevel#,#list[].showCount#,#list[].showTimes#)
+			]]>
+        </iterate>
+        ON DUPLICATE KEY UPDATE ShowCount=ShowCount+VALUES(ShowCount),ShowTimes=ShowTimes+VALUES(ShowTimes)
+    </insert>
+
+    <insert id="insertProjectClickData" parameterClass="map">
+        INSERT INTO $table$(StatDate,ProjectId,ChannelId,PluginId,Type,Country,CountryLevel,ClickCount,ClickTimes)
+        VALUES
+        <iterate conjunction="," property="list">
+            <![CDATA[
+				(#list[].statDate#,#list[].projectId#,#list[].channelId#,#list[].pluginId#,#list[].type#,#list[].country#,#list[].countryLevel#,#list[].clickCount#,#list[].clickTimes#)
+			]]>
+        </iterate>
+        ON DUPLICATE KEY UPDATE ClickCount=VALUES(ClickCount),ClickTimes=VALUES(ClickTimes)
+    </insert>
+
+    <insert id="insertProjectDownloadData" parameterClass="map">
+        INSERT INTO $table$(StatDate,ProjectId,ChannelId,PluginId,Type,Country,CountryLevel,DownloadCount,DownloadTimes)
+        VALUES
+        <iterate conjunction="," property="list">
+            <![CDATA[
+				(#list[].statDate#,#list[].projectId#,#list[].channelId#,#list[].pluginId#,#list[].type#,#list[].country#,#list[].countryLevel#,#list[].downloadCount#,#list[].downloadTimes#)
+			]]>
+        </iterate>
+        ON DUPLICATE KEY UPDATE DownloadCount=VALUES(DownloadCount),DownloadTimes=VALUES(DownloadTimes)
+    </insert>
+
+    <insert id="insertProjectInstallData" parameterClass="map">
+        INSERT INTO $table$(StatDate,ProjectId,ChannelId,PluginId,Type,Country,CountryLevel,InstallCount,InstallTimes)
+        VALUES
+        <iterate conjunction="," property="list">
+            <![CDATA[
+				(#list[].statDate#,#list[].projectId#,#list[].channelId#,#list[].pluginId#,#list[].type#,#list[].country#,#list[].countryLevel#,#list[].installCount#,#list[].installTimes#)
+			]]>
+        </iterate>
+        ON DUPLICATE KEY UPDATE InstallCount=VALUES(InstallCount),InstallTimes=VALUES(InstallTimes)
+    </insert>
+
+    <insert id="insertProjectActiveData" parameterClass="map">
+        INSERT INTO $table$(StatDate,ProjectId,ChannelId,PluginId,Type,Country,CountryLevel,ActivateCount,ActivateTimes)
+        VALUES
+        <iterate conjunction="," property="list">
+            <![CDATA[
+				(#list[].statDate#,#list[].projectId#,#list[].channelId#,#list[].pluginId#,#list[].type#,#list[].country#,#list[].countryLevel#,#list[].activateCount#,#list[].activateTimes#)
+			]]>
+        </iterate>
+        ON DUPLICATE KEY UPDATE ActivateCount=VALUES(ActivateCount),ActivateTimes=VALUES(ActivateTimes)
+    </insert>
+
+    <insert id="insertProjectSendData" parameterClass="map">
+        INSERT INTO $table$(StatDate,ProjectId,ChannelId,PluginId,Type,Country,CountryLevel,SendCount,SendTimes)
+        VALUES
+        <iterate conjunction="," property="list">
+            <![CDATA[
+				(#list[].statDate#,#list[].projectId#,#list[].channelId#,#list[].pluginId#,#list[].type#,#list[].country#,#list[].countryLevel#,#list[].sendCount#,#list[].sendTimes#)
+			]]>
+        </iterate>
+        ON DUPLICATE KEY UPDATE SendCount=VALUES(SendCount),SendTimes=VALUES(SendTimes)
+    </insert>
+
+    <insert id="insertProjectReceiveData" parameterClass="map">
+        INSERT INTO $table$(StatDate,ProjectId,ChannelId,PluginId,Type,Country,CountryLevel,ReceiveCount,ReceiveTimes)
+        VALUES
+        <iterate conjunction="," property="list">
+            <![CDATA[
+				(#list[].statDate#,#list[].projectId#,#list[].channelId#,#list[].pluginId#,#list[].type#,#list[].country#,#list[].countryLevel#,#list[].receiveCount#,#list[].receiveTimes#)
+			]]>
+        </iterate>
+        ON DUPLICATE KEY UPDATE ReceiveCount=VALUES(ReceiveCount),ReceiveTimes=VALUES(ReceiveTimes)
+    </insert>
+    <insert id="insertVersionProjectShowData" parameterClass="map">
+        INSERT INTO $table$(StatDate,Type,Version,ShowCount,ShowTimes)
+        VALUES
+        <iterate conjunction="," property="list">
+            <![CDATA[
+				(#list[].statDate#,#list[].type#,#list[].version#,#list[].showCount#,#list[].showTimes#)
+			]]>
+        </iterate>
+        ON DUPLICATE KEY UPDATE ShowCount=VALUES(ShowCount),ShowTimes=VALUES(ShowTimes)
+    </insert>
+
+    <insert id="insertVersionProjectClickData" parameterClass="map">
+        INSERT INTO $table$(StatDate,Type,Version,ClickCount,ClickTimes)
+        VALUES
+        <iterate conjunction="," property="list">
+            <![CDATA[
+				(#list[].statDate#,#list[].type#,#list[].version#,#list[].clickCount#,#list[].clickTimes#)
+			]]>
+        </iterate>
+        ON DUPLICATE KEY UPDATE ClickCount=VALUES(ClickCount),ClickTimes=VALUES(ClickTimes)
+    </insert>
+    <insert id="insertVersionProjectDownloadData" parameterClass="map">
+        INSERT INTO $table$(StatDate,Type,Version,DownloadCount,DownloadTimes)
+        VALUES
+        <iterate conjunction="," property="list">
+            <![CDATA[
+				(#list[].statDate#,#list[].type#,#list[].version#,#list[].downloadCount#,#list[].downloadTimes#)
+			]]>
+        </iterate>
+        ON DUPLICATE KEY UPDATE DownloadCount=VALUES(DownloadCount),DownloadTimes=VALUES(DownloadTimes)
+    </insert>
+    <insert id="insertVersionProjectInstallData" parameterClass="map">
+        INSERT INTO $table$(StatDate,Type,Version,InstallCount,InstallTimes)
+        VALUES
+        <iterate conjunction="," property="list">
+            <![CDATA[
+				(#list[].statDate#,#list[].type#,#list[].version#,#list[].installCount#,#list[].installTimes#)
+			]]>
+        </iterate>
+        ON DUPLICATE KEY UPDATE InstallCount=VALUES(InstallCount),InstallTimes=VALUES(InstallTimes)
+    </insert>
+    <insert id="insertVersionProjectActiveData" parameterClass="map">
+        INSERT INTO $table$(StatDate,Type,Version,ActivateCount,ActivateTimes)
+        VALUES
+        <iterate conjunction="," property="list">
+            <![CDATA[
+				(#list[].statDate#,#list[].type#,#list[].version#,#list[].activateCount#,#list[].activateTimes#)
+			]]>
+        </iterate>
+        ON DUPLICATE KEY UPDATE ActivateCount=VALUES(ActivateCount),ActivateTimes=VALUES(ActivateTimes)
+    </insert>
+    <insert id="insertVersionProjectSendData" parameterClass="map">
+        INSERT INTO $table$(StatDate,Type,Version,SendCount,SendTimes)
+        VALUES
+        <iterate conjunction="," property="list">
+            <![CDATA[
+				(#list[].statDate#,#list[].type#,#list[].version#,#list[].sendCount#,#list[].sendTimes#)
+			]]>
+        </iterate>
+        ON DUPLICATE KEY UPDATE SendCount=VALUES(SendCount),SendTimes=VALUES(SendTimes)
+    </insert>
+    <insert id="insertVersionProjectReceiveData" parameterClass="map">
+        INSERT INTO $table$(StatDate,Type,Version,ReceiveCount,ReceiveTimes)
+        VALUES
+        <iterate conjunction="," property="list">
+            <![CDATA[
+				(#list[].statDate#,#list[].type#,#list[].version#,#list[].receiveCount#,#list[].receiveTimes#)
+			]]>
+        </iterate>
+        ON DUPLICATE KEY UPDATE ReceiveCount=VALUES(ReceiveCount),ReceiveTimes=VALUES(ReceiveTimes)
+    </insert>
+
+    <insert id="insertProjectPushClickData" parameterClass="map">
+        INSERT INTO
+        $table$(StatDate,ProjectId,ChannelId,PluginId,Type,Country,CountryLevel,PushClickCount,PushClickTimes)
+        VALUES
+        <iterate conjunction="," property="list">
+            <![CDATA[
+				(#list[].statDate#,#list[].projectId#,#list[].channelId#,#list[].pluginId#,#list[].type#,#list[].country#,#list[].countryLevel#,#list[].clickCount#,#list[].clickTimes#)
+			]]>
+        </iterate>
+        ON DUPLICATE KEY UPDATE PushClickCount=VALUES(PushClickCount),PushClickTimes=VALUES(PushClickTimes)
+    </insert>
+
+    <insert id="insertProjectPushDownloadData" parameterClass="map">
+        INSERT INTO
+        $table$(StatDate,ProjectId,ChannelId,PluginId,Type,Country,CountryLevel,PushDownloadCount,PushDownloadTimes)
+        VALUES
+        <iterate conjunction="," property="list">
+            <![CDATA[
+				(#list[].statDate#,#list[].projectId#,#list[].channelId#,#list[].pluginId#,#list[].type#,#list[].country#,#list[].countryLevel#,#list[].downloadCount#,#list[].downloadTimes#)
+			]]>
+        </iterate>
+        ON DUPLICATE KEY UPDATE PushDownloadCount=VALUES(PushDownloadCount),PushDownloadTimes=VALUES(PushDownloadTimes)
+    </insert>
+    <insert id="insertProjectPushInstallData" parameterClass="map">
+        INSERT INTO
+        $table$(StatDate,ProjectId,ChannelId,PluginId,Type,Country,CountryLevel,PushInstallCount,PushInstallTimes)
+        VALUES
+        <iterate conjunction="," property="list">
+            <![CDATA[
+				(#list[].statDate#,#list[].projectId#,#list[].channelId#,#list[].pluginId#,#list[].type#,#list[].country#,#list[].countryLevel#,#list[].installCount#,#list[].installTimes#)
+			]]>
+        </iterate>
+        ON DUPLICATE KEY UPDATE PushInstallCount=VALUES(PushInstallCount),PushInstallTimes=VALUES(PushInstallTimes)
+    </insert>
+    <insert id="insertProjectPushSendData" parameterClass="map">
+        INSERT INTO $table$(StatDate,ProjectId,ChannelId,PluginId,Type,Country,CountryLevel,PushSendCount,PushSendTimes)
+        VALUES
+        <iterate conjunction="," property="list">
+            <![CDATA[
+				(#list[].statDate#,#list[].projectId#,#list[].channelId#,#list[].pluginId#,#list[].type#,#list[].country#,#list[].countryLevel#,#list[].sendCount#,#list[].sendTimes#)
+			]]>
+        </iterate>
+        ON DUPLICATE KEY UPDATE PushSendCount=VALUES(PushSendCount),PushSendTimes=VALUES(PushSendTimes)
+    </insert>
+    <insert id="insertProjectPushReceiveData" parameterClass="map">
+        INSERT INTO
+        $table$(StatDate,ProjectId,ChannelId,PluginId,Type,Country,CountryLevel,PushReceiveCount,PushReceiveTimes)
+        VALUES
+        <iterate conjunction="," property="list">
+            <![CDATA[
+				(#list[].statDate#,#list[].projectId#,#list[].channelId#,#list[].pluginId#,#list[].type#,#list[].country#,#list[].countryLevel#,#list[].receiveCount#,#list[].receiveTimes#)
+			]]>
+        </iterate>
+        ON DUPLICATE KEY UPDATE PushReceiveCount=VALUES(PushReceiveCount),PushReceiveTimes=VALUES(PushReceiveTimes)
+    </insert>
+
+    <insert id="insertProjectPushShowData" parameterClass="map">
+        INSERT INTO $table$(StatDate,ProjectId,ChannelId,PluginId,Type,Country,CountryLevel,PushShowCount,PushShowTimes)
+        VALUES
+        <iterate conjunction="," property="list">
+            <![CDATA[
+				(#list[].statDate#,#list[].projectId#,#list[].channelId#,#list[].pluginId#,#list[].type#,#list[].country#,#list[].countryLevel#,#list[].showCount#,#list[].showTimes#)
+			]]>
+        </iterate>
+        ON DUPLICATE KEY UPDATE PushShowCount=VALUES(PushShowCount),PushShowTimes=VALUES(PushShowTimes)
+    </insert>
+    <insert id="insertVersionProjectPushShowData" parameterClass="map">
+        INSERT INTO $table$(StatDate,Type,Version,PushShowCount,PushShowTimes)
+        VALUES
+        <iterate conjunction="," property="list">
+            <![CDATA[
+				(#list[].statDate#,#list[].type#,#list[].version#,#list[].showCount#,#list[].showTimes#)
+			]]>
+        </iterate>
+        ON DUPLICATE KEY UPDATE PushShowCount=VALUES(PushShowCount),PushShowTimes=VALUES(PushShowTimes)
+    </insert>
+    <insert id="insertVersionProjectPushClickData" parameterClass="map">
+        INSERT INTO $table$(StatDate,Type,Version,PushClickCount,PushClickTimes)
+        VALUES
+        <iterate conjunction="," property="list">
+            <![CDATA[
+				(#list[].statDate#,#list[].type#,#list[].version#,#list[].clickCount#,#list[].clickTimes#)
+			]]>
+        </iterate>
+        ON DUPLICATE KEY UPDATE PushClickCount=VALUES(PushClickCount),PushClickTimes=VALUES(PushClickTimes)
+    </insert>
+
+    <insert id="insertVersionProjectPushDownloadData" parameterClass="map">
+        INSERT INTO $table$(StatDate,Type,Version,PushDownloadCount,PushDownloadTimes)
+        VALUES
+        <iterate conjunction="," property="list">
+            <![CDATA[
+				(#list[].statDate#,#list[].type#,#list[].version#,#list[].downloadCount#,#list[].downloadTimes#)
+			]]>
+        </iterate>
+        ON DUPLICATE KEY UPDATE PushDownloadCount=VALUES(PushDownloadCount),PushDownloadTimes=VALUES(PushDownloadTimes)
+    </insert>
+
+    <insert id="insertVersionProjectPushInstallData" parameterClass="map">
+        INSERT INTO $table$(StatDate,Type,Version,PushInstallCount,PushInstallTimes)
+        VALUES
+        <iterate conjunction="," property="list">
+            <![CDATA[
+				(#list[].statDate#,#list[].type#,#list[].version#,#list[].installCount#,#list[].installTimes#)
+			]]>
+        </iterate>
+        ON DUPLICATE KEY UPDATE PushInstallCount=VALUES(PushInstallCount),PushInstallTimes=VALUES(PushInstallTimes)
+    </insert>
+
+    <insert id="insertVersionProjectPushReceiveData" parameterClass="map">
+        INSERT INTO $table$(StatDate,Type,Version,PushReceiveCount,PushReceiveTimes)
+        VALUES
+        <iterate conjunction="," property="list">
+            <![CDATA[
+				(#list[].statDate#,#list[].type#,#list[].version#,#list[].receiveCount#,#list[].receiveTimes#)
+			]]>
+        </iterate>
+        ON DUPLICATE KEY UPDATE PushReceiveCount=VALUES(PushReceiveCount),PushReceiveTimes=VALUES(PushReceiveTimes)
+    </insert>
+
+    <insert id="insertVersionProjectPushSendData" parameterClass="map">
+        INSERT INTO $table$(StatDate,Type,Version,PushSendCount,PushSendTimes)
+        VALUES
+        <iterate conjunction="," property="list">
+            <![CDATA[
+				(#list[].statDate#,#list[].type#,#list[].version#,#list[].sendCount#,#list[].sendTimes#)
+			]]>
+        </iterate>
+        ON DUPLICATE KEY UPDATE PushSendCount=VALUES(PushSendCount),PushSendTimes=VALUES(PushSendTimes)
+    </insert>
+
+    <insert id="insertProjectSilenceShowData" parameterClass="map">
+        INSERT INTO
+        $table$(StatDate,ProjectId,ChannelId,PluginId,Type,Country,CountryLevel,SilenceShowCount,SilenceShowTimes)
+        VALUES
+        <iterate conjunction="," property="list">
+            <![CDATA[
+				(#list[].statDate#,#list[].projectId#,#list[].channelId#,#list[].pluginId#,#list[].type#,#list[].country#,#list[].countryLevel#,#list[].showCount#,#list[].showTimes#)
+			]]>
+        </iterate>
+        ON DUPLICATE KEY UPDATE SilenceShowCount=VALUES(SilenceShowCount),SilenceShowTimes=VALUES(SilenceShowTimes)
+    </insert>
+    <insert id="insertProjectSilenceClickData" parameterClass="map">
+        INSERT INTO
+        $table$(StatDate,ProjectId,ChannelId,PluginId,Type,Country,CountryLevel,SilenceClickCount,SilenceClickTimes)
+        VALUES
+        <iterate conjunction="," property="list">
+            <![CDATA[
+				(#list[].statDate#,#list[].projectId#,#list[].channelId#,#list[].pluginId#,#list[].type#,#list[].country#,#list[].countryLevel#,#list[].clickCount#,#list[].clickTimes#)
+			]]>
+        </iterate>
+        ON DUPLICATE KEY UPDATE SilenceClickCount=VALUES(SilenceClickCount),SilenceClickTimes=VALUES(SilenceClickTimes)
+    </insert>
+    <insert id="insertProjectSilenceDownloadData" parameterClass="map">
+        INSERT INTO
+        $table$(StatDate,ProjectId,ChannelId,PluginId,Type,Country,CountryLevel,SilenceDownloadCount,SilenceDownloadTimes)
+        VALUES
+        <iterate conjunction="," property="list">
+            <![CDATA[
+				(#list[].statDate#,#list[].projectId#,#list[].channelId#,#list[].pluginId#,#list[].type#,#list[].country#,#list[].countryLevel#,#list[].downloadCount#,#list[].downloadTimes#)
+			]]>
+        </iterate>
+        ON DUPLICATE KEY UPDATE
+        SilenceDownloadCount=VALUES(SilenceDownloadCount),SilenceDownloadTimes=VALUES(SilenceDownloadTimes)
+    </insert>
+    <insert id="insertProjectSilenceInstallData" parameterClass="map">
+        INSERT INTO
+        $table$(StatDate,ProjectId,ChannelId,PluginId,Type,Country,CountryLevel,SilenceInstallCount,SilenceInstallTimes)
+        VALUES
+        <iterate conjunction="," property="list">
+            <![CDATA[
+				(#list[].statDate#,#list[].projectId#,#list[].channelId#,#list[].pluginId#,#list[].type#,#list[].country#,#list[].countryLevel#,#list[].installCount#,#list[].installTimes#)
+			]]>
+        </iterate>
+        ON DUPLICATE KEY UPDATE
+        SilenceInstallCount=VALUES(SilenceInstallCount),SilenceInstallTimes=VALUES(SilenceInstallTimes)
+    </insert>
+    <insert id="insertProjectSilenceSendData" parameterClass="map">
+        INSERT INTO
+        $table$(StatDate,ProjectId,ChannelId,PluginId,Type,Country,CountryLevel,SilenceSendCount,SilenceSendTimes)
+        VALUES
+        <iterate conjunction="," property="list">
+            <![CDATA[
+				(#list[].statDate#,#list[].projectId#,#list[].channelId#,#list[].pluginId#,#list[].type#,#list[].country#,#list[].countryLevel#,#list[].sendCount#,#list[].sendTimes#)
+			]]>
+        </iterate>
+        ON DUPLICATE KEY UPDATE SilenceSendCount=VALUES(SilenceSendCount),SilenceSendTimes=VALUES(SilenceSendTimes)
+    </insert>
+    <insert id="insertProjectSilenceReceiveData" parameterClass="map">
+        INSERT INTO
+        $table$(StatDate,ProjectId,ChannelId,PluginId,Type,Country,CountryLevel,SilenceReceiveCount,SilenceReceiveTimes)
+        VALUES
+        <iterate conjunction="," property="list">
+            <![CDATA[
+				(#list[].statDate#,#list[].projectId#,#list[].channelId#,#list[].pluginId#,#list[].type#,#list[].country#,#list[].countryLevel#,#list[].receiveCount#,#list[].receiveTimes#)
+			]]>
+        </iterate>
+        ON DUPLICATE KEY UPDATE
+        SilenceReceiveCount=VALUES(SilenceReceiveCount),SilenceReceiveTimes=VALUES(SilenceReceiveTimes)
+    </insert>
+
+    <insert id="insertVersionProjectSilenceShowData" parameterClass="map">
+        INSERT INTO $table$(StatDate,Type,Version,SilenceShowCount,SilenceShowTimes)
+        VALUES
+        <iterate conjunction="," property="list">
+            <![CDATA[
+				(#list[].statDate#,#list[].type#,#list[].version#,#list[].showCount#,#list[].showTimes#)
+			]]>
+        </iterate>
+        ON DUPLICATE KEY UPDATE SilenceShowCount=VALUES(SilenceShowCount),SilenceShowTimes=VALUES(SilenceShowTimes)
+    </insert>
+    <insert id="insertVersionProjectSilenceClickData" parameterClass="map">
+        INSERT INTO $table$(StatDate,Type,Version,SilenceClickCount,SilenceClickTimes)
+        VALUES
+        <iterate conjunction="," property="list">
+            <![CDATA[
+				(#list[].statDate#,#list[].type#,#list[].version#,#list[].clickCount#,#list[].clickTimes#)
+			]]>
+        </iterate>
+        ON DUPLICATE KEY UPDATE SilenceClickCount=VALUES(SilenceClickCount),SilenceClickTimes=VALUES(SilenceClickTimes)
+    </insert>
+    <insert id="insertVersionProjectSilenceDownloadData" parameterClass="map">
+        INSERT INTO $table$(StatDate,Type,Version,SilenceDownloadCount,SilenceDownloadTimes)
+        VALUES
+        <iterate conjunction="," property="list">
+            <![CDATA[
+				(#list[].statDate#,#list[].type#,#list[].version#,#list[].downloadCount#,#list[].downloadTimes#)
+			]]>
+        </iterate>
+        ON DUPLICATE KEY UPDATE
+        SilenceDownloadCount=VALUES(SilenceDownloadCount),SilenceDownloadTimes=VALUES(SilenceDownloadTimes)
+    </insert>
+    <insert id="insertVersionProjectSilenceInstallData" parameterClass="map">
+        INSERT INTO $table$(StatDate,Type,Version,SilenceInstallCount,SilenceInstallTimes)
+        VALUES
+        <iterate conjunction="," property="list">
+            <![CDATA[
+				(#list[].statDate#,#list[].type#,#list[].version#,#list[].installCount#,#list[].installTimes#)
+			]]>
+        </iterate>
+        ON DUPLICATE KEY UPDATE
+        SilenceInstallCount=VALUES(SilenceInstallCount),SilenceInstallTimes=VALUES(SilenceInstallTimes)
+    </insert>
+    <insert id="insertVersionProjectSilenceSendData" parameterClass="map">
+        INSERT INTO $table$(StatDate,Type,Version,SilenceSendCount,SilenceSendTimes)
+        VALUES
+        <iterate conjunction="," property="list">
+            <![CDATA[
+				(#list[].statDate#,#list[].type#,#list[].version#,#list[].sendCount#,#list[].sendTimes#)
+			]]>
+        </iterate>
+        ON DUPLICATE KEY UPDATE SilenceSendCount=VALUES(SilenceSendCount),SilenceSendTimes=VALUES(SilenceSendTimes)
+    </insert>
+    <insert id="insertVersionProjectSilenceReceiveData" parameterClass="map">
+        INSERT INTO $table$(StatDate,Type,Version,SilenceReceiveCount,SilenceReceiveTimes)
+        VALUES
+        <iterate conjunction="," property="list">
+            <![CDATA[
+				(#list[].statDate#,#list[].type#,#list[].version#,#list[].receiveCount#,#list[].receiveTimes#)
+			]]>
+        </iterate>
+        ON DUPLICATE KEY UPDATE
+        SilenceReceiveCount=VALUES(SilenceReceiveCount),SilenceReceiveTimes=VALUES(SilenceReceiveTimes)
+    </insert>
+
+    <insert id="insertProjectLeadShowData" parameterClass="map">
+        INSERT INTO $table$(StatDate,ProjectId,ChannelId,PluginId,Type,Country,CountryLevel,LeadShowCount,LeadShowTimes)
+        VALUES
+        <iterate conjunction="," property="list">
+            <![CDATA[
+				(#list[].statDate#,#list[].projectId#,#list[].channelId#,#list[].pluginId#,#list[].type#,#list[].country#,#list[].countryLevel#,#list[].showCount#,#list[].showTimes#)
+			]]>
+        </iterate>
+        ON DUPLICATE KEY UPDATE LeadShowCount=VALUES(LeadShowCount),LeadShowTimes=VALUES(LeadShowTimes)
+    </insert>
+    <insert id="insertProjectLeadClickData" parameterClass="map">
+        INSERT INTO
+        $table$(StatDate,ProjectId,ChannelId,PluginId,Type,Country,CountryLevel,LeadClickCount,LeadClickTimes)
+        VALUES
+        <iterate conjunction="," property="list">
+            <![CDATA[
+				(#list[].statDate#,#list[].projectId#,#list[].channelId#,#list[].pluginId#,#list[].type#,#list[].country#,#list[].countryLevel#,#list[].clickCount#,#list[].clickTimes#)
+			]]>
+        </iterate>
+        ON DUPLICATE KEY UPDATE LeadClickCount=VALUES(LeadClickCount),LeadClickTimes=VALUES(LeadClickTimes)
+    </insert>
+    <insert id="insertProjectLeadDownloadData" parameterClass="map">
+        INSERT INTO
+        $table$(StatDate,ProjectId,ChannelId,PluginId,Type,Country,CountryLevel,LeadDownloadCount,LeadDownloadTimes)
+        VALUES
+        <iterate conjunction="," property="list">
+            <![CDATA[
+				(#list[].statDate#,#list[].projectId#,#list[].channelId#,#list[].pluginId#,#list[].type#,#list[].country#,#list[].countryLevel#,#list[].downloadCount#,#list[].downloadTimes#)
+			]]>
+        </iterate>
+        ON DUPLICATE KEY UPDATE LeadDownloadCount=VALUES(LeadDownloadCount),LeadDownloadTimes=VALUES(LeadDownloadTimes)
+    </insert>
+    <insert id="insertProjectLeadInstallData" parameterClass="map">
+        INSERT INTO
+        $table$(StatDate,ProjectId,ChannelId,PluginId,Type,Country,CountryLevel,LeadInstallCount,LeadInstallTimes)
+        VALUES
+        <iterate conjunction="," property="list">
+            <![CDATA[
+				(#list[].statDate#,#list[].projectId#,#list[].channelId#,#list[].pluginId#,#list[].type#,#list[].country#,#list[].countryLevel#,#list[].installCount#,#list[].installTimes#)
+			]]>
+        </iterate>
+        ON DUPLICATE KEY UPDATE LeadInstallCount=VALUES(LeadInstallCount),LeadInstallTimes=VALUES(LeadInstallTimes)
+    </insert>
+    <insert id="insertProjectLeadSendData" parameterClass="map">
+        INSERT INTO $table$(StatDate,ProjectId,ChannelId,PluginId,Type,Country,CountryLevel,LeadSendCount,LeadSendTimes)
+        VALUES
+        <iterate conjunction="," property="list">
+            <![CDATA[
+				(#list[].statDate#,#list[].projectId#,#list[].channelId#,#list[].pluginId#,#list[].type#,#list[].country#,#list[].countryLevel#,#list[].sendCount#,#list[].sendTimes#)
+			]]>
+        </iterate>
+        ON DUPLICATE KEY UPDATE LeadSendCount=VALUES(LeadSendCount),LeadSendTimes=VALUES(LeadSendTimes)
+    </insert>
+    <insert id="insertProjectLeadReceiveData" parameterClass="map">
+        INSERT INTO
+        $table$(StatDate,ProjectId,ChannelId,PluginId,Type,Country,CountryLevel,LeadReceiveCount,LeadReceiveTimes)
+        VALUES
+        <iterate conjunction="," property="list">
+            <![CDATA[
+				(#list[].statDate#,#list[].projectId#,#list[].channelId#,#list[].pluginId#,#list[].type#,#list[].country#,#list[].countryLevel#,#list[].receiveCount#,#list[].receiveTimes#)
+			]]>
+        </iterate>
+        ON DUPLICATE KEY UPDATE LeadReceiveCount=VALUES(LeadReceiveCount),LeadReceiveTimes=VALUES(LeadReceiveTimes)
+    </insert>
+
+    <insert id="insertVersionProjectLeadShowData" parameterClass="map">
+        INSERT INTO $table$(StatDate,Type,Version,LeadShowCount,LeadShowTimes)
+        VALUES
+        <iterate conjunction="," property="list">
+            <![CDATA[
+				(#list[].statDate#,#list[].type#,#list[].version#,#list[].showCount#,#list[].showTimes#)
+			]]>
+        </iterate>
+        ON DUPLICATE KEY UPDATE LeadShowCount=VALUES(LeadShowCount),LeadShowTimes=VALUES(LeadShowTimes)
+    </insert>
+    <insert id="insertVersionProjectLeadClickData" parameterClass="map">
+        INSERT INTO $table$(StatDate,Type,Version,LeadClickCount,LeadClickTimes)
+        VALUES
+        <iterate conjunction="," property="list">
+            <![CDATA[
+				(#list[].statDate#,#list[].type#,#list[].version#,#list[].clickCount#,#list[].clickTimes#)
+			]]>
+        </iterate>
+        ON DUPLICATE KEY UPDATE LeadClickCount=VALUES(LeadClickCount),LeadClickTimes=VALUES(LeadClickTimes)
+    </insert>
+    <insert id="insertVersionProjectLeadDownloadData" parameterClass="map">
+        INSERT INTO $table$(StatDate,Type,Version,LeadDownloadCount,LeadDownloadTimes)
+        VALUES
+        <iterate conjunction="," property="list">
+            <![CDATA[
+				(#list[].statDate#,#list[].type#,#list[].version#,#list[].downloadCount#,#list[].downloadTimes#)
+			]]>
+        </iterate>
+        ON DUPLICATE KEY UPDATE LeadDownloadCount=VALUES(LeadDownloadCount),LeadDownloadTimes=VALUES(LeadDownloadTimes)
+    </insert>
+    <insert id="insertVersionProjectLeadInstallData" parameterClass="map">
+        INSERT INTO $table$(StatDate,Type,Version,LeadInstallCount,LeadInstallTimes)
+        VALUES
+        <iterate conjunction="," property="list">
+            <![CDATA[
+				(#list[].statDate#,#list[].type#,#list[].version#,#list[].installCount#,#list[].installTimes#)
+			]]>
+        </iterate>
+        ON DUPLICATE KEY UPDATE LeadInstallCount=VALUES(LeadInstallCount),LeadInstallTimes=VALUES(LeadInstallTimes)
+    </insert>
+    <insert id="insertVersionProjectLeadSendData" parameterClass="map">
+        INSERT INTO $table$(StatDate,Type,Version,LeadSendCount,LeadSendTimes)
+        VALUES
+        <iterate conjunction="," property="list">
+            <![CDATA[
+				(#list[].statDate#,#list[].type#,#list[].version#,#list[].sendCount#,#list[].sendTimes#)
+			]]>
+        </iterate>
+        ON DUPLICATE KEY UPDATE LeadSendCount=VALUES(LeadSendCount),LeadSendTimes=VALUES(LeadSendTimes)
+    </insert>
+    <insert id="insertVersionProjectLeadReceiveData" parameterClass="map">
+        INSERT INTO $table$(StatDate,Type,Version,LeadReceiveCount,LeadReceiveTimes)
+        VALUES
+        <iterate conjunction="," property="list">
+            <![CDATA[
+				(#list[].statDate#,#list[].type#,#list[].version#,#list[].receiveCount#,#list[].receiveTimes#)
+			]]>
+        </iterate>
+        ON DUPLICATE KEY UPDATE LeadReceiveCount=VALUES(LeadReceiveCount),LeadReceiveTimes=VALUES(LeadReceiveTimes)
+    </insert>
+
+
+    <insert id="insertProjectSinkShowData" parameterClass="map">
+        INSERT INTO $table$(StatDate,ProjectId,ChannelId,PluginId,Type,Country,CountryLevel,SinkShowCount,SinkShowTimes)
+        VALUES
+        <iterate conjunction="," property="list">
+            <![CDATA[
+				(#list[].statDate#,#list[].projectId#,#list[].channelId#,#list[].pluginId#,#list[].type#,#list[].country#,#list[].countryLevel#,#list[].showCount#,#list[].showTimes#)
+			]]>
+        </iterate>
+        ON DUPLICATE KEY UPDATE SinkShowCount=VALUES(SinkShowCount),SinkShowTimes=VALUES(SinkShowTimes)
+    </insert>
+    <insert id="insertProjectSinkClickData" parameterClass="map">
+        INSERT INTO
+        $table$(StatDate,ProjectId,ChannelId,PluginId,Type,Country,CountryLevel,SinkClickCount,SinkClickTimes)
+        VALUES
+        <iterate conjunction="," property="list">
+            <![CDATA[
+				(#list[].statDate#,#list[].projectId#,#list[].channelId#,#list[].pluginId#,#list[].type#,#list[].country#,#list[].countryLevel#,#list[].clickCount#,#list[].clickTimes#)
+			]]>
+        </iterate>
+        ON DUPLICATE KEY UPDATE SinkClickCount=VALUES(SinkClickCount),SinkClickTimes=VALUES(SinkClickTimes)
+    </insert>
+    <insert id="insertProjectSinkDownloadData" parameterClass="map">
+        INSERT INTO
+        $table$(StatDate,ProjectId,ChannelId,PluginId,Type,Country,CountryLevel,SinkDownloadCount,SinkDownloadTimes)
+        VALUES
+        <iterate conjunction="," property="list">
+            <![CDATA[
+				(#list[].statDate#,#list[].projectId#,#list[].channelId#,#list[].pluginId#,#list[].type#,#list[].country#,#list[].countryLevel#,#list[].downloadCount#,#list[].downloadTimes#)
+			]]>
+        </iterate>
+        ON DUPLICATE KEY UPDATE SinkDownloadCount=VALUES(SinkDownloadCount),SinkDownloadTimes=VALUES(SinkDownloadTimes)
+    </insert>
+    <insert id="insertProjectSinkInstallData" parameterClass="map">
+        INSERT INTO
+        $table$(StatDate,ProjectId,ChannelId,PluginId,Type,Country,CountryLevel,SinkInstallCount,SinkInstallTimes)
+        VALUES
+        <iterate conjunction="," property="list">
+            <![CDATA[
+				(#list[].statDate#,#list[].projectId#,#list[].channelId#,#list[].pluginId#,#list[].type#,#list[].country#,#list[].countryLevel#,#list[].installCount#,#list[].installTimes#)
+			]]>
+        </iterate>
+        ON DUPLICATE KEY UPDATE SinkInstallCount=VALUES(SinkInstallCount),SinkInstallTimes=VALUES(SinkInstallTimes)
+    </insert>
+    <insert id="insertProjectSinkSendData" parameterClass="map">
+        INSERT INTO $table$(StatDate,ProjectId,ChannelId,PluginId,Type,Country,CountryLevel,SinkSendCount,SinkSendTimes)
+        VALUES
+        <iterate conjunction="," property="list">
+            <![CDATA[
+				(#list[].statDate#,#list[].projectId#,#list[].channelId#,#list[].pluginId#,#list[].type#,#list[].country#,#list[].countryLevel#,#list[].sendCount#,#list[].sendTimes#)
+			]]>
+        </iterate>
+        ON DUPLICATE KEY UPDATE SinkSendCount=VALUES(SinkSendCount),SinkSendTimes=VALUES(SinkSendTimes)
+    </insert>
+    <insert id="insertProjectSinkReceiveData" parameterClass="map">
+        INSERT INTO
+        $table$(StatDate,ProjectId,ChannelId,PluginId,Type,Country,CountryLevel,SinkReceiveCount,SinkReceiveTimes)
+        VALUES
+        <iterate conjunction="," property="list">
+            <![CDATA[
+				(#list[].statDate#,#list[].projectId#,#list[].channelId#,#list[].pluginId#,#list[].type#,#list[].country#,#list[].countryLevel#,#list[].receiveCount#,#list[].receiveTimes#)
+			]]>
+        </iterate>
+        ON DUPLICATE KEY UPDATE SinkReceiveCount=VALUES(SinkReceiveCount),SinkReceiveTimes=VALUES(SinkReceiveTimes)
+    </insert>
+
+
+    <insert id="insertVersionProjectSinkShowData" parameterClass="map">
+        INSERT INTO $table$(StatDate,Type,Version,SinkShowCount,SinkShowTimes)
+        VALUES
+        <iterate conjunction="," property="list">
+            <![CDATA[
+				(#list[].statDate#,#list[].type#,#list[].version#,#list[].showCount#,#list[].showTimes#)
+			]]>
+        </iterate>
+        ON DUPLICATE KEY UPDATE SinkShowCount=VALUES(SinkShowCount),SinkShowTimes=VALUES(SinkShowTimes)
+    </insert>
+    <insert id="insertVersionProjectSinkClickData" parameterClass="map">
+        INSERT INTO $table$(StatDate,Type,Version,SinkClickCount,SinkClickTimes)
+        VALUES
+        <iterate conjunction="," property="list">
+            <![CDATA[
+				(#list[].statDate#,#list[].type#,#list[].version#,#list[].clickCount#,#list[].clickTimes#)
+			]]>
+        </iterate>
+        ON DUPLICATE KEY UPDATE SinkClickCount=VALUES(SinkClickCount),SinkClickTimes=VALUES(SinkClickTimes)
+    </insert>
+    <insert id="insertVersionProjectSinkDownloadData" parameterClass="map">
+        INSERT INTO $table$(StatDate,Type,Version,SinkDownloadCount,SinkDownloadTimes)
+        VALUES
+        <iterate conjunction="," property="list">
+            <![CDATA[
+				(#list[].statDate#,#list[].type#,#list[].version#,#list[].downloadCount#,#list[].downloadTimes#)
+			]]>
+        </iterate>
+        ON DUPLICATE KEY UPDATE SinkDownloadCount=VALUES(SinkDownloadCount),SinkDownloadTimes=VALUES(SinkDownloadTimes)
+    </insert>
+    <insert id="insertVersionProjectSinkInstallData" parameterClass="map">
+        INSERT INTO $table$(StatDate,Type,Version,SinkInstallCount,SinkInstallTimes)
+        VALUES
+        <iterate conjunction="," property="list">
+            <![CDATA[
+				(#list[].statDate#,#list[].type#,#list[].version#,#list[].installCount#,#list[].installTimes#)
+			]]>
+        </iterate>
+        ON DUPLICATE KEY UPDATE SinkInstallCount=VALUES(SinkInstallCount),SinkInstallTimes=VALUES(SinkInstallTimes)
+    </insert>
+    <insert id="insertVersionProjectSinkSendData" parameterClass="map">
+        INSERT INTO $table$(StatDate,Type,Version,SinkSendCount,SinkSendTimes)
+        VALUES
+        <iterate conjunction="," property="list">
+            <![CDATA[
+				(#list[].statDate#,#list[].type#,#list[].version#,#list[].sendCount#,#list[].sendTimes#)
+			]]>
+        </iterate>
+        ON DUPLICATE KEY UPDATE SinkSendCount=VALUES(SinkSendCount),SinkSendTimes=VALUES(SinkSendTimes)
+    </insert>
+    <insert id="insertVersionProjectSinkReceiveData" parameterClass="map">
+        INSERT INTO $table$(StatDate,Type,Version,SinkReceiveCount,SinkReceiveTimes)
+        VALUES
+        <iterate conjunction="," property="list">
+            <![CDATA[
+				(#list[].statDate#,#list[].type#,#list[].version#,#list[].receiveCount#,#list[].receiveTimes#)
+			]]>
+        </iterate>
+        ON DUPLICATE KEY UPDATE SinkReceiveCount=VALUES(SinkReceiveCount),SinkReceiveTimes=VALUES(SinkReceiveTimes)
+    </insert>
+
+    <insert id="insertAdBackData" parameterClass="map">
+        INSERT INTO $table$(sdate,apkid,realTotal)
+        VALUES
+        <iterate conjunction="," property="list">
+            <![CDATA[
+				(#list[].statDate#,#list[].adId#,#list[].realCount#)
+			]]>
+        </iterate>
+        ON DUPLICATE KEY UPDATE realTotal=VALUES(realTotal)
+    </insert>
+    <select id="getAdData" parameterClass="map" resultClass="data">
+		SELECT StatDate statDate,
+			AdId adId,
+			SUM(InstallTimes+PushInstallTimes+SilenceInstallTimes+PushSilenceInstallTimes) installTimes,
+			SUM(ShowTimes+PushShowTimes) showTimes,
+			SUM(DownloadTimes+PushDownloadTimes) downloadTimes,
+			SUM(SilenceDownloadTimes) silenceDownloadTimes,
+			SUM(InstallTimes+PushInstallTimes) totalInstallTimes,
+			SUM(SilenceInstallTimes+PushSilenceInstallTimes) silenceInstallTimes
+		FROM $table$
+		WHERE StatDate=#statDate#
+		GROUP BY StatDate,AdId
+		HAVING installTimes+showTimes+downloadTimes+silenceDownloadTimes+totalInstallTimes+silenceInstallTimes>0
+	</select>
+    <insert id="insertAdData" parameterClass="map">
+        INSERT INTO
+        $table$(sdate,apkid,installTotal,showTotal,downloadCount,silenceDownloadCount,installedCount,silenceInstalledCount)
+        VALUES
+        <iterate conjunction="," property="list">
+            <![CDATA[
+				(#list[].statDate#,#list[].adId#,#list[].installTimes#,#list[].showTimes#,#list[].downloadTimes#,#list[].silenceDownloadTimes#,#list[].totalInstallTimes#,#list[].silenceInstallTimes#)
+			]]>
+        </iterate>
+        ON DUPLICATE KEY UPDATE
+        installTotal=VALUES(installTotal),showTotal=VALUES(showTotal),downloadCount=VALUES(downloadCount),silenceDownloadCount=VALUES(silenceDownloadCount),installedCount=VALUES(installedCount),silenceInstalledCount=VALUES(silenceInstalledCount)
+    </insert>
+    <select id="getAdEffectiveData" parameterClass="map" resultClass="data">
+		SELECT D.StatDate statDate,
+			D.AdId adId,
+			SUM(D.InstallTimes+D.PushInstallTimes+D.SilenceInstallTimes+D.PushSilenceInstallTimes) installTimes
+		FROM $table$ D
+		WHERE D.StatDate=#statDate# AND D.CountryLevel<![CDATA[<]]>4
+		GROUP BY D.StatDate,D.AdId
+		HAVING installTimes>0
+	</select>
+    <insert id="insertAdEffectiveData" parameterClass="map">
+        INSERT INTO $table$(sdate,apkid,effectiveInstallTotal)
+        VALUES
+        <iterate conjunction="," property="list">
+            <![CDATA[
+				(#list[].statDate#,#list[].adId#,#list[].installTimes#)
+			]]>
+        </iterate>
+        ON DUPLICATE KEY UPDATE effectiveInstallTotal=VALUES(effectiveInstallTotal)
+    </insert>
+    <select id="getTotalProjectUserData" parameterClass="map" resultClass="data">
+		SELECT D.StatDate statDate,
+				D.ProjectId projectId,
+				D.Type type,
+				SUM(D.UserCount) userCount,
+				SUM(D.ProjectUserCount) projectUserCount,
+				SUM(D.activeCount) activeCount,
+				SUM(D.TotalActiveCount) totalActiveCount,
+				SUM(D.ProjectActiveCount) projectActiveCount
+		FROM $table$ D
+		WHERE D.StatDate=#statDate#
+		GROUP BY D.StatDate,D.ProjectId,D.Type
+		HAVING (userCount+projectUserCount+activeCount+totalActiveCount+projectActiveCount)>0
+	</select>
+    <select id="getProjectUserData" parameterClass="map" resultClass="data">
+		SELECT D.StatDate statDate,
+				D.ProjectId projectId,
+				D.Type type,
+				IFNULL(D.CountryLevel,4) level,
+				SUM(D.UserCount) userCount,
+				SUM(D.activeCount) activeCount,
+				SUM(D.TotalActiveCount) totalActiveCount,
+				SUM(D.ProjectActiveCount) projectActiveCount
+		FROM $table$ D
+		WHERE D.StatDate=#statDate#
+		GROUP BY D.StatDate,D.ProjectId,D.Type,D.CountryLevel
+		HAVING (userCount+activeCount+totalActiveCount+projectActiveCount)>0
+	</select>
+    <select id="getFirstProjectUserData" parameterClass="map" resultClass="data">
+		SELECT D.StatDate statDate,
+				D.ProjectId projectId,
+				D.Type type,
+				IFNULL(SUM(D.FirstCount),0) userCount
+		FROM $table$ D
+		WHERE D.StatDate=#statDate#
+		GROUP BY D.StatDate,D.ProjectId,D.Type
+		HAVING userCount>0
+	</select>
+    <select id="getDdlList" parameterClass="map" resultClass="data">
+		select StatDate statDate,
+		ProjectId projectId,
+		600400 type,
+		SUM(ShowSaleCount) userCount
+		FROM $table$
+		where StatDate = #statDate#
+		group by StatDate,ProjectId
+		having userCount >0
+
+	</select>
+    <insert id="insertDdlList" parameterClass="map">
+        INSERT INTO $table$(sdate,projectid,sdktype,highusers)
+        VALUES
+        <iterate conjunction="," property="list">
+            <![CDATA[
+				(#list[].statDate#,#list[].projectId#,#list[].type#,#list[].userCount#)
+			]]>
+        </iterate>
+        ON DUPLICATE KEY UPDATE highusers=VALUES(highusers)
+    </insert>
+    <insert id="insertFirstProjectUserData" parameterClass="map">
+        INSERT INTO $table$(sdate,projectid,sdktype,firstCount)
+        VALUES
+        <iterate conjunction="," property="list">
+            <![CDATA[
+				(#list[].statDate#,#list[].projectId#,#list[].type#,#list[].userCount#)
+			]]>
+        </iterate>
+        ON DUPLICATE KEY UPDATE firstCount=VALUES(firstCount)
+    </insert>
+    <insert id="insertProjectUserData" parameterClass="map">
+        INSERT INTO $table$(sdate,projectid,sdktype,newusers,newprojectusers,actusers,totalactusers,projectactusers)
+        VALUES
+        <iterate conjunction="," property="list">
+            <![CDATA[
+				(#list[].statDate#,#list[].projectId#,#list[].type#,#list[].userCount#,#list[].projectUserCount#,#list[].activeCount#,#list[].totalActiveCount#,#list[].projectActiveCount#)
+			]]>
+        </iterate>
+        ON DUPLICATE KEY UPDATE
+        newusers=VALUES(newusers),newprojectusers=VALUES(newprojectusers),actusers=VALUES(actusers),totalactusers=VALUES(totalactusers),projectactusers=VALUES(projectactusers)
+    </insert>
+    <insert id="insertHighProjectUserData" parameterClass="map">
+        INSERT INTO $table$(sdate,projectid,sdktype,install_high)
+        VALUES
+        <iterate conjunction="," property="list">
+            <![CDATA[
+				(#list[].statDate#,#list[].projectId#,#list[].type#,#list[].userCount#)
+			]]>
+        </iterate>
+        ON DUPLICATE KEY UPDATE install_high=VALUES(install_high)
+    </insert>
+    <insert id="insertMidProjectUserData" parameterClass="map">
+        INSERT INTO $table$(sdate,projectid,sdktype,install_mid)
+        VALUES
+        <iterate conjunction="," property="list">
+            <![CDATA[
+				(#list[].statDate#,#list[].projectId#,#list[].type#,#list[].userCount#)
+			]]>
+        </iterate>
+        ON DUPLICATE KEY UPDATE install_mid=VALUES(install_mid)
+    </insert>
+    <insert id="insertLowProjectUserData" parameterClass="map">
+        INSERT INTO $table$(sdate,projectid,sdktype,install_low)
+        VALUES
+        <iterate conjunction="," property="list">
+            <![CDATA[
+				(#list[].statDate#,#list[].projectId#,#list[].type#,#list[].userCount#)
+			]]>
+        </iterate>
+        ON DUPLICATE KEY UPDATE install_low=VALUES(install_low)
+    </insert>
+    <insert id="insertNoneProjectUserData" parameterClass="map">
+        INSERT INTO $table$(sdate,projectid,sdktype,install_none)
+        VALUES
+        <iterate conjunction="," property="list">
+            <![CDATA[
+				(#list[].statDate#,#list[].projectId#,#list[].type#,#list[].userCount#)
+			]]>
+        </iterate>
+        ON DUPLICATE KEY UPDATE install_none=VALUES(install_none)
+    </insert>
+    <select id="getProjectShow" parameterClass="map" resultClass="data">
+		SELECT StatDate statDate,
+			ProjectId projectId,
+			Type type,
+			SUM(ShowTimes) showTimes,
+			SUM(InstallTimes+PushInstallTimes+SilenceInstallTimes+PushSilenceInstallTimes) installTimes,
+			SUM(LeadInstallTimes) leadInstallTimes,
+			SUM(SinkInstallTimes) sinkInstallTimes
+		FROM $table$
+		WHERE StatDate=#statDate#
+		GROUP BY StatDate,ProjectId,Type
+		HAVING (showTimes+installTimes+leadInstallTimes+sinkInstallTimes)>0
+	</select>
+    <insert id="insertProjectShow" parameterClass="map">
+        INSERT INTO $table$(sdate,projectId,sdktype,showtotal,installTotal,leadInstallTimes,sinkInstallTimes)
+        VALUES
+        <iterate conjunction="," property="list">
+            <![CDATA[
+				(#list[].statDate#,#list[].projectId#,#list[].type#,#list[].showTimes#,#list[].installTimes#,#list[].leadInstallTimes#,#list[].sinkInstallTimes#)
+			]]>
+        </iterate>
+        ON DUPLICATE KEY UPDATE
+        showtotal=VALUES(showtotal),installTotal=VALUES(installTotal),leadInstallTimes=VALUES(leadInstallTimes),sinkInstallTimes=VALUES(sinkInstallTimes)
+    </insert>
+    <select id="getAdProjectData" parameterClass="map" resultClass="data">
+		SELECT #statDate# statDate,
+			AdId adId,
+			ProjectId projectId,
+			Type type,
+			SUM(InstallTimes+PushInstallTimes+SilenceInstallTimes+PushSilenceInstallTimes) installTimes
+		FROM $table$
+		WHERE StatDate=#statDate#
+		GROUP BY StatDate,AdId,ProjectId,Type
+		HAVING installTimes>0
+	</select>
+    <insert id="insertAdProjectData" parameterClass="map">
+        INSERT INTO $table$(StatDate,AdId,ProjectId,Type,InstallTimes)
+        VALUES
+        <iterate conjunction="," property="list">
+            <![CDATA[
+				(#list[].statDate#,#list[].adId#,#list[].projectId#,#list[].type#,#list[].installTimes#)
+			]]>
+        </iterate>
+        ON DUPLICATE KEY UPDATE InstallTimes=VALUES(InstallTimes)
+    </insert>
+    <select id="getAdProjectEffectiveData" parameterClass="map" resultClass="data">
+		SELECT D.StatDate statDate,
+			D.AdId adId,
+			D.ProjectId projectId,
+			D.Type type,
+			SUM(D.InstallTimes+D.PushInstallTimes+D.SilenceInstallTimes+D.PushSilenceInstallTimes) installTimes
+		FROM $table$ D
+		WHERE D.StatDate=#statDate# AND D.CountryLevel<![CDATA[<]]>4
+		GROUP BY D.StatDate,D.AdId,D.ProjectId,D.Type
+		HAVING installTimes>0
+	</select>
+    <insert id="insertAdProjectEffectiveData" parameterClass="map">
+        INSERT INTO $table$(StatDate,AdId,ProjectId,Type,EffectiveInstallTimes)
+        VALUES
+        <iterate conjunction="," property="list">
+            <![CDATA[
+				(#list[].statDate#,#list[].adId#,#list[].projectId#,#list[].type#,#list[].installTimes#)
+			]]>
+        </iterate>
+        ON DUPLICATE KEY UPDATE EffectiveInstallTimes=VALUES(EffectiveInstallTimes)
+    </insert>
+    <update id="updateAdPercent" parameterClass="map">
+		UPDATE $table$ SET Income=(realTotal+inputTotal)*price,
+		RealPercent=IFNULL(realtotal*1.0/(effectiveInstalltotal*1.0),0.00),
+		InputPercent=IFNULL(inputtotal*1.0/(effectiveInstalltotal*1.0),0.00)
+		WHERE sdate=#statDate#
+	</update>
+    <update id="updateAdProjectPercent" parameterClass="map">
+		UPDATE PROJECT_AD_INCOME_$table$ PA,APK_CPHC_TOTAL_$table$ AC
+		SET PA.RealTimes=PA.EffectiveInstallTimes*AC.RealPercent,
+		PA.InputTimes=PA.EffectiveInstallTimes*AC.inputPercent,
+		PA.Price=AC.Price
+		WHERE PA.StatDate=#statDate# AND PA.StatDate=AC.sdate AND PA.AdId=AC.apkId
+	</update>
+    <select id="getProjectIncome" parameterClass="map" resultClass="data">
+		SELECT #statDate# statDate,
+			ProjectId projectId,
+			Type type,
+			SUM(RealTimes*price+InputTimes*price) income
+		FROM $table$
+		WHERE StatDate=#statDate#
+		GROUP BY StatDate,ProjectId,Type
+	</select>
+    <insert id="insertProjectIncome" parameterClass="map">
+        INSERT INTO $table$(sdate,projectid,sdktype,income)
+        VALUES
+        <iterate conjunction="," property="list">
+            <![CDATA[
+				(#list[].statDate#,#list[].projectId#,#list[].type#,#list[].income#)
+			]]>
+        </iterate>
+        ON DUPLICATE KEY UPDATE income=VALUES(income)
+    </insert>
+    <update id="updateExpectIncome" parameterClass="map">
+		UPDATE $table$ SET expectIncome=installTotal*expectPrice WHERE sdate=#statDate#
+	</update>
+    <update id="updateProjectUsers" parameterClass="map">
+		UPDATE $table$ D,PROJECT P 
+		SET D.highusers=D.install_high*P.RateHigh,
+			D.midusers=D.install_mid*P.RateMid,
+			D.lowusers=D.install_low*P.RateLow,
+			D.ratehigh=P.RateHigh,
+			D.ratemid=P.RateMid,
+			D.ratelow=P.RateLow,
+			D.minincomerate=P.minincomerate
+		WHERE D.sdate=#statDate# AND D.ProjectId=P.ID AND D.sdkType=600400 AND P.Type=1
+	</update>
+
+    <update id="updateProjectOutcome" parameterClass="map">
+		UPDATE $table$ D, PROJECT PR,PRODUCT P 
+		SET D.OutCome=D.highusers*P.HighPrice+D.midusers*P.MidPrice+D.lowusers*P.LowPrice
+		WHERE D.sdate=#statDate# AND D.ProjectId=PR.ID AND PR.ProductId=P.ID
+	</update>
+    <update id="updateProjectOutcomeRateFirst" parameterClass="map">
+		UPDATE $table$ 
+		SET rateout=IFNULL((expectIncome+thirdincome-outcome)/(expectIncome+thirdincome),0.00)
+		WHERE sdate=#statDate#
+	</update>
+    <update id="updateProjectOutcomeRateSecond" parameterClass="map">
+		UPDATE $table$ 
+		SET rateout=-1.0
+		WHERE sdate=#statDate# and outcome>0 AND (expectIncome+thirdincome)=0
+	</update>
+    <update id="updateProjectUsersNeedBack" parameterClass="map">
+		UPDATE $table$ D,PROJECT P
+		SET D.highusers=D.highusers*(D.expectIncome+D.thirdincome)*(1-D.minincomerate)/D.outCome,
+			D.midusers=D.midusers*(D.expectIncome+D.thirdincome)*(1-D.minincomerate)/D.outCome,
+			D.lowusers=D.lowusers*(D.expectIncome+D.thirdincome)*(1-D.minincomerate)/D.outCome
+		WHERE D.sdate=#statDate# AND D.rateout<![CDATA[<]]>D.minincomerate AND D.outcome>0
+		AND D.ProjectId=P.ID AND P.Type=1
+	</update>
+    <update id="updateAdPrice" parameterClass="map">
+		UPDATE $table$ D,kok_sdk.A_SdkPushApk A
+		SET D.Price=IFNULL(A.Price,0)
+		WHERE D.sdate=#statDate# AND D.apkid=A.id
+	</update>
+    <!-- 转化数*单价/展示数*1000 -->
+    <update id="updateAdCpm" parameterClass="map">
+		UPDATE $table$ D
+		SET D.cpm=IFNULL((D.installtotal)*D.price/D.showtotal*1.0*1000,0.00)
+		WHERE D.sdate=#statDate#
+	</update>
+    <select id="getAdCpm" parameterClass="map" resultClass="data">
+		SELECT #statDate# statDate,
+				apkid adId,
+				cpm cpm
+		FROM $table$
+		WHERE sdate=#statDate#
+		GROUP BY apkId
+	</select>
+    <insert id="insertDayActiveData" parameterClass="map">
+	    INSERT INTO TOTAL_DAY_DATA(StatDate,TotalActiveCount)
+	    SELECT StatDate,IFNULL(SUM(TotalActiveCount),0)
+	    FROM REGISTER_DATA_$table$
+	    WHERE StatDate=#statDate#
+	    GROUP BY StatDate
+	    ON DUPLICATE KEY UPDATE TotalActiveCount=VALUES(TotalActiveCount)
+	</insert>
+    <insert id="insertDayInstalledData" parameterClass="map">
+	    INSERT INTO TOTAL_DAY_DATA(StatDate,InstallCount)
+	    SELECT StatDate,IFNULL(SUM(InstallTimes+PushInstallTimes+SilenceInstallTimes),0) InstallCount
+	    FROM REGISTER_DATA_$table$
+	    WHERE StatDate=#statDate#
+	    GROUP BY StatDate
+	    ON DUPLICATE KEY UPDATE InstallCount=VALUES(InstallCount)
+	</insert>
+    <insert id="insertDayUserData" parameterClass="map">
+	    INSERT INTO TOTAL_DAY_DATA(StatDate,UserCount)
+	    SELECT StatDate,IFNULL(SUM(UserCount),0)
+	    FROM REGISTER_DATA_$table$
+	    WHERE StatDate=#statDate# AND Type=600400
+	    GROUP BY StatDate
+	    ON DUPLICATE KEY UPDATE UserCount=VALUES(UserCount)
+	</insert>
+    <insert id="insertTotalUserData" parameterClass="map">
+	    INSERT INTO TOTAL_DAY_DATA(StatDate,TotalUserCount)
+	    SELECT #statDate# StatDate,IFNULL(SUM(UserCount),0) TotalUserCount
+	    FROM REGISTER_DATA_$table$
+	    WHERE Type=600400
+	    ON DUPLICATE KEY UPDATE TotalUserCount=VALUES(TotalUserCount)
+	</insert>
+
+
+    <insert id="insertdsdesktopData" parameterClass="map">
+        INSERT INTO $table$(StatDate,AdId,cou,desktopClickTimes)
+        VALUES
+        <iterate conjunction="," property="list">
+            <![CDATA[
+				(#list[].statDate#,#list[].adId#,#list[].country#,#list[].clickTimes#)
+			]]>
+        </iterate>
+        ON DUPLICATE KEY UPDATE desktopClickTimes=VALUES(desktopClickTimes)
+    </insert>
+    <insert id="insertdssuspensionData" parameterClass="map">
+        INSERT INTO $table$(StatDate,AdId,cou,suspensionClickTimes)
+        VALUES
+        <iterate conjunction="," property="list">
+            <![CDATA[
+				(#list[].statDate#,#list[].adId#,#list[].country#,#list[].clickTimes#)
+			]]>
+        </iterate>
+        ON DUPLICATE KEY UPDATE suspensionClickTimes=VALUES(suspensionClickTimes)
+    </insert>
+    <insert id="insertdspushData" parameterClass="map">
+        INSERT INTO $table$(StatDate,AdId,cou,pushClickTimes)
+        VALUES
+        <iterate conjunction="," property="list">
+            <![CDATA[
+				(#list[].statDate#,#list[].adId#,#list[].country#,#list[].clickTimes#)
+			]]>
+        </iterate>
+        ON DUPLICATE KEY UPDATE pushClickTimes=VALUES(pushClickTimes)
+    </insert>
+    <insert id="insertdsappData" parameterClass="map">
+        INSERT INTO $table$(StatDate,AdId,cou,appClickTimes)
+        VALUES
+        <iterate conjunction="," property="list">
+            <![CDATA[
+				(#list[].statDate#,#list[].adId#,#list[].country#,#list[].clickTimes#)
+			]]>
+        </iterate>
+        ON DUPLICATE KEY UPDATE appClickTimes=VALUES(appClickTimes)
+    </insert>
+    <insert id="insertdsotherappData" parameterClass="map">
+        INSERT INTO $table$(StatDate,AdId,cou,otherappClickTimes)
+        VALUES
+        <iterate conjunction="," property="list">
+            <![CDATA[
+				(#list[].statDate#,#list[].adId#,#list[].country#,#list[].clickTimes#)
+			]]>
+        </iterate>
+        ON DUPLICATE KEY UPDATE otherappClickTimes=VALUES(otherappClickTimes)
+    </insert>
+
+    <insert id="insertAdNoLimitLinkData" parameterClass="map">
+        INSERT INTO $table$(StatDate,AdId,ProjectId,Internet,NoLimitClickTimes)
+        VALUES
+        <iterate conjunction="," property="list">
+            <![CDATA[
+				(#list[].statDate#,#list[].adId#,#list[].projectId#,#list[].level#,#list[].clickTimes#)
+			]]>
+        </iterate>
+        ON DUPLICATE KEY UPDATE NoLimitClickTimes=VALUES(NoLimitClickTimes)
+    </insert>
+    <insert id="insertAdIconLinkData" parameterClass="map">
+        INSERT INTO $table$(StatDate,AdId,ProjectId,Internet,IconClickTimes)
+        VALUES
+        <iterate conjunction="," property="list">
+            <![CDATA[
+				(#list[].statDate#,#list[].adId#,#list[].projectId#,#list[].level#,#list[].clickTimes#)
+			]]>
+        </iterate>
+        ON DUPLICATE KEY UPDATE IconClickTimes=VALUES(IconClickTimes)
+    </insert>
+    <insert id="insertAdStatusBarLinkData" parameterClass="map">
+        INSERT INTO $table$(StatDate,AdId,ProjectId,Internet,StatusBarClickTimes)
+        VALUES
+        <iterate conjunction="," property="list">
+            <![CDATA[
+				(#list[].statDate#,#list[].adId#,#list[].projectId#,#list[].level#,#list[].clickTimes#)
+			]]>
+        </iterate>
+        ON DUPLICATE KEY UPDATE StatusBarClickTimes=VALUES(StatusBarClickTimes)
+    </insert>
+    <insert id="insertAdBrowserLinkData" parameterClass="map">
+        INSERT INTO $table$(StatDate,AdId,ProjectId,Internet,BrowserClickTimes)
+        VALUES
+        <iterate conjunction="," property="list">
+            <![CDATA[
+				(#list[].statDate#,#list[].adId#,#list[].projectId#,#list[].level#,#list[].clickTimes#)
+			]]>
+        </iterate>
+        ON DUPLICATE KEY UPDATE BrowserClickTimes=VALUES(BrowserClickTimes)
+    </insert>
+    <update id="updateLinkData" parameterClass="map">
+	    UPDATE $table$ SET TotalClickTimes = NoLimitClickTimes+IconClickTimes+BrowserClickTimes+StatusBarClickTimes
+	    WHERE StatDate = #statDate#
+	</update>
+    <update id="updateDsData" parameterClass="map">
+		UPDATE $table$ SET TotalClickTimes = otherappClickTimes+appClickTimes+pushClickTimes+suspensionClickTimes+desktopClickTimes
+		WHERE StatDate = #statDate#
+	</update>
+    <insert id="insertAdTotalLinkData" parameterClass="map">
+		INSERT INTO AD_DATA_STAT_LINK_$table$(StatDate,AdId,BrowserClickTimes,StatusBarClickTimes,IconClickTimes,NoLimitClickTimes,TotalClickTimes) 
+		SELECT StatDate,
+				AdId,
+				sum(BrowserClickTimes),
+				sum(StatusBarClickTimes),
+				sum(IconClickTimes),
+				sum(NoLimitClickTimes),
+				sum(TotalClickTimes)
+		FROM AD_DATA_LINK_$table$
+		WHERE StatDate=#statDate#
+		GROUP BY StatDate,AdId
+		ON DUPLICATE KEY UPDATE BrowserClickTimes=VALUES(BrowserClickTimes),StatusBarClickTimes=VALUES(StatusBarClickTimes),IconClickTimes=VALUES(IconClickTimes),NoLimitClickTimes=VALUES(NoLimitClickTimes),TotalClickTimes=VALUES(TotalClickTimes)
+	</insert>
+
+    <insert id="insertAdTotalLinkDataUv" parameterClass="map">
+        INSERT INTO $table$(StatDate,AdId,Uv)
+        VALUES
+        <iterate conjunction="," property="list">
+            <![CDATA[
+				(#list[].statDate#,#list[].adId#,#list[].clickCount#)
+			]]>
+        </iterate>
+        ON DUPLICATE KEY UPDATE Uv=VALUES(Uv)
+    </insert>
+
+    <insert id="insertAdSubStatDate" parameterClass="map">
+        INSERT INTO $table$(adId, cou, projectId, platformId, operatorId, adType, activateTimes , clickTimes ,income, statDate)
+        VALUES
+        <iterate conjunction="," property="list">
+            <![CDATA[
+			   (#list[].adId#, #list[].country#, #list[].projectId#,  #list[].platformId#, #list[].operatorId#,
+			    #list[].adType#, #list[].activateTimes#, #list[].clickTimes#,#list[].income#,#list[].statDate#)
+			]]>
+        </iterate>
+    </insert>
+
+    <insert id="insertOfferSdkData" parameterClass="map">
+         INSERT into  $table$(adId, cou, projectId, adType, activateTimes , clickTimes ,showTimes, income, statDate)
+         VALUES
+         <iterate conjunction="," property="list">
+             <![CDATA[
+			   (#list[].adId#, #list[].country#, #list[].projectId#,
+			    #list[].adType#, #list[].activateTimes#, #list[].clickTimes#,#list[].showTimes#,#list[].income#,#list[].statDate#)
+			]]>
+         </iterate>
+    </insert>
+
+    <insert id="insertCooActiveDate" parameterClass="map">
+        INSERT INTO $table$(cooId, activeTotal , clickTotal ,statDate)
+        VALUES
+        <iterate conjunction="," property="list">
+            <![CDATA[
+			   (#list[].projectId#, #list[].activeCount#, #list[].clickCount#, #list[].statDate#)
+			]]>
+        </iterate>
+    </insert>
+
+    <insert id="insertSub" parameterClass="map">
+		INSERT INTO sub_ad_model (adId,clickTotal,activeTotal, statDate) VALUES
+        <iterate conjunction="," property="list">
+            <![CDATA[
+			   (#list[].adId#, #list[].clickCount#, #list[].activateCount#, #list[].statDate#)
+			]]>
+        </iterate>
+	</insert>
+
+    <select id="selectSub" parameterClass="int" resultClass="int">
+		SELECT count(adId)
+		FROM sub_ad_model
+		WHERE adId=adId
+	</select>
+</sqlMap>

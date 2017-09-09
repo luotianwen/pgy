@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="offlinesdkSqlMap">
+	<select id="getOfflinesdkVOListCount" parameterClass="OfflinesdkVO" resultClass="int">
+		SELECT COUNT(ID) count			
+		FROM o_offlinesdk
+		WHERE 1=1
+		<isNotNull property="id">
+			<isGreaterThan property="id" compareValue="0">
+				AND id = #id#
+			</isGreaterThan>
+		</isNotNull>
+		<isNotNull property="status">
+			<isGreaterThan property="status" compareValue="0">
+				AND status = #status#
+			</isGreaterThan>
+		</isNotNull>
+	</select>
+	<select id="getOfflinesdkVOList" parameterClass="OfflinesdkVO" resultClass="OfflinesdkVO">
+		 select * from  o_offlinesdk where 1=1
+		<isNotNull property="id">
+			<isGreaterThan property="id" compareValue="0">
+				AND id = #id#
+			</isGreaterThan>
+		</isNotNull>
+		<isNotNull property="status">
+			<isGreaterThan property="status" compareValue="0">
+				AND status = #status#
+			</isGreaterThan>
+		</isNotNull>
+		ORDER BY id DESC
+		<![CDATA[ LIMIT  #page.index#, #page.pageSize# ]]>
+	</select>
+	<select id="getOfflinesdkVO" parameterClass="OfflinesdkVO" resultClass="OfflinesdkVO">
+		  SELECT * from  o_offlinesdk where id =#id#
+	</select>
+	<insert id="insert" parameterClass="OfflinesdkVO">
+		  INSERT  into o_offlinesdk (timeStep, status, version, cdate)VALUES (#timeStep#, #status#, #version#, now());
+	</insert>
+	<update id="update" parameterClass="OfflinesdkVO">
+		  UPDATE   o_offlinesdk set
+		  timeStep = #timeStep#,
+		  status = #status#,
+		  version = #version#
+		  where id = #id#
+	</update>
+</sqlMap>

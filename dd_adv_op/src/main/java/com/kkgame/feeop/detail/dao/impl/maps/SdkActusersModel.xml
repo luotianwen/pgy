@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="sdkActusersModelSqlMap">
+	<typeAlias alias="sdkActusersModelVO"
+		type="com.kkgame.feeop.detail.bean.SdkActusersModelVO" />
+
+	<select id="getSdkActusersModelVOList" parameterClass="sdkActusersModelVO"
+		resultClass="sdkActusersModelVO">
+		SELECT
+		id ,coo_id as cooId,imei ,channelid , cdate ,sdkversion ,xdate
+		,xc_coo_id as xcCooId,xmodel ,xversion ,ximsi ,xinternet ,xoperator
+		,(select description from kok_sdk.EnumerationValue where id=xcou)as xcou ,scoo_id as scooId
+		FROM kok_sdk.$table$
+
+		<dynamic prepend="WHERE">
+
+			<isNotEmpty prepend="AND" property="id">
+				id = #id#
+		       </isNotEmpty>
+
+
+			<isNotEmpty prepend="AND" property="cooId">
+				coo_id = #cooId#
+		       </isNotEmpty>
+
+
+			<isNotEmpty prepend="AND" property="imei">
+				imei = #imei#
+		       </isNotEmpty>
+
+
+			<isNotEmpty prepend="AND" property="channelid">
+				channelid = #channelid#
+		       </isNotEmpty>
+
+
+			<isNotEmpty prepend="AND" property="sdk">
+				sdk = #sdk#
+		       </isNotEmpty>
+
+
+
+
+
+			<isNotEmpty prepend="AND" property="sdkversion">
+				sdkversion = #sdkversion#
+		       </isNotEmpty>
+
+
+			<isNotEmpty prepend="AND" property="xdate">
+				xdate = #xdate#
+		       </isNotEmpty>
+
+
+			<isNotEmpty prepend="AND" property="xcCooId">
+				xc_coo_id = #xcCooId#
+		       </isNotEmpty>
+
+
+			<isNotEmpty prepend="AND" property="xmodel">
+				xmodel = #xmodel#
+		       </isNotEmpty>
+
+
+			<isNotEmpty prepend="AND" property="xversion">
+				xversion = #xversion#
+		       </isNotEmpty>
+
+
+			<isNotEmpty prepend="AND" property="ximsi">
+				ximsi = #ximsi#
+		       </isNotEmpty>
+
+
+			<isNotEmpty prepend="AND" property="xinternet">
+				xinternet = #xinternet#
+		       </isNotEmpty>
+
+
+			<isNotEmpty prepend="AND" property="xoperator">
+				xoperator = #xoperator#
+		       </isNotEmpty>
+
+
+			<isNotEmpty prepend="AND" property="xcou">
+				xcou = #xcou#
+		       </isNotEmpty>
+
+
+			<isNotEmpty prepend="AND" property="scooId">
+				scoo_id = #scooId#
+		       </isNotEmpty>
+
+		</dynamic>
+
+		order by cdate desc
+		LIMIT 20
+	</select>
+
+
+</sqlMap>

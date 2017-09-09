@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="screenSqlMap">
+	<select id="getAllScreen" parameterClass="screenVO" resultClass="screenVO">
+		SELECT  SC.ID id,
+				SC.Name name,
+				SC.Width width,
+				SC.Height height,
+				SC.Alias alias
+			FROM SCREEN SC
+	</select>
+	<select id="getScreen" parameterClass="screenVO" resultClass="screenVO">
+		SELECT  SC.ID id,
+				SC.Name name,
+				SC.Width width,
+				SC.Height height,
+				SC.Alias alias
+			FROM SCREEN SC
+			WHERE SC.ID = #id#
+	</select>
+	
+	<insert id="insertScreen" parameterClass="screenVO">
+		INSERT INTO SCREEN( Name,Width, Height)
+		VALUES (#name#,#width#,#height#)
+		<selectKey resultClass="int" keyProperty="id">
+			select @@IDENTITY as value
+		</selectKey>
+	</insert>
+		
+	<delete id="deleteScreen" parameterClass="screenVO">
+		DELETE FROM SCREEN WHERE ID = #id#
+	</delete>
+</sqlMap>

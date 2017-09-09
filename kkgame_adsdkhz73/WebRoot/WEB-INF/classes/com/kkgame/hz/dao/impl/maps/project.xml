@@ -1,0 +1,638 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="projectSqlMap">
+	<select id="getProjectVOListCount" parameterClass="projectVO" resultClass="int">
+		SELECT COUNT(P.ID) count			
+		FROM PROJECT P 
+		LEFT JOIN CUSTOMER C ON C.ID = P.CustomerId
+		LEFT JOIN BUSINESS_DEVELOPER BD ON BD.ID = P.BdId
+		LEFT JOIN AGENT A ON A.ID = P.AgentId
+		WHERE 1=1
+		<isNotNull property="id">
+			<isGreaterThan property="id" compareValue="0">
+				AND P.ID = #id#
+			</isGreaterThan>
+		</isNotNull>
+		<isNotNull property="customerName">
+			<isNotEmpty property="customerName">
+				AND C.Name like concat('%',#customerName#,'%')
+			</isNotEmpty>
+		</isNotNull>
+		<isNotNull property="status">
+			<isGreaterThan property="status" compareValue="0">
+				AND P.Status = #status#
+			</isGreaterThan>
+		</isNotNull>
+		<isNotNull property="priceStatus">			
+			<isGreaterThan property="priceStatus" compareValue="0">
+				<isNotEqual property="priceStatus" compareValue="3">
+					AND
+				</isNotEqual>
+				<isEqual property="priceStatus" compareValue="3">
+					<isGreaterThan property="status" compareValue="0">
+						OR
+					</isGreaterThan>
+					<isEqual property="status" compareValue="0">
+						AND
+					</isEqual>
+				</isEqual>
+				 P.PriceStatus = #priceStatus#
+			</isGreaterThan>
+		</isNotNull>
+		<isNotNull property="confirmTime">
+			<isNotEmpty property="confirmTime">
+				AND P.ConfirmTime>#confirmTime#
+			</isNotEmpty>
+		</isNotNull>
+		<isNotNull property="bdId">
+			<isGreaterThan property="bdId" compareValue="0">
+				AND P.BdId = #bdId#
+			</isGreaterThan>
+		</isNotNull>
+		<isNotNull property="agentId">
+			<isGreaterThan property="agentId" compareValue="0">
+				AND P.AgentId = #agentId#
+			</isGreaterThan>
+		</isNotNull>
+		<isNotNull property="bhId">
+			<isGreaterThan property="bhId" compareValue="0">
+				AND P.BhId = #bhId#
+			</isGreaterThan>
+		</isNotNull>
+		<isNotNull property="version">
+			<isGreaterThan property="version" compareValue="0">
+				AND P.Version = #version#
+			</isGreaterThan>
+		</isNotNull>
+		AND C.IsNew = #isDevCustomer#
+	</select>
+	<select id="getProjectVOList" parameterClass="projectVO" resultClass="projectVO">
+		SELECT P.ID id,
+			P.Name name,
+			BD.Name bdName,
+			C.Name customerName,
+			IFNULL(C.IsNew,0) isDevCustomer,
+			A.Name agentName,
+			P.Status status,
+			P.PriceStatus priceStatus,
+			P.ConfirmTime confirmTime,
+			P.PackageTime packageTime,
+			P.Version version,
+			ifnull(hour(timediff(P.PackageTime,P.ConfirmTime)),0) timeStep
+		FROM PROJECT P 
+		LEFT JOIN CUSTOMER C ON C.ID = P.CustomerId
+		LEFT JOIN BUSINESS_DEVELOPER BD ON BD.ID = P.BdId
+		LEFT JOIN AGENT A ON A.ID = P.AgentId
+		WHERE 1=1
+		<isNotNull property="id">
+			<isGreaterThan property="id" compareValue="0">
+				AND P.ID = #id#
+			</isGreaterThan>
+		</isNotNull>
+		<isNotNull property="customerName">
+			<isNotEmpty property="customerName">
+				AND C.Name like concat('%',#customerName#,'%')
+			</isNotEmpty>
+		</isNotNull>
+		<isNotNull property="status">
+			<isGreaterThan property="status" compareValue="0">
+				AND P.Status = #status#
+			</isGreaterThan>
+		</isNotNull>
+		<isNotNull property="priceStatus">			
+			<isGreaterThan property="priceStatus" compareValue="0">
+				<isNotEqual property="priceStatus" compareValue="3">
+					AND
+				</isNotEqual>
+				<isEqual property="priceStatus" compareValue="3">
+					<isGreaterThan property="status" compareValue="0">
+						OR
+					</isGreaterThan>
+					<isEqual property="status" compareValue="0">
+						AND
+					</isEqual>
+				</isEqual>
+				 P.PriceStatus = #priceStatus#
+			</isGreaterThan>
+		</isNotNull>
+		<isNotNull property="confirmTime">
+			<isNotEmpty property="confirmTime">
+				AND P.ConfirmTime>#confirmTime#
+			</isNotEmpty>
+		</isNotNull>
+		<isNotNull property="bdId">
+			<isGreaterThan property="bdId" compareValue="0">
+				AND P.BdId = #bdId#
+			</isGreaterThan>
+		</isNotNull>
+		<isNotNull property="agentId">
+			<isGreaterThan property="agentId" compareValue="0">
+				AND P.AgentId = #agentId#
+			</isGreaterThan>
+		</isNotNull>
+		<isNotNull property="bhId">
+			<isGreaterThan property="bhId" compareValue="0">
+				AND P.BhId = #bhId#
+			</isGreaterThan>
+		</isNotNull>
+		<isNotNull property="version">
+			<isGreaterThan property="version" compareValue="0">
+				AND P.Version = #version#
+			</isGreaterThan>
+		</isNotNull>
+		AND C.IsNew = #isDevCustomer#
+		<isEqual property="status" compareValue="3">
+			ORDER BY ConfirmTime ASC
+		</isEqual>
+		<isNotEqual property="status" compareValue="3">
+			ORDER BY ID DESC
+		</isNotEqual>
+		<![CDATA[ LIMIT  #page.index#, #page.pageSize# ]]>
+	</select>
+
+	<select id="getProjectVO" parameterClass="projectVO" resultClass="projectVO">
+		SELECT P.ID id,
+			P.Name name,
+			P.CustomerId customerId,
+			P.BdId BdId,
+			P.BhId BhId,
+			P.AgentId agentId,
+			P.ScreenId screenId,
+			P.OsId osId,
+			P.Version version,
+			P.CooperateType cooperateType,
+			P.PopulariseType populariseType,
+			P.IsRemoveLogo isRemoveLogo,
+			P.SchemeName schemeName,
+			P.Price price,
+			P.ProductIds productIds,
+			P.Intro intro,
+			P.`Status` status,
+			P.PriceStatus priceStatus,
+			DATE(P.CreateTime) CreateTime,
+			P.ConfirmText confirmText,
+			P.TestText testText,
+			P.PriceText priceText,
+			P.FeeName feeName,
+			P.GameName gameName,
+			P.Big big,
+			P.Type type,
+			B.Mail mail
+		FROM PROJECT P
+		LEFT JOIN BUSINESS_DEVELOPER B ON B.ID =P.BdId
+		WHERE P.ID = #id#	
+	</select>
+	<select id="getProjectProductList" parameterClass="projectVO" resultClass="productVO">
+		SELECT PP.ProjectId projectId,
+			P.Name name,
+			PP.ProductId id,
+			PP.CooperateMode cooperateMode,
+			PP.BdBuildInRegisterPrice bdBuildInRegisterPrice,
+			PP.CuBuildInRegisterPrice cuBuildInRegisterPrice,
+			PP.BhBuildInRegisterPrice bhBuildInRegisterPrice,
+			PP.BdUninstallRegisterPrice bdUninstallRegisterPrice,
+			PP.CuUninstallRegisterPrice cuUninstallRegisterPrice,
+			PP.BhUninstallRegisterPrice BhUninstallRegisterPrice,
+			PP.BdDividePercent bdDividePercent,
+			PP.CuDividePercent cuDividePercent,
+			PP.BhDividePercent bhDividePercent
+		FROM PROJECT_PRODUCT PP
+		LEFT JOIN PRODUCT P ON P.ID = PP.ProductId
+		WHERE PP.ProjectId = #id#
+	</select>
+	<insert id="insert" parameterClass="projectVO">
+		INSERT INTO PROJECT(Name,CustomerId,BdId,BhId,AgentId,ScreenId,OsId,CooperateType,Type,
+			PopulariseType,IsRemoveLogo,SchemeName,Price,ProductIds,Intro,`Status`,PriceStatus,FeeName,GameName,Big,CreateTime)
+		VALUES(#name#,#customerId#,#bdId#,#bhId#,#agentId#,#screenId#,#osId#, #cooperateType#, #type#, #populariseType#,#isRemoveLogo#,#schemeName#,#price#,#productIds#,#intro#,#status#,#priceStatus#,#feeName#,#gameName#,#big#,now())
+		<selectKey keyProperty="id" resultClass="int">
+			SELECT LAST_INSERT_ID() AS ID FROM PROJECT LIMIT 1
+		</selectKey>
+	</insert>
+	<update id="update" parameterClass="projectVO">
+		UPDATE PROJECT 
+		SET	`Name` = #name#,
+			CustomerId = #customerId#,
+			BdId = #bdId#,
+			BhId = #bhId#,
+			AgentId = #agentId#,
+			ScreenId = #screenId#,
+			OsId = #osId#,
+			PopulariseType = #populariseType#,
+			CooperateType = #cooperateType#,
+			IsRemoveLogo = #isRemoveLogo#,
+			SchemeName = #schemeName#,
+			ProductIds = #productIds#,
+			Price = #price#,
+			Intro = #intro#,
+			FeeName = #feeName#,
+			GameName = #gameName#,
+			Big = #big#,
+			Type=#type#
+		WHERE ID = #id#
+	</update>
+	<insert id="insertProjectProduct" parameterClass="java.util.List">
+		INSERT INTO PROJECT_PRODUCT(ProjectId,ProductId,CooperateMode,BdBuildInRegisterPrice,CuBuildInRegisterPrice,BhBuildInRegisterPrice,BdUninstallRegisterPrice,CuUninstallRegisterPrice,BhUninstallRegisterPrice,BdDividePercent,CuDividePercent,BhDividePercent)
+		VALUES
+		<iterate conjunction=",">
+			<![CDATA[
+			(#list[].projectId#,#list[].id#,#list[].cooperateMode#,#list[].bdBuildInRegisterPrice#,#list[].cuBuildInRegisterPrice#,#list[].bhBuildInRegisterPrice#,#list[].bdUninstallRegisterPrice#,#list[].cuUninstallRegisterPrice#,#list[].bhUninstallRegisterPrice#,#list[].bdDividePercent#,#list[].cuDividePercent#,#list[].bhDividePercent#)
+			]]>  
+		</iterate>
+	</insert>
+	<delete id="deleteProjectProduct" parameterClass="projectVO">
+		DELETE FROM PROJECT_PRODUCT WHERE ProjectId = #id#
+	</delete>
+	<update id="updateStatus" parameterClass="projectVO">
+		UPDATE PROJECT SET Status=#status#
+		<isEqual property="status" compareValue="2">
+			,PriceStatus=#priceStatus#,SubmitTime=now()
+		</isEqual>
+		<isEqual property="status" compareValue="3">
+			,ConfirmTime=now(),PackageTime=NULL,Version=#version#
+			<isNotNull property="intro">
+				<isNotEmpty property="intro">
+					,Intro=#intro#
+				</isNotEmpty>
+			</isNotNull>
+		</isEqual>
+		<isEqual property="status" compareValue="4">
+			,PackageTime=now()
+		</isEqual>
+		<isEqual property="status" compareValue="5">
+			,TestTime=now()
+		</isEqual>
+		<isEqual property="status" compareValue="6">
+			,TestTime=now(),TestText=#testText#
+		</isEqual>
+		<isEqual property="status" compareValue="7">
+			,ConfirmTime=now(),ConfirmText=#confirmText#
+		</isEqual>
+		WHERE ID = #id#
+	</update>
+	<update id="updatePriceStatus" parameterClass="projectVO">
+		UPDATE PROJECT SET PriceStatus=#priceStatus#
+		<isGreaterThan property="priceStatus" compareValue="0">
+			<isEqual property="priceStatus" compareValue="3">
+				,PriceText=#priceText#			
+			</isEqual>
+		</isGreaterThan>
+		WHERE ID = #id#
+	</update>
+	<insert id="insertProjectFileVO" parameterClass="projectFileVO">
+		INSERT INTO PROJECT_FILE(ProjectId,FilePath,UploadId,Info,CreateTime)
+		VALUES(#projectId#,#filePath#,#uploadId#,#info#,now())
+	</insert>
+	<select id="getProjectFileVOList" parameterClass="projectFileVO" resultClass="projectFileVO">
+		SELECT ID id,
+			ProjectId projectId,
+			FilePath filePath,
+			Info info,
+			DATE(CreateTime) createTime,
+			Times times,
+			DATE(LastDownTime) lastDownTime
+		FROM PROJECT_FILE WHERE ProjectId = #projectId#
+	</select>
+	<update id="updateProjectFile" parameterClass="projectFileVO">
+		UPDATE PROJECT_FILE SET Times=Times+1,LastDownTime=now() WHERE ID  = #id#
+	</update>
+	<update id="updateInfo" parameterClass="projectVO">
+		UPDATE PROJECT SET Intro=#intro# WHERE ID = #id#
+	</update>
+	<select id="getProjectProductVO" parameterClass="productVO" resultClass="productVO">
+		SELECT PP.ProjectId projectId,
+			P.Name name,
+			PP.ProductId id,
+			PR.bhId bhId,
+			PP.CooperateMode cooperateMode,
+			PP.BdBuildInRegisterPrice bdBuildInRegisterPrice,
+			PP.CuBuildInRegisterPrice cuBuildInRegisterPrice,
+			PP.BhBuildInRegisterPrice bhBuildInRegisterPrice,
+			PP.BdUninstallRegisterPrice bdUninstallRegisterPrice,
+			PP.CuUninstallRegisterPrice cuUninstallRegisterPrice,
+			PP.BhUninstallRegisterPrice BhUninstallRegisterPrice,
+			PP.BdDividePercent bdDividePercent,
+			PP.CuDividePercent cuDividePercent,
+			PP.BhDividePercent bhDividePercent
+		FROM PROJECT_PRODUCT PP
+		LEFT JOIN PRODUCT P ON P.ID = PP.ProductId
+		LEFT JOIN PROJECT PR ON PR.ID = PP.ProjectId
+		WHERE PP.ProjectId = #projectId# AND PP.ProductId = #id#
+	</select>
+	<update id="updatePrice" parameterClass="productVO">
+		UPDATE PROJECT_PRODUCT PP
+		SET 
+		<isEqual property="cooperateMode" compareValue="1">
+			PP.BdBuildInRegisterPrice = #bdBuildInRegisterPrice#,
+			PP.CuBuildInRegisterPrice = #cuBuildInRegisterPrice#,
+			PP.BhBuildInRegisterPrice = #bhBuildInRegisterPrice#,
+			PP.BdUninstallRegisterPrice = #bdUninstallRegisterPrice#,
+			PP.CuUninstallRegisterPrice = #cuUninstallRegisterPrice#,
+			PP.BhUninstallRegisterPrice = #bhUninstallRegisterPrice#
+		</isEqual>
+		<isEqual property="cooperateMode" compareValue="2">
+			PP.BdDividePercent =#bdDividePercent#,
+			PP.CuDividePercent =#cuDividePercent#,
+			PP.BhDividePercent =#bhDividePercent#
+		</isEqual>
+		WHERE PP.ProjectId = #projectId# AND PP.ProductId = #id#
+	</update>
+	<select id="getAllProjectVOList" parameterClass="projectVO" resultClass="projectVO">
+		SELECT P.ID id,
+		P.Name name,
+		BD.Name bdName,
+		C.Name customerName,
+		IFNULL(C.IsNew,0) isDevCustomer,
+		A.Name agentName,
+		P.Status status,
+		P.PriceStatus priceStatus,
+		P.ConfirmTime confirmTime,
+		P.PackageTime packageTime,
+		P.Version version,
+		ifnull(hour(timediff(P.PackageTime,P.ConfirmTime)),0) timeStep
+		FROM PROJECT P
+		LEFT JOIN CUSTOMER C ON C.ID = P.CustomerId
+		LEFT JOIN BUSINESS_DEVELOPER BD ON BD.ID = P.BdId
+		LEFT JOIN AGENT A ON A.ID = P.AgentId
+		WHERE 1=1
+		<isNotNull property="id">
+			<isGreaterThan property="id" compareValue="0">
+				AND P.ID = #id#
+			</isGreaterThan>
+		</isNotNull>
+		<isNotNull property="customerName">
+			<isNotEmpty property="customerName">
+				AND C.Name like concat('%',#customerName#,'%')
+			</isNotEmpty>
+		</isNotNull>
+		<isNotNull property="status">
+			<isGreaterThan property="status" compareValue="0">
+				AND P.Status = #status#
+			</isGreaterThan>
+		</isNotNull>
+		<isNotNull property="priceStatus">
+			<isGreaterThan property="priceStatus" compareValue="0">
+				<isNotEqual property="priceStatus" compareValue="3">
+					AND
+				</isNotEqual>
+				<isEqual property="priceStatus" compareValue="3">
+					<isGreaterThan property="status" compareValue="0">
+						OR
+					</isGreaterThan>
+					<isEqual property="status" compareValue="0">
+						AND
+					</isEqual>
+				</isEqual>
+				P.PriceStatus = #priceStatus#
+			</isGreaterThan>
+		</isNotNull>
+		<isNotNull property="confirmTime">
+			<isNotEmpty property="confirmTime">
+				AND P.ConfirmTime>#confirmTime#
+			</isNotEmpty>
+		</isNotNull>
+		<isNotNull property="bdId">
+			<isGreaterThan property="bdId" compareValue="0">
+				AND P.BdId = #bdId#
+			</isGreaterThan>
+		</isNotNull>
+		<isNotNull property="agentId">
+			<isGreaterThan property="agentId" compareValue="0">
+				AND P.AgentId = #agentId#
+			</isGreaterThan>
+		</isNotNull>
+		<isNotNull property="bhId">
+			<isGreaterThan property="bhId" compareValue="0">
+				AND P.BhId = #bhId#
+			</isGreaterThan>
+		</isNotNull>
+		<isNotNull property="version">
+			<isGreaterThan property="version" compareValue="0">
+				AND P.Version = #version#
+			</isGreaterThan>
+		</isNotNull>
+		AND C.IsNew = #isDevCustomer#
+		<isEqual property="status" compareValue="3">
+			ORDER BY ConfirmTime ASC
+		</isEqual>
+		<isNotEqual property="status" compareValue="3">
+			ORDER BY ID DESC
+		</isNotEqual>
+	</select>
+	<select id="getProjectStatVOList" parameterClass="projectStatVO" resultClass="projectStatVO">
+		SELECT
+			DATE_FORMAT(p.CreateTime,"%y-%m-%d")  time,
+			BD.`Name` bdName,
+			p.`Status` status,
+		COUNT(*) packegaNum
+		FROM PROJECT P
+		LEFT JOIN CUSTOMER C ON C.ID = P.CustomerId
+		LEFT JOIN BUSINESS_DEVELOPER BD ON BD.ID = P.BdId
+
+		WHERE C.IsNew = 0
+		<isNotEmpty property="startTime">
+			AND P.CreateTime &gt; #startTime#
+		</isNotEmpty>
+		<isNotEmpty property="endTime">
+			AND P.CreateTime &lt; #endTime#
+		</isNotEmpty>
+		<isGreaterThan property="bdId" compareValue="0">
+			AND P.BdId = #bdId#
+		</isGreaterThan>
+		<isGreaterThan property="status" compareValue="0">
+			AND P.Status = #status#
+		</isGreaterThan>
+
+		GROUP BY 1=1
+		<isEmpty property="startTime">
+			<isNotEmpty property="endTime">
+				,time
+			</isNotEmpty>
+		</isEmpty>
+		<isEmpty property="endTime">
+			<isNotEmpty property="startTime">
+				,time
+			</isNotEmpty>
+		</isEmpty>
+		<isNotEmpty property="startTime">
+			<isNotEmpty property="endTime">
+				,time
+			</isNotEmpty>
+		</isNotEmpty>
+		<isEqual property="bdId" compareValue="0">
+			,bdName
+		</isEqual>
+		<isEqual property="status" compareValue="0">
+			,status
+		</isEqual>
+
+		ORDER BY 1=1
+		<isEmpty property="startTime">
+			<isNotEmpty property="endTime">
+				,time ASC
+			</isNotEmpty>
+		</isEmpty>
+		<isEmpty property="endTime">
+			<isNotEmpty property="startTime">
+				,time ASC
+			</isNotEmpty>
+		</isEmpty>
+		<isNotEmpty property="startTime">
+			<isNotEmpty property="endTime">
+				,time ASC
+			</isNotEmpty>
+		</isNotEmpty>
+		,packegaNum DESC
+	</select>
+
+
+
+
+
+	<insert id="createSubscribe" parameterClass="projectVO">
+		INSERT INTO PROJECT_SUBSCRIBE(Name,CustomerId,BdId,BhId,AgentId,SchemeName,Price,ProductIds,Intro,`Status`,CreateTime)
+		VALUES(#name#,#customerId#,#bdId#,#bhId#,#agentId#,#schemeName#,#price#,#productIds#,#intro#,1,now())
+		<selectKey keyProperty="id" resultClass="int">
+			SELECT LAST_INSERT_ID() AS ID FROM PROJECT LIMIT 1
+		</selectKey>
+	</insert>
+	<update id="updateSubscribe" parameterClass="projectVO">
+		UPDATE PROJECT_SUBSCRIBE
+		SET	`Name` = #name#,
+		CustomerId = #customerId#,
+		BdId = #bdId#,
+		BhId = #bhId#,
+		AgentId = #agentId#,
+
+		SchemeName = #schemeName#,
+		ProductIds = #productIds#,
+
+		Intro = #intro#,
+		Price = #price#,
+		Status = #status#,
+		CreateTime = now()
+
+		WHERE ID = #id#
+	</update>
+	<select id="getProjectVOSubscribeListCount" parameterClass="projectVO" resultClass="int">
+		SELECT COUNT(P.ID) count
+		FROM PROJECT_SUBSCRIBE P
+		LEFT JOIN CUSTOMER C ON C.ID = P.CustomerId
+		LEFT JOIN BUSINESS_DEVELOPER BD ON BD.ID = P.BdId
+		LEFT JOIN AGENT A ON A.ID = P.AgentId
+		WHERE 1=1
+		<isNotNull property="id">
+			<isGreaterThan property="id" compareValue="0">
+				AND P.ID = #id#
+			</isGreaterThan>
+		</isNotNull>
+		<isNotNull property="customerName">
+			<isNotEmpty property="customerName">
+				AND C.Name like concat('%',#customerName#,'%')
+			</isNotEmpty>
+		</isNotNull>
+
+		<isNotNull property="schemeName">
+			<isNotEmpty property="schemeName">
+				AND p.SchemeName  like concat('%',#schemeName#,'%')
+			</isNotEmpty>
+		</isNotNull>
+
+		<isNotNull property="status">
+			<isGreaterThan property="status" compareValue="0">
+				AND P.Status = #status#
+			</isGreaterThan>
+		</isNotNull>
+
+		<isNotNull property="bdId">
+			<isGreaterThan property="bdId" compareValue="0">
+				AND P.BdId = #bdId#
+			</isGreaterThan>
+		</isNotNull>
+		<isNotNull property="agentId">
+			<isGreaterThan property="agentId" compareValue="0">
+				AND P.AgentId = #agentId#
+			</isGreaterThan>
+		</isNotNull>
+		<isNotNull property="bhId">
+			<isGreaterThan property="bhId" compareValue="0">
+				AND P.BhId = #bhId#
+			</isGreaterThan>
+		</isNotNull>
+	</select>
+	<select id="getProjectVOSubscribeList" parameterClass="projectVO" resultClass="projectVO">
+		SELECT P.ID id,
+		P.Name name,
+		BD.Name bdName,
+		C.Name customerName,
+		DATE(P.CreateTime) CreateTime,
+		A.Name agentName,
+		P.Status status,
+		p.SchemeName schemeName
+		FROM PROJECT_SUBSCRIBE P
+		LEFT JOIN CUSTOMER C ON C.ID = P.CustomerId
+		LEFT JOIN BUSINESS_DEVELOPER BD ON BD.ID = P.BdId
+		LEFT JOIN AGENT A ON A.ID = P.AgentId
+		WHERE 1=1
+		<isNotNull property="id">
+			<isGreaterThan property="id" compareValue="0">
+				AND P.ID = #id#
+			</isGreaterThan>
+		</isNotNull>
+		<isNotNull property="customerName">
+			<isNotEmpty property="customerName">
+				AND C.Name like concat('%',#customerName#,'%')
+			</isNotEmpty>
+		</isNotNull>
+
+		<isNotNull property="schemeName">
+			<isNotEmpty property="schemeName">
+				AND p.SchemeName  like concat('%',#schemeName#,'%')
+			</isNotEmpty>
+		</isNotNull>
+
+		<isNotNull property="status">
+			<isGreaterThan property="status" compareValue="0">
+				AND P.Status = #status#
+			</isGreaterThan>
+		</isNotNull>
+
+		<isNotNull property="bdId">
+			<isGreaterThan property="bdId" compareValue="0">
+				AND P.BdId = #bdId#
+			</isGreaterThan>
+		</isNotNull>
+		<isNotNull property="agentId">
+			<isGreaterThan property="agentId" compareValue="0">
+				AND P.AgentId = #agentId#
+			</isGreaterThan>
+		</isNotNull>
+		<isNotNull property="bhId">
+			<isGreaterThan property="bhId" compareValue="0">
+				AND P.BhId = #bhId#
+			</isGreaterThan>
+		</isNotNull>
+
+
+			ORDER BY CreateTime DESC
+
+		<![CDATA[ LIMIT  #page.index#, #page.pageSize# ]]>
+	</select>
+
+	<select id="getProjectVOSubscribe" parameterClass="projectVO" resultClass="projectVO">
+		SELECT P.ID id,
+		P.Name name,
+		P.CustomerId customerId,
+		P.BdId BdId,
+		P.BhId BhId,
+		P.AgentId agentId,
+
+		P.SchemeName schemeName,
+		P.Price price,
+		P.ProductIds productIds,
+		P.Intro intro,
+		P.`Status` status,
+		DATE(P.CreateTime) CreateTime
+		FROM PROJECT_SUBSCRIBE P
+		WHERE P.ID = #id#
+	</select>
+</sqlMap>

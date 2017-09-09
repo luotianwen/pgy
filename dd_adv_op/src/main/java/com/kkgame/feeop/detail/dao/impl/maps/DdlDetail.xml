@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="ddlDetailSqlMap">
+	<select id="getDdlSdkDetailVOList" parameterClass="ddlDetailVO"
+		resultClass="ddlDetailVO">
+		SELECT
+		D.id ,
+		D.coo_id as projectId,
+		D.simei ,
+		D.channelId ,
+		D.productId,
+		P.Name productName,
+		C.Name channelName,
+		D.createTime ,
+		D.status ,
+		D.zstatus ,
+		(select
+		description from EnumerationValue where id=D.status) as statusName,
+		(select
+		description from EnumerationValue where id=D.zstatus) as zstatusName,
+		IFNULL(D.countryId,0) ,
+		(select
+		description from EnumerationValue where id=countryId) as countryName
+		FROM PRODUCTSALE_$table$ D
+		LEFT JOIN PRODUCTS P ON P.ID
+		= D.productId
+		LEFT JOIN CHANNELS C ON C.Id = D.channelId
+		WHERE 1=1
+		<isNotNull property="simei">
+			<isNotEmpty property="simei">
+				AND D.simei=#simei#
+			</isNotEmpty>
+		</isNotNull>
+		<isGreaterThan property="projectId" compareValue="0">
+			AND
+			D.coo_id =#projectId#
+		</isGreaterThan>
+		<isGreaterThan property="channelId" compareValue="0">
+			AND
+			D.channelId =#channelId#
+		</isGreaterThan>
+		<isGreaterThan property="productId" compareValue="0">
+			AND
+			D.productId =#productId#
+		</isGreaterThan>
+		<isGreaterThan property="countryId" compareValue="0">
+			AND
+			D.countryId =#countryId#
+		</isGreaterThan>
+		<isGreaterThan property="status" compareValue="0">
+			AND
+			D.status =#status#
+		</isGreaterThan>
+		<isGreaterThan property="zstatus" compareValue="0">
+			AND
+			D.zstatus =#zstatus#
+		</isGreaterThan>
+		ORDER BY #sortIndex#
+		<isEqual property="sortType" compareValue="desc"> DESC </isEqual>
+    	<![CDATA[ LIMIT  #page.index#, #page.pageSize# ]]>
+	</select>
+	<select id="getDdlSdkDetailVOListCount" parameterClass="ddlDetailVO"
+		resultClass="int">
+		SELECT
+		COUNT(*) count
+		FROM PRODUCTSALE_$table$ D
+		LEFT JOIN PRODUCTS P ON P.ID
+		= D.productId
+		LEFT JOIN CHANNELS C ON C.Id = D.channelId
+		WHERE 1=1
+		<isNotNull property="simei">
+			<isNotEmpty property="simei">
+				AND D.simei=#simei#
+			</isNotEmpty>
+		</isNotNull>
+		<isGreaterThan property="projectId" compareValue="0">
+			AND
+			D.coo_id =#projectId#
+		</isGreaterThan>
+		<isGreaterThan property="channelId" compareValue="0">
+			AND
+			D.channelId =#channelId#
+		</isGreaterThan>
+		<isGreaterThan property="productId" compareValue="0">
+			AND
+			D.productId =#productId#
+		</isGreaterThan>
+		<isGreaterThan property="countryId" compareValue="0">
+			AND
+			D.countryId =#countryId#
+		</isGreaterThan>
+		<isGreaterThan property="status" compareValue="0">
+			AND
+			D.status =#status#
+		</isGreaterThan>
+		<isGreaterThan property="zstatus" compareValue="0">
+			AND
+			D.zstatus =#zstatus#
+		</isGreaterThan>
+	</select>
+	<select id="getDdlAdjustDetailVOList" parameterClass="ddlDetailVO"
+		resultClass="ddlDetailVO">
+		SELECT
+		D.id ,
+		D.coo_id as projectId,
+		D.channelId ,
+		D.productId,
+		P.Name productName,
+		C.Name channelName,
+		D.createTime ,
+		D.status ,
+		D.ClickId clickId,
+		(select
+		description from EnumerationValue where id=D.status) as statusName,
+		(select
+		description from EnumerationValue where id=D.zstatus) as zstatusName,
+		D.zstatus ,
+		IFNULL(D.countryId,0) ,
+		(select
+		description from EnumerationValue where id=countryId) as countryName
+		FROM INSTALL_ADJUST_$table$ D
+		LEFT JOIN PRODUCTS P ON P.ID
+		= D.productId
+		LEFT JOIN CHANNELS C ON C.Id = D.channelId
+		WHERE 1=1
+		
+		<isGreaterThan property="projectId" compareValue="0">
+			AND
+			D.coo_id =#projectId#
+		</isGreaterThan>
+		<isGreaterThan property="channelId" compareValue="0">
+			AND
+			D.channelId =#channelId#
+		</isGreaterThan>
+		<isGreaterThan property="productId" compareValue="0">
+			AND
+			D.productId =#productId#
+		</isGreaterThan>
+		<isGreaterThan property="countryId" compareValue="0">
+			AND
+			D.countryId =#countryId#
+		</isGreaterThan>
+		<isGreaterThan property="status" compareValue="0">
+			AND
+			D.status =#status#
+		</isGreaterThan>
+		<isGreaterThan property="zstatus" compareValue="0">
+			AND
+			D.zstatus =#zstatus#
+		</isGreaterThan>
+		<isNotNull property="clickId">
+			<isNotEmpty property="clickId">
+			AND
+			D.clickId =#clickId#
+			</isNotEmpty>
+		</isNotNull>
+		ORDER BY #sortIndex#
+		<isEqual property="sortType" compareValue="desc"> DESC </isEqual>
+    	<![CDATA[ LIMIT  #page.index#, #page.pageSize# ]]>
+	</select>
+	<select id="getDdlAdjustDetailVOListCount" parameterClass="ddlDetailVO"
+		resultClass="int">
+		SELECT
+		COUNT(*) count
+		FROM INSTALL_ADJUST_$table$ D
+		LEFT JOIN PRODUCTS P ON P.ID
+		= D.productId
+		LEFT JOIN CHANNELS C ON C.Id = D.channelId
+		WHERE 1=1
+		
+		<isGreaterThan property="projectId" compareValue="0">
+			AND
+			D.coo_id =#projectId#
+		</isGreaterThan>
+		<isGreaterThan property="channelId" compareValue="0">
+			AND
+			D.channelId =#channelId#
+		</isGreaterThan>
+		<isGreaterThan property="productId" compareValue="0">
+			AND
+			D.productId =#productId#
+		</isGreaterThan>
+		<isGreaterThan property="countryId" compareValue="0">
+			AND
+			D.countryId =#countryId#
+		</isGreaterThan>
+		<isGreaterThan property="status" compareValue="0">
+			AND
+			D.status =#status#
+		</isGreaterThan>
+		<isGreaterThan property="zstatus" compareValue="0">
+			AND
+			D.zstatus =#zstatus#
+		</isGreaterThan>
+		<isNotNull property="clickId">
+			<isNotEmpty property="clickId">
+			AND
+			D.clickId =#clickId#
+			</isNotEmpty>
+		</isNotNull>
+	</select>
+</sqlMap>

@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+<beans>
+	<!-- tag -->
+	<bean id="tagDAO" class="com.kkgame.hz.tag.TagDAOImpl">
+		<property name="dataSource" ref="dataSource"></property>
+		<property name="sqlMapClient" ref="sqlMapClient" />
+	</bean>
+	<!-- user -->
+	<bean id="portalUserDAO"
+		class="com.kkgame.hz.dao.impl.PortalUserDAOImpl">
+		<property name="dataSource" ref="dataSource"></property>
+		<property name="sqlMapClient" ref="sqlMapClient" />
+	</bean>
+	<!-- agent -->
+	<bean id="agentDAO" class="com.kkgame.hz.dao.impl.AgentDAOImpl">
+		<property name="dataSource" ref="dataSource"></property>
+		<property name="sqlMapClient" ref="sqlMapClient" />
+	</bean>
+	<!-- bd -->
+	<bean id="bdDAO" class="com.kkgame.hz.dao.impl.BdDAOImpl">
+		<property name="dataSource" ref="dataSource"></property>
+		<property name="sqlMapClient" ref="sqlMapClient" />
+	</bean>
+	<!-- bd -->
+	<bean id="bhDAO" class="com.kkgame.hz.dao.impl.BhDAOImpl">
+		<property name="dataSource" ref="dataSource"></property>
+		<property name="sqlMapClient" ref="sqlMapClient" />
+	</bean>
+	<!-- customer -->
+	<bean id="customerDAO"
+		class="com.kkgame.hz.dao.impl.CustomerDAOImpl">
+		<property name="dataSource" ref="dataSource"></property>
+		<property name="sqlMapClient" ref="sqlMapClient" />
+	</bean>
+	<bean id="screenDAO" class="com.kkgame.hz.dao.impl.ScreenDAOImpl">
+ 		<property name="dataSource" ref="dataSource"></property>
+ 		<property name="sqlMapClient" ref="sqlMapClient"></property>
+ 	</bean>
+ 	<bean id="osDAO" class="com.kkgame.hz.dao.impl.OsDAOImpl">
+ 		<property name="dataSource" ref="dataSource"></property>
+ 		<property name="sqlMapClient" ref="sqlMapClient"></property>
+ 	</bean>
+ 	<bean id="productDAO" class="com.kkgame.hz.dao.impl.ProductDAOImpl">
+ 		<property name="dataSource" ref="dataSource"></property>
+ 		<property name="sqlMapClient" ref="sqlMapClient"></property>
+ 	</bean>
+ 	<bean id="projectDAO" class="com.kkgame.hz.dao.impl.ProjectDAOImpl">
+ 		<property name="dataSource" ref="dataSource"></property>
+ 		<property name="sqlMapClient" ref="sqlMapClient"></property>
+ 	</bean>
+ 	<bean id="userRegisterDAO" class="com.kkgame.hz.dao.impl.UserRegisterDAOImpl">
+		<property name="dataSource" ref="dataSource"></property>
+		<property name = "sqlMapClient" ref = "sqlMapClient"/>
+	</bean>
+	<bean id="userDivideDAO" class="com.kkgame.hz.dao.impl.UserDivideDAOImpl">
+		<property name="dataSource" ref="dataSource"></property>
+		<property name = "sqlMapClient" ref = "sqlMapClient"/>
+	</bean>
+	<bean id="ddlDataDAO" class="com.kkgame.hz.dao.impl.DdlDataDAOImpl">
+		<property name="dataSource" ref="dataSource"></property>
+		<property name = "sqlMapClient" ref = "sqlMapClient"/>
+	</bean>
+</beans>

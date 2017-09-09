@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop" 
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:p="http://www.springframework.org/schema/p" 
+       xsi:schemaLocation="http://www.springframework.org/schema/beans 
+       		http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+       		http://www.springframework.org/schema/aop
+       		http://www.springframework.org/schema/aop/spring-aop-2.5.xsd 
+		    http://www.springframework.org/schema/tx  
+    	    http://www.springframework.org/schema/tx/spring-tx-2.5.xsd 
+            http://www.springframework.org/schema/context
+            http://www.springframework.org/schema/context/spring-context-2.5.xsd">
+ 	
+ 	<!-- 索引 -->
+ 	<bean id="adverService" class="com.kkgame.feeop.adver.service.impl.AdverServiceImpl">
+ 		<property name="adverDAO" ref="adverDAO"></property>
+ 	</bean>
+ 	<bean id="adverDAO" class="com.kkgame.feeop.adver.dao.impl.AdverDAOImpl">
+ 		<property name="sqlMapClient" ref="sqlMapClient_kkpay_sdkmaster"></property>
+ 		<property name="dataSource" ref="dataSource_kkpay_sdkmaster"></property>
+ 	</bean>
+
+	<bean id="videoService" class="com.kkgame.feeop.adver.service.impl.VideoServiceImpl">
+		<property name="videoDao" ref="videoDao"></property>
+	</bean>
+	<bean id="videoDao" class="com.kkgame.feeop.adver.dao.impl.VideoDaoImpl">
+		<property name="sqlMapClient" ref="sqlMapClient_kkpay_sdkmaster"></property>
+		<property name="dataSource" ref="dataSource_kkpay_sdkmaster"></property>
+	</bean>
+
+ 	<bean id="advService" class="com.kkgame.feeop.adver.service.impl.AdvServiceImpl">
+ 		<property name="advDAO" ref="advDAO"></property>
+ 	</bean>
+ 	<bean id="advDAO" class="com.kkgame.feeop.adver.dao.impl.AdvDAOImpl">
+ 		<property name="sqlMapClient" ref="sqlMapClient_kkpay_sdkmaster"></property>
+ 		<property name="dataSource" ref="dataSource_kkpay_sdkmaster"></property>
+ 	</bean>
+ 	<bean id="advSdkService" class="com.kkgame.feeop.adver.service.impl.AdvSdkServiceImpl">
+ 		<property name="advSdkDAO" ref="advSdkDAO"></property>
+ 	</bean>
+ 	<bean id="advSdkDAO" class="com.kkgame.feeop.adver.dao.impl.AdvSdkDAOImpl">
+ 		<property name="sqlMapClient" ref="sqlMapClient_kkpay_sdkmaster"></property>
+ 		<property name="dataSource" ref="dataSource_kkpay_sdkmaster"></property>
+ 	</bean>
+	<bean id="advLinkmanService" class="com.kkgame.feeop.adver.service.impl.AdvLinkmanServiceImpl">
+		<property name="advLinkmanDAO" ref="advLinkmanDAO"/>
+	</bean>
+	<bean id="advLinkmanDAO" class="com.kkgame.feeop.adver.dao.impl.AdvLinkmanDaoImpl">
+		<property name="sqlMapClient" ref="sqlMapClient_kkpay_sdkmaster"></property>
+		<property name="dataSource" ref="dataSource_kkpay_sdkmaster"></property>
+	</bean>
+	<bean id="linkads2Service" class="com.kkgame.feeop.adver.service.impl.Linkads2ServiceImpl">
+		<property name="linkads2DAO" ref="linkads2DAO"></property>
+	</bean>
+	<bean id="linkads2DAO" class="com.kkgame.feeop.adver.dao.impl.Linkads2DAOImpl">
+		<property name="sqlMapClient" ref="sqlMapClient_kkpay_sdkmaster"></property>
+		<property name="dataSource" ref="dataSource_kkpay_sdkmaster"></property>
+	</bean>
+	<bean id="linkadsconfigService" class="com.kkgame.feeop.adver.service.impl.LinkadsconfigServiceImpl">
+		<property name="linkadsconfigDAO" ref="linkadsconfigDAO"></property>
+	</bean>
+	<bean id="linkadsconfigDAO" class="com.kkgame.feeop.adver.dao.impl.LinkadsconfigDAOImpl">
+		<property name="sqlMapClient" ref="sqlMapClient_kkpay_sdkmaster"></property>
+		<property name="dataSource" ref="dataSource_kkpay_sdkmaster"></property>
+	</bean>
+	<bean id="webdomainService" class="com.kkgame.feeop.adver.service.impl.WebdomainServiceImpl">
+		<property name="webdomainDAO" ref="webdomainDAO"></property>
+	</bean>
+	<bean id="webdomainDAO" class="com.kkgame.feeop.adver.dao.impl.WebdomainDAOImpl">
+		<property name="sqlMapClient" ref="sqlMapClient_kkpay_sdkmaster"></property>
+		<property name="dataSource" ref="dataSource_kkpay_sdkmaster"></property>
+	</bean>
+
+
+	<bean id="promotionDomainService" class="com.kkgame.feeop.adver.service.impl.PromotionDomainServiceImpl">
+		<property name="promotionDomainDAO" ref="promotionDomainDAO"></property>
+	</bean>
+	<bean id="promotionDomainDAO" class="com.kkgame.feeop.adver.dao.impl.PromotionDomainDAOImpl">
+		<property name="sqlMapClient" ref="sqlMapClient_kkpay_sdkmaster"></property>
+		<property name="dataSource" ref="dataSource_kkpay_sdkmaster"></property>
+	</bean>
+
+
+	<bean id="pcustomerService" class="com.kkgame.feeop.adver.service.impl.PcustomerServiceImpl">
+		<property name="pcustomerDAO" ref="pcustomerDAO"></property>
+	</bean>
+	<bean id="spromotionService" class="com.kkgame.feeop.adver.service.impl.SpromotionServiceImpl">
+		<property name="spromotionDAO" ref="spromotionDAO"></property>
+	</bean>
+	<bean id="pcustomerDAO" class="com.kkgame.feeop.adver.dao.impl.PcustomerDAOImpl">
+		<property name="sqlMapClient" ref="sqlMapClient_kkpay_sdkmaster"></property>
+		<property name="dataSource" ref="dataSource_kkpay_sdkmaster"></property>
+	</bean>
+	<bean id="spromotionDAO" class="com.kkgame.feeop.adver.dao.impl.SpromotionDAOImpl">
+		<property name="sqlMapClient" ref="sqlMapClient_kkpay_sdkmaster"></property>
+		<property name="dataSource" ref="dataSource_kkpay_sdkmaster"></property>
+	</bean>
+
+	<bean id="promotionService" class="com.kkgame.feeop.adver.service.impl.PromotionServiceImpl">
+		<property name="promotionDAO" ref="promotionDAO"></property>
+	</bean>
+	<bean id="promotionDAO" class="com.kkgame.feeop.adver.dao.impl.PromotionDAOImpl">
+		<property name="sqlMapClient" ref="sqlMapClient_kkpay_sdkmaster"></property>
+		<property name="dataSource" ref="dataSource_kkpay_sdkmaster"></property>
+	</bean>
+	<bean id="subscribeService" class="com.kkgame.feeop.adver.service.impl.SubscribeServiceImpl">
+		<property name="subscribeDAO" ref="subscribeDAO"></property>
+	</bean>
+	<bean id="subscribeDAO" class="com.kkgame.feeop.adver.dao.impl.SubscribeDAOImpl">
+		<property name="sqlMapClient" ref="sqlMapClient_kkpay_sdkmaster"></property>
+		<property name="dataSource" ref="dataSource_kkpay_sdkmaster"></property>
+	</bean>
+	<bean id="promotionCustomerService" class="com.kkgame.feeop.adver.service.impl.PromotionCustomerServiceImpl">
+		<property name="promotionCustomerDAO" ref="promotionCustomerDAO"></property>
+	</bean>
+	<bean id="promotionCustomerDAO" class="com.kkgame.feeop.adver.dao.impl.PromotionCustomerDAOImpl">
+		<property name="sqlMapClient" ref="sqlMapClient_kkpay_sdkmaster"></property>
+		<property name="dataSource" ref="dataSource_kkpay_sdkmaster"></property>
+	</bean>
+
+
+</beans>

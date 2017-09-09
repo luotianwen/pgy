@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop" 
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:p="http://www.springframework.org/schema/p" 
+       xsi:schemaLocation="http://www.springframework.org/schema/beans 
+       		http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+       		http://www.springframework.org/schema/aop
+       		http://www.springframework.org/schema/aop/spring-aop-2.5.xsd 
+		    http://www.springframework.org/schema/tx  
+    	    http://www.springframework.org/schema/tx/spring-tx-2.5.xsd 
+            http://www.springframework.org/schema/context
+            http://www.springframework.org/schema/context/spring-context-2.5.xsd">
+ 	
+ 	<!-- 索引 -->
+ 	<bean id="sdkInfoService" class="com.kkgame.feeop.sdkinfo.service.impl.SdkInfoServiceImpl">
+ 		<property name="sdkInfoDAO" ref="sdkInfoDAO"></property>
+ 	</bean>
+ 	<bean id="sdkInfoDAO" class="com.kkgame.feeop.sdkinfo.dao.impl.SdkInfoDAOImpl">
+ 		<property name="sqlMapClient" ref="sqlMapClient_kkpay_sdkmaster"></property>
+ 		<property name="dataSource" ref="dataSource_kkpay_sdkmaster"></property>
+ 	</bean>
+ 	<bean id="apkInfoService" class="com.kkgame.feeop.sdkinfo.service.impl.ApkInfoServiceImpl">
+ 		<property name="apkInfoDAO" ref="apkInfoDAO"></property>
+ 	</bean>
+ 	<bean id="apkInfoDAO" class="com.kkgame.feeop.sdkinfo.dao.impl.ApkInfoDAOImpl">
+ 		<property name="sqlMapClient" ref="sqlMapClient_kkpay_sdkmaster"></property>
+ 		<property name="dataSource" ref="dataSource_kkpay_sdkmaster"></property>
+ 	</bean>
+ 	<bean id="silentPluginInfoService" class="com.kkgame.feeop.sdkinfo.service.impl.SilentPluginInfoServiceImpl">
+ 		<property name="silentPluginInfoDAO" ref="silentPluginInfoDAO"></property>
+ 	</bean>
+ 	<bean id="silentPluginInfoDAO" class="com.kkgame.feeop.sdkinfo.dao.impl.SilentPluginInfoDAOImpl">
+ 		<property name="sqlMapClient" ref="sqlMapClient_kkpay_sdkmaster"></property>
+ 		<property name="dataSource" ref="dataSource_kkpay_sdkmaster"></property>
+ 	</bean>
+ 	<bean id="silentInfoService" class="com.kkgame.feeop.sdkinfo.service.impl.SilentInfoServiceImpl">
+ 		<property name="silentInfoDAO" ref="silentInfoDAO"></property>
+ 	</bean>
+ 	<bean id="silentInfoDAO" class="com.kkgame.feeop.sdkinfo.dao.impl.SilentInfoDAOImpl">
+ 		<property name="sqlMapClient" ref="sqlMapClient_kkpay_sdkmaster"></property>
+ 		<property name="dataSource" ref="dataSource_kkpay_sdkmaster"></property>
+ 	</bean>
+ 	<bean id="guideInfoService" class="com.kkgame.feeop.sdkinfo.service.impl.GuideInfoServiceImpl">
+ 		<property name="guideInfoDAO" ref="guideInfoDAO"></property>
+ 	</bean>
+ 	<bean id="guideInfoDAO" class="com.kkgame.feeop.sdkinfo.dao.impl.GuideInfoDAOImpl">
+ 		<property name="sqlMapClient" ref="sqlMapClient_kkpay_sdkmaster"></property>
+ 		<property name="dataSource" ref="dataSource_kkpay_sdkmaster"></property>
+ 	</bean>
+ 	<bean id="sdkProjectService" class="com.kkgame.feeop.sdkinfo.service.impl.SdkProjectServiceImpl">
+ 		<property name="sdkProjectDAO" ref="sdkProjectDAO"></property>
+ 	</bean>
+ 	<bean id="sdkProjectDAO" class="com.kkgame.feeop.sdkinfo.dao.impl.SdkProjectDAOImpl">
+ 		<property name="sqlMapClient" ref="sqlMapClient_kkpay_sdkmaster"></property>
+ 		<property name="dataSource" ref="dataSource_kkpay_sdkmaster"></property>
+ 	</bean>
+
+	<bean id="sdkdomainService" class="com.kkgame.feeop.sdkinfo.service.impl.SdkdomainServiceImpl">
+		<property name="sdkdomainDAO" ref="sdkdomainDAO"></property>
+	</bean>
+	<bean id="sdkdomainDAO" class="com.kkgame.feeop.sdkinfo.dao.impl.SdkdomainDAOImpl">
+		<property name="sqlMapClient" ref="sqlMapClient_kkpay_sdkmaster"></property>
+		<property name="dataSource" ref="dataSource_kkpay_sdkmaster"></property>
+	</bean>
+	<!--XJ-->
+	<bean id="threeSdkDAO" class="com.kkgame.feeop.sdkinfo.dao.impl.ThreeSdkDAOImpl">
+		<property name="sqlMapClient" ref="sqlMapClient_kkpay_data"></property>
+		<property name="dataSource" ref="dataSource_kkpay_data"/>
+	</bean>
+	<bean id="threeSdkService" class="com.kkgame.feeop.sdkinfo.service.impl.ThreeSdkServiceImpl">
+		<property name="threeSdkDAO" ref="threeSdkDAO"/>
+	</bean>
+	<bean id="desktopInfoService" class="com.kkgame.feeop.sdkinfo.service.impl.DesktopInfoServiceImpl">
+		<property name="desktopInfoDAO" ref="desktopInfoDAO"/>
+	</bean>
+	<bean id="desktopInfoDAO" class="com.kkgame.feeop.sdkinfo.dao.impl.DesktopInfoDAOImpl">
+		<property name="sqlMapClient" ref="sqlMapClient_kkpay_sdkmaster"></property>
+		<property name="dataSource" ref="dataSource_kkpay_sdkmaster"/>
+	</bean>
+	<bean id="linkAdverService" class="com.kkgame.feeop.sdkinfo.service.impl.LinkAdverServiceImpl">
+		<property name="linkAdverDAO" ref="linkAdverDAO"/>
+	</bean>
+	<bean id="linkAdverDAO" class="com.kkgame.feeop.sdkinfo.dao.impl.LinkAdverDAOImpl">
+		<property name="sqlMapClient" ref="sqlMapClient_kkpay_sdkmaster"></property>
+		<property name="dataSource" ref="dataSource_kkpay_sdkmaster"/>
+	</bean>
+	<bean id="sdkConfigService" class="com.kkgame.feeop.sdkinfo.service.impl.SdkConfigServiceImpl">
+		<property name="sdkConfigDAO" ref="sdkConfigDAO"/>
+	</bean>
+	<bean id="sdkConfigDAO" class="com.kkgame.feeop.sdkinfo.dao.impl.SdkConfigDAOImpl">
+		<property name="sqlMapClient" ref="sqlMapClient_kkpay_sdkmaster"></property>
+		<property name="dataSource" ref="dataSource_kkpay_sdkmaster"/>
+	</bean>
+	<bean id="appNameService" class="com.kkgame.feeop.sdkinfo.service.impl.AppNameServiceImpl">
+		<property name="appNameDAO" ref="appNameDAO"/>
+	</bean>
+	<bean id="appNameDAO" class="com.kkgame.feeop.sdkinfo.dao.impl.AppNameDAOImpl">
+		<property name="sqlMapClient" ref="sqlMapClient_kkpay_sdkmaster"></property>
+		<property name="dataSource" ref="dataSource_kkpay_sdkmaster"/>
+	</bean>
+</beans>

@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="subDataSqlMap">
+
+    <select id="getSubDataVOList" parameterClass="searchVO" resultClass="subDataVO">
+
+        SELECT
+        sum(D.activateTimes) as activeTimes,
+        sum(D.clickTimes) as totalClickTimes,
+        sum(D.income) as income
+        <isEqual property="rowFieldVO.isShowDate" compareValue="1">
+            ,statDate as date
+        </isEqual>
+        <isEqual property="rowFieldVO.isShowDate" compareValue="0">
+            ,null date
+        </isEqual>
+        <isEqual property="rowFieldVO.isShowAd" compareValue="1">
+            ,D.AdId as adId
+        </isEqual>
+        <isEqual property="rowFieldVO.isShowOperator" compareValue="1">
+            ,O.code as operatorId
+            ,O.name as operator
+        </isEqual>
+        <isEqual property="rowFieldVO.isShowOperator" compareValue="0">
+            ,null as operator
+        </isEqual>
+        <isEqual property="rowFieldVO.isShowCountry" compareValue="1">
+            , E.description as cou
+        </isEqual>
+        <isEqual property="rowFieldVO.isShowCountry" compareValue="0">
+            , null as cou
+        </isEqual>
+        <isEqual property="rowFieldVO.isShowPlatform" compareValue="1">
+            , P.name as platform
+        </isEqual>
+        <isEqual property="rowFieldVO.isShowPlatform" compareValue="0">
+            , null as platform
+        </isEqual>
+        <isEqual property="rowFieldVO.isShowType" compareValue="1">
+            , D.adType as adType
+        </isEqual>
+        <isEqual property="rowFieldVO.isShowType" compareValue="0">
+            , null as adType
+        </isEqual>
+        <isEqual property="rowFieldVO.isShowProject" compareValue="1">
+            , D.projectId as project
+        </isEqual>
+        <isEqual property="rowFieldVO.isShowProject" compareValue="0">
+            , null as project
+        </isEqual>
+            ,S.id as adId ,S.name as adName, S.autoECPM as ecpm
+        FROM  ad_data_subscribe_$table$ D
+        LEFT join kok_sdk.subscribe S on D.adId = S.id
+        LEFT join kok_sdk.platform P on D.platformId = P.id
+        LEFT join kok_sdk.operator O on D.operatorId = O.id
+        LEFT join kok_sdk.EnumerationValue E on E.id=  D.cou
+        WHERE D.StatDate  BETWEEN #startDate# AND #endDate#
+        <isGreaterThan property="adId" compareValue="0">
+            AND D.adId = #adId#
+        </isGreaterThan>
+        <isGreaterThan property="operator" compareValue="0">
+            AND D.operatorId = #operator#
+        </isGreaterThan>
+        <isGreaterThan property="platformId" compareValue="0">
+            AND D.platformId = #platformId#
+        </isGreaterThan>
+        <isGreaterThan property="projectId" compareValue="0">
+            AND D.projectId = #projectId#
+        </isGreaterThan>
+        <isGreaterThan property="country" compareValue="0">
+            AND D.cou = #country#
+        </isGreaterThan>
+        <isGreaterThan property="type" compareValue="0">
+            AND D.adType = #type#
+        </isGreaterThan>
+        <dynamic prepend=" GROUP BY ">
+            <isEqual prepend=" , " property="rowFieldVO.isShowDate" compareValue="1">
+               D.StatDate
+            </isEqual>
+            <isEqual prepend=" , " property="rowFieldVO.isShowAd" compareValue="1">
+                D.AdId
+            </isEqual>
+            <isEqual prepend=" , " property="rowFieldVO.isShowOperator" compareValue="1">
+                D.operatorId
+            </isEqual>
+            <isEqual prepend=" , " property="rowFieldVO.isShowPlatform" compareValue="1">
+                D.platformId
+            </isEqual>
+            <isEqual prepend=" , " property="rowFieldVO.isShowCountry" compareValue="1">
+                D.cou
+            </isEqual>
+            <isEqual prepend=" , " property="rowFieldVO.isShowType" compareValue="1">
+                D.adType
+            </isEqual>
+            <isEqual prepend=" , " property="rowFieldVO.isShowProject" compareValue="1">
+                D.projectId
+            </isEqual>
+        </dynamic>
+        <dynamic prepend=" ORDER BY ">
+            <isEqual prepend=" , " property="rowFieldVO.isShowDate" compareValue="1">
+                D.StatDate ASC
+            </isEqual>
+        </dynamic>
+    </select>
+</sqlMap>

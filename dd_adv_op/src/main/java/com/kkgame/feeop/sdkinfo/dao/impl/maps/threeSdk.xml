@@ -1,0 +1,281 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="threeSdkSqlMap">
+	<select id="getThreeSdkVOListCount" parameterClass="threeSdkVO" resultClass="int">
+		SELECT COUNT(ID) count
+		FROM threesdk
+		WHERE 1=1
+		<isNotNull property="name">
+			<isNotEmpty property="name">
+				AND name LIKE CONCAT('%',#name#,'%')
+			</isNotEmpty>
+		</isNotNull>
+		<isNotNull property="status">
+			<isGreaterThan property="status" compareValue="0">
+				AND status = #status#
+			</isGreaterThan>
+		</isNotNull>
+	</select>
+	<select id="getThreeSdkVOList" parameterClass="threeSdkVO" resultClass="threeSdkVO">
+	  	SELECT
+			id,
+			`name`,
+			`status`,
+			note,
+			cdate createDate,
+			remark,
+			sort
+		FROM
+			`threesdk`
+		WHERE 1=1
+		<isNotNull property="name">
+			<isNotEmpty property="name">
+				AND name LIKE CONCAT('%',#name#,'%')
+			</isNotEmpty>
+		</isNotNull>
+		<isNotNull property="status">
+			<isGreaterThan property="status" compareValue="0">
+				AND status = #status#
+			</isGreaterThan>
+		</isNotNull>
+		ORDER BY id DESC
+		<![CDATA[ LIMIT  #page.index#, #page.pageSize# ]]>
+	</select>
+	<select id="getThreeSdkVOById" parameterClass="int" resultClass="threeSdkVO">
+		SELECT
+			id,
+			`name`,
+			`status`,
+			note,
+			cdate createDate,
+			remark,
+			sort
+		FROM
+			`threesdk`
+		WHERE id = #id#
+	</select>
+	<insert id="insertThreeSdk" parameterClass="threeSdkVO">
+		INSERT INTO threesdk(name, status, note, cdate, remark, sort)
+		VALUES(#name#,#status#,#note#,CURDATE(),#remark#,#sort#)
+	</insert>
+	<update id="updateThreeSdk" parameterClass="threeSdkVO">
+		UPDATE threesdk
+		SET name = #name#, status = #status#, note = #note#, remark = #remark#, sort = #sort#
+		WHERE id = #id#
+	</update>
+	<select id="getProjectSdkVOListCount" parameterClass="projectSdkVO" resultClass="int">
+		SELECT
+			COUNT(projectId) count
+		FROM
+			project_sdk
+		WHERE 1=1
+			<isNotNull property="projectId">
+				<isGreaterThan property="projectId" compareValue="0">
+					AND projectId = #projectId#
+				</isGreaterThan>
+			</isNotNull>
+			<isNotNull property="sdkId">
+				<isGreaterThan property="sdkId" compareValue="0">
+					AND sdkId = #sdkId#
+				</isGreaterThan>
+			</isNotNull>
+	</select>
+	<select id="getProjectSdkVOList" parameterClass="projectSdkVO" resultClass="projectSdkVO">
+		SELECT
+			ps.projectId,
+			ps.sdkId,
+			t.name sdkName,
+			p.name projectName,
+			ps.sdkKey,
+			ps.note
+		FROM
+			project_sdk ps
+			LEFT JOIN threesdk t ON ps.sdkId = t.id
+			LEFT JOIN project p ON ps.projectId = p.id
+		WHERE 1=1
+			<isNotNull property="projectId">
+				<isGreaterThan property="projectId" compareValue="0">
+					AND projectId = #projectId#
+				</isGreaterThan>
+			</isNotNull>
+			<isNotNull property="sdkId">
+				<isGreaterThan property="sdkId" compareValue="0">
+					AND sdkId = #sdkId#
+				</isGreaterThan>
+			</isNotNull>
+		ORDER BY projectId DESC
+		<![CDATA[ LIMIT  #page.index#, #page.pageSize# ]]>
+	</select>
+	<select id="getProjectSdkVOById" parameterClass="map" resultClass="projectSdkVO">
+		SELECT
+			ps.projectId,
+			ps.sdkId,
+			t.name sdkName,
+		    p.name projectName,
+		    ps.sdkKey,
+		    ps.note
+		FROM
+			project_sdk ps
+			LEFT JOIN threesdk t ON ps.sdkId = t.id
+			LEFT JOIN project p ON ps.projectId = p.id
+		WHERE 1=1
+			<isNotNull property="projectId">
+				<isGreaterThan property="projectId" compareValue="0">
+					AND projectId = #projectId#
+				</isGreaterThan>
+			</isNotNull>
+			<isNotNull property="sdkId">
+				<isGreaterThan property="sdkId" compareValue="0">
+					AND sdkId = #sdkId#
+				</isGreaterThan>
+			</isNotNull>
+	</select>
+	<insert id="insertProjectSdk" parameterClass="projectSdkVO">
+		INSERT INTO project_sdk(projectId, sdkId,sdkKey,note)
+		VALUES (#projectId#, #sdkId#,#sdkKey#,#note#) ON DUPLICATE KEY UPDATE sdkKey=VALUES(sdkKey), note=VALUES(note)
+	</insert>
+	<update id="updateProjectSdk" parameterClass="projectSdkVO">
+		UPDATE project_sdk
+		SET sdkKey = #sdkKey#, note = #note#
+		WHERE projectId = #oldProjectId# AND sdkId = #oldSdkId#
+	</update>
+	<delete id="delectProjectSdk" parameterClass="projectSdkVO">
+		DELETE FROM project_sdk
+		WHERE projectId = #projectId# AND sdkId = #sdkId#
+	</delete>
+	<insert id="writeProjectSdkLogs" parameterClass="projectSdkVO">
+		INSERT INTO project_sdk_logs(projectId, sdkId, operateDate, operateNote)
+		VALUES (#projectId#, #sdkId#, #operateDate#, #operateNote#)
+	</insert>
+	<select id="getAllThreeSdkVOList" resultClass="threeSdkVO">
+		SELECT
+			id,
+			`name`,
+			`status`,
+			note,
+			cdate createDate,
+			remark
+		FROM
+			`threesdk`
+		WHERE
+			status = 3200
+		ORDER BY sort DESC
+	</select>
+	<select id="getProjectThreeStatVOList" parameterClass="searchVO" resultClass="projectThreeStatVO">
+		SELECT
+			pt.sdate saleDate,
+			pt.projectId,
+			p.`Name` projectName,
+			pt.sdkId,
+			t.`name` sdkName,
+			SUM(pt.activate) activate,
+			SUM(pt.income) income
+		FROM
+			$table$ pt
+			LEFT JOIN project p ON pt.projectId = p.ID
+			LEFT JOIN threesdk t ON pt.sdkId = t.id
+		WHERE
+			sdate BETWEEN #startDate# AND #endDate#
+			<isGreaterThan property="projectId" compareValue="0">
+				AND pt.projectId = #projectId#
+			</isGreaterThan>
+			<isGreaterThan property="sdkId" compareValue="0">
+				AND pt.sdkId = #sdkId#
+			</isGreaterThan>
+
+		<dynamic prepend =" GROUP BY ">
+			<isEqual prepend =" , " property="rowFieldVO.isShowDate" compareValue="1">
+				pt.sdate
+			</isEqual>
+			<isEqual prepend =" , " property="rowFieldVO.isShowProject" compareValue="1">
+				pt.projectId
+			</isEqual>
+			<isEqual prepend =" , " property="rowFieldVO.isShowSdk" compareValue="1">
+				pt.sdkId
+			</isEqual>
+		</dynamic>
+		ORDER BY
+			<isEqual property="rowFieldVO.isShowDate" compareValue="1">
+				sdate DESC,
+			</isEqual>
+			income DESC, activate DESC
+	</select>
+	<delete id="delectProjectThreeList" parameterClass="map">
+		DELETE FROM $table$
+		WHERE sdate = #saleDate#
+	</delete>
+	<insert id="insertProjectThreeList" parameterClass="map">
+		INSERT INTO $table$(sdate, projectId, sdkId, activate, income)
+		VALUES
+		 <iterate property="list" conjunction=",">
+			 (#list[].statDate#, #list[].projectId#, #list[].sdkId#, #list[].activeCount#, #list[].thirdIncome#)
+		 </iterate>
+		ON DUPLICATE KEY UPDATE activate=VALUES(activate), income=VALUES(income)
+	</insert>
+	<select id="getAllExportProjectSdkVOList" parameterClass="map" resultClass="projectSdkVO">
+		SELECT
+			ps.projectId,
+			A.`Name` projectName,
+			IFNULL(A.count,0) activate,
+			ps.sdkId,
+			ps.sdkKey
+		FROM
+			project_sdk ps
+		LEFT JOIN
+		(
+			SELECT
+				p.ID,
+				p.`Name`,
+				SUM(rd.UserCount) count
+			FROM project p
+			LEFT JOIN register_data_$month$ rd ON rd.ProjectId = p.ID
+			WHERE p.ID IN (SELECT projectId FROM project_sdk GROUP BY projectId)
+				AND rd.StatDate = #exportData# AND rd.Type=600400
+			GROUP BY p.ID
+		) as A ON ps.projectId = A.ID
+	</select>
+	<select id="getExportProjectSdkLogsList" parameterClass="map" resultClass="projectSdkVO">
+		SELECT
+			projectId,
+			sdkId,
+			Date_FORMAT(operateDate,'%Y-%m-%d') operateDate,
+			operateNote
+		FROM
+			project_sdk_logs
+		WHERE Date_FORMAT(operateDate,'%Y-%m-%d') BETWEEN #startDate# AND #endDate#
+		ORDER BY operateDate DESC
+	</select>
+
+	<update id="updateInside" parameterClass="projectSdkVO">
+		UPDATE  project_inside
+		set projectId=#projectId#
+		WHERE  id=#sdkId#
+	</update>
+	<delete id="deleteInside" parameterClass="projectSdkVO">
+		DELETE FROM project_inside
+		WHERE  id=#sdkId#
+	</delete>
+	<insert id="insertInside" parameterClass="projectSdkVO">
+		INSERT  INTO  project_inside (projectId)VALUES (#projectId#)
+	</insert>
+	<select id="getInsideSdkProjectVOList" parameterClass="projectSdkVO" resultClass="projectSdkVO">
+		SELECT  projectId ,id as sdkId FROM project_inside
+		WHERE  1=1
+		<isGreaterThan property="projectId"  compareValue="0">
+			AND  projectId=#projectId#
+		</isGreaterThan>
+	</select>
+	<select id="getInsideSdkProjectVOListCount" parameterClass="projectSdkVO" resultClass="int">
+		SELECT  COUNT(*) FROM project_inside
+		WHERE  1=1
+		<isGreaterThan property="projectId"  compareValue="0">
+			AND  projectId=#projectId#
+		</isGreaterThan>
+	</select>
+	<select id="getInsideVOById" parameterClass="int" resultClass="projectSdkVO">
+		SELECT  projectId ,id as sdkId FROM project_inside
+		WHERE   id=#sdkId#
+
+	</select>
+
+</sqlMap>

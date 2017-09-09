@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans  http://www.springframework.org/schema/beans/spring-beans-2.5.xsd 
+	http://www.springframework.org/schema/aop  http://www.springframework.org/schema/aop/spring-aop-2.5.xsd   
+	http://www.springframework.org/schema/tx  http://www.springframework.org/schema/tx/spring-tx-2.5.xsd 
+	http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-2.5.xsd"
+  >
+  <bean id="dataSource" class="com.kkgame.pay.stat.datasource.DynamicDataSource">  
+    	<property name="targetDataSources">  
+    	<map key-type="java.lang.String">  
+    		<!-- key的值必须要和静态键值对照类中的值相同 -->  
+        	<entry value-ref="dataSource_fee" key="kkpay_fee"></entry>  
+        	<entry value-ref="dataSource_data" key="kkpay_data"></entry>  
+    	</map>  
+    	</property>  
+	</bean>   	
+  	<bean id = "sqlMapClient" class = "org.springframework.orm.ibatis.SqlMapClientFactoryBean">
+	    <property name = "configLocation">
+	    	<value>classpath:SqlMapConfig.xml</value>
+	    </property>
+	    <property name = "dataSource">
+	      	<ref local = "dataSource"/>
+	    </property>
+  	</bean>
+	<bean id = "placeholderConfig" class = "org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+    	<property name = "location" value = "classpath:db_pkig_pool.properties"/>
+  	</bean>
+  <bean id="dataSource_data" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close"> 
+     <property name="url" value="${url}" />
+     <property name="username" value="${username}"/>
+     <property name="password" value="${password}" />
+     <property name="maxActive"><value>20</value></property>
+     <property name="initialSize"><value>1</value></property>
+     <property name="maxWait"><value>60000</value></property>
+     <property name="minIdle"><value>1</value></property>
+     <property name="timeBetweenEvictionRunsMillis"><value>60000</value></property>
+     <property name="minEvictableIdleTimeMillis"><value>300000</value></property>
+     <property name="validationQuery"><value>SELECT 1</value></property>
+     <property name="testWhileIdle"><value>true</value></property>
+     <property name="testOnBorrow"><value>false</value></property>
+     <property name="testOnReturn"><value>false</value></property>
+     <property name="poolPreparedStatements"><value>true</value></property>
+     <property name="maxOpenPreparedStatements"><value>20</value></property>
+ </bean> 
+	<!-- <bean id = "dataSource_data" class = "com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close" lazy-init="true">
+	    <property name = "driverClass" value = "${driverClassName}"/>
+	    <property name = "jdbcUrl" value = "${url}"/>
+	    <property name = "user" value = "${username}"/>
+	    <property name = "password" value = "${password}"/>
+	    <property name = "autoCommitOnClose" value="false"></property>
+	    <property name = "maxPoolSize" value = "${maxPoolSize}"/>
+	    <property name = "minPoolSize" value = "${minPoolSize}"/>
+	    <property name = "maxIdleTime" value = "1800"/>
+	    <property name = "acquireIncrement" value = "2"/>
+	    <property name = "idleConnectionTestPeriod" value = "600"/>
+  	</bean> -->
+  	<bean id = "sqlMapClient_data" class = "org.springframework.orm.ibatis.SqlMapClientFactoryBean">
+	    <property name = "configLocation" value = "classpath:SqlMapConfig.xml"/>
+	    <property name = "dataSource">
+	      	<ref local = "dataSource_data"/>
+	    </property>
+  	</bean>	  	
+	<bean id="transactionManager_data" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource_data" />
+	</bean>
+ 	<tx:advice id="txAdvice_data" transaction-manager="transactionManager_data" >
+		 <tx:attributes>  
+			<tx:method name="get*" read-only="true" />
+			<tx:method name="getReceiveTaskDetailInfo" rollback-for="org.springframework.dao.DataAccessException" />
+			<tx:method name="*" rollback-for="org.springframework.dao.DataAccessException" />
+        </tx:attributes>  
+	</tx:advice>
+	<aop:config>
+		<aop:pointcut id="allManagerMethod_data" expression="execution(* com.kkgame.pay.stat.service.*.*(..))" />
+		<aop:advisor advice-ref="txAdvice_data" pointcut-ref="allManagerMethod_data" />
+	</aop:config> 	
+ <bean id="dataSource_fee" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close"> 
+     <property name="url" value="${fee.url}" />
+     <property name="username" value="${fee.username}"/>
+     <property name="password" value="${fee.password}" />
+     <property name="maxActive"><value>20</value></property>
+     <property name="initialSize"><value>1</value></property>
+     <property name="maxWait"><value>60000</value></property>
+     <property name="minIdle"><value>1</value></property>
+     <property name="timeBetweenEvictionRunsMillis"><value>60000</value></property>
+     <property name="minEvictableIdleTimeMillis"><value>300000</value></property>
+     <property name="validationQuery"><value>SELECT 1</value></property>
+     <property name="testWhileIdle"><value>true</value></property>
+     <property name="testOnBorrow"><value>false</value></property>
+     <property name="testOnReturn"><value>false</value></property>
+     <property name="poolPreparedStatements"><value>true</value></property>
+     <property name="maxOpenPreparedStatements"><value>20</value></property>
+ </bean> 	
+	<!-- <bean id = "dataSource_fee" class = "com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close" lazy-init="true">
+	    <property name = "driverClass" value = "${fee.driverClassName}"/>
+	    <property name = "jdbcUrl" value = "${fee.url}"/>
+	    <property name = "user" value = "${fee.username}"/>
+	    <property name = "password" value = "${fee.password}"/>
+	    <property name = "autoCommitOnClose" value="false"></property>
+	    <property name = "maxPoolSize" value = "${fee.maxPoolSize}"/>
+	    <property name = "minPoolSize" value = "${fee.minPoolSize}"/>
+	    <property name = "maxIdleTime" value = "1800"/>
+	    <property name = "acquireIncrement" value = "2"/>
+	    <property name = "idleConnectionTestPeriod" value = "600"/>
+  	</bean>
+ -->
+  	<bean id = "sqlMapClient_fee" class = "org.springframework.orm.ibatis.SqlMapClientFactoryBean">
+   	    <property name = "configLocation" value = "classpath:SqlMapConfig.xml"/>
+	    <property name = "dataSource">
+	      	<ref local = "dataSource_fee"/>
+	    </property>
+  	</bean>
+  	
+	<bean id="transactionManager_fee" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource_fee" />
+	</bean>
+
+ 	<tx:advice id="txAdvice_fee" transaction-manager="transactionManager_fee" >
+		 <tx:attributes> 
+			<tx:method name="get*" read-only="true" />
+			<tx:method name="getReceiveTaskDetailInfo" rollback-for="org.springframework.dao.DataAccessException" />
+			<tx:method name="*" rollback-for="org.springframework.dao.DataAccessException" />
+		</tx:attributes>
+	</tx:advice>
+	
+	<aop:config>
+		<aop:pointcut id="allManagerMethod_fee" expression="execution(* com.kkgame.pay.stat.service.*.*(..))" />
+		<aop:advisor advice-ref="txAdvice_fee" pointcut-ref="allManagerMethod_fee" />
+	</aop:config>
+	
+	<!-- <bean id = "dataSource_master" class = "com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close" lazy-init="true">
+	    <property name = "driverClass" value = "${master.driverClassName}"/>
+	    <property name = "jdbcUrl" value = "${master.url}"/>
+	    <property name = "user" value = "${master.username}"/>
+	    <property name = "password" value = "${master.password}"/>
+	    <property name = "autoCommitOnClose" value="false"></property>
+	    <property name = "maxPoolSize" value = "${master.maxPoolSize}"/>
+	    <property name = "minPoolSize" value = "${master.minPoolSize}"/>
+	    <property name = "maxIdleTime" value = "1800"/>
+	    <property name = "acquireIncrement" value = "2"/>
+	    <property name = "idleConnectionTestPeriod" value = "600"/>
+  	</bean> -->
+ <bean id="dataSource_master" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close"> 
+     <property name="url" value="${master.url}" />
+     <property name="username" value="${master.username}"/>
+     <property name="password" value="${master.password}" />
+     <property name="maxActive"><value>20</value></property>
+     <property name="initialSize"><value>1</value></property>
+     <property name="maxWait"><value>60000</value></property>
+     <property name="minIdle"><value>1</value></property>
+     <property name="timeBetweenEvictionRunsMillis"><value>60000</value></property>
+     <property name="minEvictableIdleTimeMillis"><value>300000</value></property>
+     <property name="validationQuery"><value>SELECT 1</value></property>
+     <property name="testWhileIdle"><value>true</value></property>
+     <property name="testOnBorrow"><value>false</value></property>
+     <property name="testOnReturn"><value>false</value></property>
+     <property name="poolPreparedStatements"><value>true</value></property>
+     <property name="maxOpenPreparedStatements"><value>20</value></property>
+ </bean> 
+  	<bean id = "sqlMapClient_master" class = "org.springframework.orm.ibatis.SqlMapClientFactoryBean">
+   	    <property name = "configLocation" value = "classpath:SqlMapConfig.xml"/>
+	    <property name = "dataSource">
+	      	<ref local = "dataSource_master"/>
+	    </property>
+  	</bean>
+  	
+	<bean id="transactionManager_master" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource_master" />
+	</bean>
+
+ 	<tx:advice id="txAdvice_master" transaction-manager="transactionManager_master" >
+		 <tx:attributes> 
+			<tx:method name="get*" read-only="true" />
+			<tx:method name="getReceiveTaskDetailInfo" rollback-for="org.springframework.dao.DataAccessException" />
+			<tx:method name="*" rollback-for="org.springframework.dao.DataAccessException" />
+		</tx:attributes>
+	</tx:advice>
+	
+	<aop:config>
+		<aop:pointcut id="allManagerMethod_master" expression="execution(* com.kkgame.pay.stat.service.*.*(..))" />
+		<aop:advisor advice-ref="txAdvice_master" pointcut-ref="allManagerMethod_master" />
+	</aop:config>
+</beans>

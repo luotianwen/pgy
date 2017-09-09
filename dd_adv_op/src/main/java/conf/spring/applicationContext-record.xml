@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:context="http://www.springframework.org/schema/context" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+       		http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+       		http://www.springframework.org/schema/aop
+       		http://www.springframework.org/schema/aop/spring-aop-2.5.xsd 
+		    http://www.springframework.org/schema/tx  
+    	    http://www.springframework.org/schema/tx/spring-tx-2.5.xsd 
+            http://www.springframework.org/schema/context
+            http://www.springframework.org/schema/context/spring-context-2.5.xsd">
+
+
+	<bean id="apkCphcTotalModelService"
+		class="com.kkgame.feeop.record.service.impl.ApkCphcTotalModelServiceImpl">
+		<property name="apkCphcTotalModelDAO" ref="apkCphcTotalModelDAO"></property>
+	</bean>
+	<bean id="apkCphcTotalModelDAO"
+		class="com.kkgame.feeop.record.dao.impl.ApkCphcTotalModelDAOImpl">
+		<property name="sqlMapClient" ref="sqlMapClient_kkpay_data"></property>
+		<property name="dataSource" ref="dataSource_kkpay_data"></property>
+	</bean>
+	<bean id="projectHzTotalModelService"
+		class="com.kkgame.feeop.record.service.impl.ProjectHzTotalModelServiceImpl">
+		<property name="projectHzTotalModelDAO" ref="projectHzTotalModelDAO"></property>
+	</bean>
+	<bean id="projectHzTotalModelDAO"
+		class="com.kkgame.feeop.record.dao.impl.ProjectHzTotalModelDAOImpl">
+		<property name="sqlMapClient" ref="sqlMapClient_kkpay_data"></property>
+		<property name="dataSource" ref="dataSource_kkpay_data"></property>
+	</bean>
+		<bean id="countryLevelService" class="com.kkgame.feeop.record.service.impl.CountryLevelServiceImpl">
+ 		<property name="countryLevelDAO" ref="countryLevelDAO"></property>
+ 	</bean>
+ 	<bean id="countryLevelDAO" class="com.kkgame.feeop.record.dao.impl.CountryLevelDAOImpl">
+ 		<property name="sqlMapClient" ref="sqlMapClient_kkpay_data"></property>
+ 		<property name="dataSource" ref="dataSource_kkpay_data"></property>
+ 	</bean>
+	<bean id="adjustService" class="com.kkgame.feeop.record.service.impl.AdjustServiceImpl">
+		<property name="adjustDAO" ref="adjustDAO"></property>
+	</bean>
+	<bean id="adjustDAO" class="com.kkgame.feeop.record.dao.impl.AdjustDAOImpl">
+		<property name="sqlMapClient" ref="sqlMapClient_kkpay_sdkmaster"></property>
+		<property name="dataSource" ref="dataSource_kkpay_sdkmaster"></property>
+	</bean>
+	<bean id="operatorService" class="com.kkgame.feeop.record.service.impl.OperatorServiceImpl">
+		<property name="operatorDAO" ref="operatorDAO"></property>
+	</bean>
+	<bean id="operatorDAO" class="com.kkgame.feeop.record.dao.impl.OperatorDAOImpl">
+		<property name="sqlMapClient" ref="sqlMapClient_kkpay_sdkmaster"></property>
+		<property name="dataSource" ref="dataSource_kkpay_sdkmaster"></property>
+	</bean>
+</beans>

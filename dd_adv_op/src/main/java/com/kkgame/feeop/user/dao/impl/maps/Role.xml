@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="roleSqlMap">
+	<select id="getRoleVOList" resultClass="roleVO">
+		SELECT ID id,
+				RoleName roleName,
+				RoleDesc roleDesc
+		FROM ROLE
+		ORDER BY ID DESC
+	</select>
+	<select id="getProjectRoleVOList" resultClass="roleVO">
+		SELECT ID id,
+				RoleName roleName,
+				RoleDesc roleDesc
+		FROM ROLE
+		WHERE RoleName like '%ROLE_PROJECT%'
+	</select>
+	<select id="getBdRoleVOList" resultClass="roleVO">
+		SELECT ID id,
+				RoleName roleName,
+				RoleDesc roleDesc
+		FROM ROLE
+		WHERE RoleName like '%ROLE_BD%'
+		ORDER BY ID DESC
+	</select>
+	<delete id="delete" parameterClass="roleVO">
+		DELETE FROM ROLE WHERE ID = #id#
+	</delete>
+	<select id="getRoleVO" parameterClass="roleVO" resultClass="roleVO">
+		SELECT ID id,
+				RoleName roleName,
+				RoleDesc roleDesc
+		FROM ROLE WHERE ID = #id#
+	</select>
+	<update id="update" parameterClass="roleVO">
+		UPDATE ROLE SET RoleName = #roleName#,RoleDesc=#roleDesc# WHERE ID = #id#
+	</update>
+	<insert id="create" parameterClass="roleVO">
+		INSERT INTO ROLE(RoleName,RoleDesc) VALUES(#roleName#,#roleDesc#)
+	</insert>
+	<select id="getRoleVOListByUser" parameterClass="int" resultClass="RoleVO">
+		SELECT 	UR.RoleId id,R.RoleName roleName
+		FROM USER_ROLE UR
+		LEFT JOIN ROLE R ON UR.RoleId = R.ID
+		WHERE UR.UserId  =#userId#
+	</select>
+</sqlMap>

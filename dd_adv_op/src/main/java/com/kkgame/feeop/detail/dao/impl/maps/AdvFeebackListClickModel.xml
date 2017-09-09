@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="advFeebackListClickModelSqlMap">
+	<typeAlias alias="advFeebackListClickModelVO" type="com.kkgame.feeop.detail.bean.AdvFeebackListClickModelVO"/>
+	<select id="getAdvFeebackListClickModelVOList" parameterClass="advFeebackListClickModelVO" resultClass="advFeebackListClickModelVO">
+		  SELECT
+         coo_id as cooId ,imei ,channelid ,apkid ,cdate ,
+        (select description from kok_sdk.EnumerationValue where id=sdk) as sdk , 
+        (select description from kok_sdk.EnumerationValue where id=sdkstyle) as sdkstyle , 
+        (select description from kok_sdk.EnumerationValue where id=cou)as cou ,sdkversion ,pkgid ,xc_coo_id as xcCooId
+		  FROM kok_sdk.$table$  
+		  
+	        <dynamic prepend="WHERE">
+		       <isNotEmpty prepend="AND" property="cooId">
+		             coo_id = #cooId#
+		       </isNotEmpty>
+		       <isNotEmpty prepend="AND" property="imei">
+		             imei = #imei#
+		       </isNotEmpty>
+				<isNotEmpty prepend="AND" property="sdkversion">
+					sdkversion = #sdkversion#
+				</isNotEmpty>
+		       <isNotEmpty prepend="AND" property="channelid">
+		             channelid = #channelid#
+		       </isNotEmpty>
+		       <isNotEmpty prepend="AND" property="apkid">
+		             apkid = #apkid#
+		       </isNotEmpty>
+		       <isNotEmpty prepend="AND" property="pkgid">
+		             pkgid = #pkgid#
+		       </isNotEmpty>
+		       <isNotEmpty prepend="AND" property="xcCooId">
+		             xc_coo_id = #xcCooId#
+		       </isNotEmpty>
+	    </dynamic>	
+	    order by cdate desc   LIMIT  20 
+	</select>
+	 
+		 
+	 
+</sqlMap>

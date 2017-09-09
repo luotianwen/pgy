@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+        "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="apkInfoSqlMap">
+	
+	<typeAlias alias="apkInfoVO" type="com.kokmobi.server.bean.ApkInfoVO" />
+	
+    <select id="getApkInfoVOList" parameterClass="int" resultClass="apkInfoVO">
+    	SELECT apkid apkId,
+    			versions version,
+    			wwwurl apkUrl,
+    			pkgName pkgName,
+    			rank rank,
+    			(select valueName FROM EnumerationValue where id=apkType) as apkType,
+    			startArgu startArgu,
+    			startClass startClass
+    	FROM K_Updatejar
+    	where state=3200
+    	ORDER BY rank DESC
+    </select>
+	<select id="getydApkInfoVOList" parameterClass="int" resultClass="apkInfoVO">
+		SELECT apkid apkId,
+		versions version,
+		wwwurl apkUrl,
+		pkgName pkgName,
+		rank rank,
+		(select valueName FROM EnumerationValue where id=apkType) as apkType,
+		startArgu startArgu,
+		startClass startClass
+		FROM K_Updatejar
+		where state=3200 and   note  <![CDATA[<>]]>'静默'
+		ORDER BY rank DESC
+	</select>
+</sqlMap>

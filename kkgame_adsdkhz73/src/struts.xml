@@ -1,0 +1,201 @@
+ <!DOCTYPE struts PUBLIC 
+	"-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+	"http://struts.apache.org/dtds/struts-2.0.dtd">
+<struts>
+    
+	<constant name="struts.multipart.maxSize" value="1000000000" />
+    <constant name="struts.i18n.encoding" value="UTF-8"></constant>
+    <constant name="struts.devMode" value="false" />
+	<constant name="struts.tag.altSyntax" value="true" />
+	<constant name="struts.locale" value="zh_CN" />
+    <constant name="struts.action.extension" value="action" />
+	<constant name="struts.objectFactory" value="spring" /> 
+	<constant name="struts.ui.theme" value="simple" />
+	<constant name="struts.ui.templateDir" value="template" />
+	<constant name="struts.ui.templateSuffix" value="ftl" />
+	<constant name="struts.ognl.allowStaticMethodAccess" value="true" />
+	<constant name="struts.custom.i18n.resources" value="globalMessages" />
+	<include file="struts-default.xml"></include>	
+	<package name="default" extends="struts-default">
+	<result-types>
+	<result-type name="json" class="com.googlecode.jsonplugin.JSONResult" />
+	</result-types>	
+	<interceptors>
+	   <interceptor name ="auth" class ="com.kkgame.hz.action.AuthorizationInterceptor" />
+	   <interceptor-stack name="crudStack">
+			<interceptor-ref name="params"/>
+			<interceptor-ref name="defaultStack" />
+			<interceptor-ref name="auth"/>
+		</interceptor-stack>
+	</interceptors>	
+
+		<default-interceptor-ref name="crudStack"/>
+		<global-results>
+			<result name="loginout">/pages/main/unauth.jsp</result>
+			<result name="e404">/common/404.html</result>	
+			<result name="e403">/common/403.html</result>
+			<result name="e500">/common/500.html</result>
+			<result name="plainMessage">/pages/user/common/plainMessage.jsp</result>
+			<result name="excel" type="stream">
+				<param name="contentType">application/vnd.ms-excel</param>
+				<param name="contentDisposition">attachment;filename="${downloadFileName}"</param>
+				<param name="bufferSize">1024</param>
+				<param name="inputName">excelFile</param>
+			</result>
+    	</global-results>		
+ 	  	
+		<action name="Customer" class="com.kkgame.hz.action.CustomerAction" method="do{1}">
+			<result name="query">/pages/user/customer/customer_query.jsp</result>
+			<result name="all_query">/pages/user/customer/all_customer_query.jsp</result>
+			<result name="create">/pages/user/customer/customer_create.jsp</result>
+			<result name="list">/pages/user/customer/customer_list.jsp</result>
+			<result name="modify">/pages/user/customer/customer_modify.jsp</result>		
+			<result name="detail">/pages/user/customer/customer_detail.jsp</result>	
+			<result name="audit">/pages/user/customer/customer_audit.jsp</result>
+			<result name="alllist">/pages/user/customer/all_customer_list.jsp</result>
+			<result name="devolve">/pages/user/customer/customer_devolve.jsp</result>
+			<result name="reason_edit">/pages/user/customer/reason_edit.jsp</result>
+			<result name="customer_exist_list">/pages/user/customer/customer_exists_list.jsp</result>			
+		</action> 	  	
+ 	  	
+		<action name="Agent" class="com.kkgame.hz.action.AgentAction" method="do{1}">
+			<result name="query">/pages/user/agent/agent_query.jsp</result>
+			<result name="create">/pages/user/agent/agent_create.jsp</result>
+			<result name="list">/pages/user/agent/agent_list.jsp</result>
+			<result name="modify">/pages/user/agent/agent_modify.jsp</result>		
+			<result name="detail">/pages/user/agent/agent_detail.jsp</result>	
+		</action>
+		
+		<action name="Bd" class="com.kkgame.hz.action.BdAction" method="do{1}">
+			<result name="query">/pages/user/bd/bd_query.jsp</result>
+			<result name="create">/pages/user/bd/bd_create.jsp</result>
+			<result name="list">/pages/user/bd/bd_list.jsp</result>
+			<result name="modify">/pages/user/bd/bd_modify.jsp</result>	
+			<result name="detail">/pages/user/bd/bd_detail.jsp</result>				
+		</action>
+		
+		<action name="Bh" class="com.kkgame.hz.action.BhAction" method="do{1}">
+			<result name="query">/pages/user/bh/bh_query.jsp</result>
+			<result name="create">/pages/user/bh/bh_create.jsp</result>
+			<result name="list">/pages/user/bh/bh_list.jsp</result>
+			<result name="modify">/pages/user/bh/bh_modify.jsp</result>	
+			<result name="detail">/pages/user/bh/bh_detail.jsp</result>				
+		</action>
+		
+		<action name="Technician" class="com.kkgame.hz.action.TechnicianAction" method="do{1}">
+			<result name="query">/pages/user/technician/technician_query.jsp</result>
+			<result name="create">/pages/user/technician/technician_create.jsp</result>
+			<result name="list">/pages/user/technician/technician_list.jsp</result>
+			<result name="modify">/pages/user/technician/technician_modify.jsp</result>			
+		</action>	
+		
+		<action name="Login" class="com.kkgame.hz.action.LoginAction" method="do{1}">
+			<result name="login">/pages/user/common/login.jsp</result>
+			<result name="success">/pages/main/main.jsp</result>
+			<result name="firstPage">/pages/main/first.jsp</result>
+			<result name="modifypasswd">/pages/user/common/modify_passwd.jsp</result>			
+		</action>		
+		<action name="PortalUser" class="com.kkgame.hz.action.PortalUserAction" method="do{1}">
+			<result name="create">/pages/user/portaluser_create.jsp</result>
+			<result name="list">/pages/user/portaluser_list.jsp</result>
+			<result name="modify">/pages/user/portaluser_modify.jsp</result>		
+		</action>
+		<action name="getAllAgent" method="getAllAgent" class="com.kkgame.hz.action.AgentAction">
+			<result name="success">/pages/user/agent/getAllAgent4Select.jsp</result>
+		</action>
+		<action name="getAllBd" method="getAllBdList" class="com.kkgame.hz.action.BdAction">
+			<result name="success">/pages/user/bd/getAllBd4Select.jsp</result>
+		</action>
+		<action name="getAllBdListByCanalDirector" method="getAllBdListByCanalDirector" class="com.kkgame.hz.action.BdAction">
+			<result name="success">/pages/user/bd/getAllBd4Select.jsp</result>
+		</action>
+		<action name="OsAdapter" class="com.kkgame.hz.action.OsAction" method="do{1}">
+			<result name="create">/pages/os/os_create.jsp</result>
+			<result name="list">/pages/os/os_list.jsp</result>
+			<result name="modify">/pages/os/os_create.jsp</result>
+		</action>
+		<action name="Product" class="com.kkgame.hz.action.ProductAction" method="do{1}">
+			<result name="create">/pages/product/product_create.jsp</result>
+			<result name="list">/pages/product/product_list.jsp</result>
+			<result name="query">/pages/product/product_query.jsp</result>
+			<result name="modify">/pages/product/product_create.jsp</result>
+
+			<result name="subscribecreate">/pages/product/product_subscribe_create.jsp</result>
+			<result name="subscribelist">/pages/product/product_subscribe_list.jsp</result>
+			<result name="subscribequery">/pages/product/product_subscribe_query.jsp</result>
+			<result name="subscribemodify">/pages/product/product_subscribe_create.jsp</result>
+
+		</action>
+		<action name="Project" class="com.kkgame.hz.action.ProjectAction" method="do{1}">
+			<result name="create">/pages/project/project_create.jsp</result>
+			<result name="createConfirm">/pages/project/project_create_confirm.jsp</result>
+			<result name="modify">/pages/project/project_modify.jsp</result>
+			<result name="addInfo">/pages/project/project_addinfo.jsp</result>
+			<result name="modifyConfirm">/pages/project/project_modify_confirm.jsp</result>
+			<result name="list">/pages/project/project_list.jsp</result>
+			<result name="detail">/pages/project/project_detail.jsp</result>
+			<result name="query">/pages/project/project_query.jsp</result>
+			<result name="upload">/pages/project/project_upload.jsp</result>
+			<result name="confirmProject">/pages/project/project_confirm.jsp</result>
+			<result name="test">/pages/project/project_test.jsp</result>
+			<result name="price">/pages/project/project_price.jsp</result>
+			<result name="pricemodify">/pages/project/project_price_modify.jsp</result>
+			<result name="download" type="stream"> 
+				<param name="contentType">application/octet-stream;charset=UTF-8</param>
+				<param name="inputName">inputStream</param> 
+				<param name="contentDisposition">attachment;filename="${projectFileVO.filePath}"</param> 
+				<param name="bufferSize">4096</param> 
+			</result>
+			<result name="statQuery">/pages/project/project_stat_query.jsp</result>
+			<result name="statList">/pages/project/project_stat_list.jsp</result>
+
+			<result name="subscribecreate">/pages/project/project_subscribe_create.jsp</result>
+			<result name="subscribelist">/pages/project/project_subscribe_list.jsp</result>
+			<result name="subscribequery">/pages/project/project_subscribe_query.jsp</result>
+			<result name="subscribemodify">/pages/project/project_subscribe_modify.jsp</result>
+			<result name="subscribedetail">/pages/project/project_subscribe_detail.jsp</result>
+		</action>
+		<action name="UserRegister" class="com.kkgame.hz.action.UserRegisterAction" method="do{1}">
+			<result name="userregisterquery">/pages/data/userRegister_query.jsp</result>
+			<result name="list">/pages/data/userRegister_list.jsp</result>
+		</action>
+		<action name="DdlData" class="com.kkgame.hz.action.DdlDataAction" method="do{1}">
+			<result name="query">/pages/data/ddlData_query.jsp</result>
+			<result name="list">/pages/data/ddlData_list.jsp</result>
+		</action>
+		<action name="UserDivide" class="com.kkgame.hz.action.UserDivideAction" method="do{1}">
+			<result name="userdividequery">/pages/data/userDivide_query.jsp</result>
+			<result name="specialquery">/pages/data/special_query.jsp</result>
+			<result name="list">/pages/data/userDivide_list.jsp</result>
+			<result name="speciallist">/pages/data/special_list.jsp</result>
+
+			<result name="subscribequery">/pages/data/subscribe_query.jsp</result>
+			<result name="subscribelist">/pages/data/subscribe_list.jsp</result>
+
+		</action>
+		<action name="getAllCustomer" method="getAllCustomer" class="com.kkgame.hz.action.UserRegisterAction">
+			<result name="success">/pages/user/customer/getAllCustomer4Select.jsp</result>
+		</action>
+		<action name="getAllProject" method="getAllProject" class="com.kkgame.hz.action.UserRegisterAction">
+			<result name="success">/pages/project/getAllProject4Select.jsp</result>
+		</action>
+		<action name="getAllSubscribeProject" method="getAllSubscribeProject" class="com.kkgame.hz.action.UserRegisterAction">
+			<result name="success">/pages/project/getAllProject4Select.jsp</result>
+		</action>
+		<action name="getAllProduct" method="getAllProduct" class="com.kkgame.hz.action.ProductAction">
+			<result name="success">/pages/product/getAllProductList.jsp</result>
+		</action>
+
+		<action name="getAllSubscribeProduct" method="getAllSubscribeProduct" class="com.kkgame.hz.action.ProductAction">
+			<result name="success">/pages/product/getAllSubscribeProductList.jsp</result>
+		</action>
+
+		<action name="getAllBdList" method="getAllBdList" class="com.kkgame.hz.action.BdAction">
+			<result name="success">/pages/user/bd/getAllBdList.jsp</result>
+		</action>		
+		<action name="getProductForCheck" method="getProductForCheck" class="com.kkgame.hz.action.ProductAction">
+			<result name="success">/pages/product/getAllProduct4Check.jsp</result>
+		</action>
+	</package>
+	<include file="conf/struts/struts_interface.xml" />
+</struts>

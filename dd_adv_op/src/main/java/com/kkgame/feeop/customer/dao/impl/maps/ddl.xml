@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="ddlSqlMap">
+	
+	<select id="getDdlVO" parameterClass="ddlVO" resultClass="ddlVO">
+		SELECT  coo_id projectId,
+				rate rate
+		FROM PRODUCT_CHANNEL_LINKS
+		WHERE coo_id = #projectId#
+		LIMIT 1
+	</select>
+	<update id="update" parameterClass="ddlVO">
+		UPDATE PRODUCT_CHANNEL_LINKS SET rate = #rate#
+		
+		WHERE coo_id = #projectId#
+	</update>
+	<select id="getDdlVOClickList" parameterClass="ddlVO" resultClass="ddlVO">
+		select ipaddr projectName, sum(a.c) clickCount
+
+		from (
+
+		select  ipaddr,count(*)as c from CLICKS_ADJUST_0_$createTime$ where subId=#projectId# group by ipaddr HAVING c>5  union all
+		select  ipaddr,count(*)as c from CLICKS_ADJUST_1_$createTime$ where subId=#projectId# group by ipaddr HAVING c>5  union all
+		select  ipaddr,count(*)as c from CLICKS_ADJUST_2_$createTime$ where subId=#projectId# group by ipaddr HAVING c>5  union all
+		select  ipaddr,count(*)as c from CLICKS_ADJUST_3_$createTime$ where subId=#projectId# group by ipaddr HAVING c>5  union all
+		select  ipaddr,count(*)as c from CLICKS_ADJUST_4_$createTime$ where subId=#projectId# group by ipaddr HAVING c>5  union all
+		select  ipaddr,count(*)as c from CLICKS_ADJUST_5_$createTime$ where subId=#projectId# group by ipaddr HAVING c>5  union all
+		select  ipaddr,count(*)as c from CLICKS_ADJUST_6_$createTime$ where subId=#projectId# group by ipaddr HAVING c>5  union all
+		select  ipaddr,count(*)as c from CLICKS_ADJUST_7_$createTime$ where subId=#projectId# group by ipaddr HAVING c>5  union all
+		select  ipaddr,count(*)as c from CLICKS_ADJUST_8_$createTime$ where subId=#projectId# group by ipaddr HAVING c>5  union all
+		select  ipaddr,count(*)as c from CLICKS_ADJUST_9_$createTime$ where subId=#projectId# group by ipaddr HAVING c>5
+
+		)as a  group by ipaddr  order by clickCount desc
+
+	</select>
+</sqlMap>

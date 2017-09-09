@@ -1,0 +1,346 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+		"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="Sdk">
+
+	<typeAlias alias="country" type="com.kokmobi.server.bean.Country"/>
+	<typeAlias alias="sdkInfo" type="com.kokmobi.server.bean.SdkInfo"/>
+	<typeAlias alias="adUserInfo" type="com.kokmobi.server.bean.AdUserInfo"/>
+	<typeAlias alias="adProjectInfo" type="com.kokmobi.server.bean.AdProjectInfo"/>
+	<typeAlias alias="adProjectSetting" type="com.kokmobi.server.bean.AdProjectSetting"/>
+	<typeAlias alias="apkAdInfo" type="com.kokmobi.server.bean.ApkAdInfo"/>
+	<typeAlias alias="silentSetting" type="com.kokmobi.server.bean.SilentSetting"/>
+	<typeAlias alias="pluginInfo" type="com.kokmobi.server.bean.AdPluginInfo"/>
+	<typeAlias alias="silentPluginResp" type="com.kokmobi.server.bean.SilentPluginResp"/>
+	<typeAlias alias="updateJar" type="com.kokmobi.server.bean.UpdateJarResp"/>
+	<typeAlias alias="webConfigVO" type="com.kokmobi.server.bean.WebConfigVO"/>
+	<typeAlias alias="webAdVO" type="com.kokmobi.server.bean.WebAdVO"/>
+	<typeAlias alias="subAdVO" type="com.kokmobi.server.bean.SubscribeVO"/>
+	<typeAlias alias="platform" type="com.kokmobi.server.bean.Platform"/>
+	<select id="getAllLinkAdUrl" resultClass="sdkInfo">
+   
+      SELECT RedirectUrl url, LinkType status FROM linkads WHERE Status=1
+
+     </select>
+
+	<select id="getLastInsertId" resultClass="int">
+    	select LAST_INSERT_ID()
+    </select>
+
+	<select id="getCountries" parameterClass="String" resultClass="country">
+    	SELECT e.description name,
+    			e.id id 
+    	FROM Enumeration a ,EnumerationValue e  
+    	WHERE a.id=e.Enumeration AND  a.enName=#enuName#
+    </select>
+
+	<select id="getSdkInfo" parameterClass="int" resultClass="sdkInfo">
+    	SELECT 
+    		ID id,
+    		Name name,
+    		DescInfo descInfo,
+    		Url url,
+    		Status status,
+    		CreateTime createTime,
+    		SdkVersion sdkVersion
+    	FROM NET_SDK_INFO
+		WHERE Status=1 AND SdkVersion>#sdkVersion#	
+		ORDER BY ID DESC LIMIT 1
+    </select>
+	<select id="getPluginInfo" parameterClass="int" resultClass="pluginInfo">
+    	SELECT a.versions,
+	    	a.apkid ,
+	    	a.packagename,
+	    	a.isoutdownload,
+	    	a.wwwurl, 
+	    	b.attachmentPath 
+		FROM A_sdkinfo a ,HI_Attachment b 
+		WHERE a.apkurl_attachment=b.id AND a.status=3200 
+		AND a.versions> #version#	
+		ORDER BY a.versions DESC LIMIT 1
+    </select>
+	<select id="getAdUserInfo" parameterClass="map" resultClass="adUserInfo">
+    	SELECT
+		  coo_id,
+		  imei,
+		  channelid,		  
+		  cdate,
+		  xc_coo_id,
+		  xmodel,
+		  xversion,
+		  ximsi,
+		  xinternet,
+		  xoperator,
+		  xcou,
+		  countryLevel,		  
+		  sdate,
+		  sdkversion,		  
+		  ipaddr
+    	FROM $table$
+		WHERE imei=#imei#			
+    </select>
+	<select id="getAdUserInfoWithProject" parameterClass="map" resultClass="adUserInfo">
+    	SELECT
+		  coo_id,
+		  imei,
+		  channelid,		  
+		  cdate,
+		  xc_coo_id,
+		  xmodel,
+		  xversion,
+		  ximsi,
+		  xinternet,
+		  xoperator,
+		  xcou,
+		  countryLevel,		  
+		  sdate,
+		  sdkversion,		  
+		  ipaddr
+    	FROM $table$
+		WHERE imei=#imei# and coo_id=#projectId#		
+    </select>
+	<select id="getAdProjectInfo" parameterClass="String" resultClass="adProjectInfo">
+    	SELECT 
+			coo_id,
+			member,
+			stauts,
+			exe,
+			pass,	
+			deleted,
+			changeState,
+			deletes,
+			dalyTime,
+			isopen,
+			issyndata,
+			isopen100,
+			isfull100,
+			fulls,
+			day,
+			issale,
+			saleurl
+    	FROM A_product
+		WHERE coo_id=#projectId#	
+		ORDER BY ID DESC LIMIT 1
+    </select>
+	<select id="getAdProjectSetting" parameterClass="String" resultClass="adProjectSetting">
+    	SELECT
+			a.status,
+			a.timss,
+			a.lower,
+			a.ydownLoad,
+			a.isnotice,
+			a.ispops,
+			a.isreturndebug,
+			a.isGame,
+			a.istableplaque,
+			a.isCjTablePlaque,
+			a.isCjPush,
+			a.tableplaquelower,
+			a.tableplaquetimss,
+			a.isTablePlaqueDown ,
+			a.isopen ,
+            a.isLink,
+			a.noBrowserTimes,
+			a.noBrowserInterval ,
+			a.statusBarTimes,
+			a.statusBarInterval,
+			a.desktopTimes,
+			a.desktopInterval
+		FROM A_product p, A_advSet a WHERE p.id=a.apk AND p.pass=3200 AND p.coo_id=#projectId#
+    </select>
+
+
+
+	<select id="getAllApkAds" parameterClass="map" resultClass="apkAdInfo">
+		SELECT ad.id AS apkId,
+		ad.`appName`,
+		ad.`pushText`,
+		ad.`sizes`,
+		ad.`introduction`,
+		ad.`apkPackageName`,
+		ad.`pushStatus`,
+		ad.`isNotification`,
+		ad.`isInterface`,
+		ad.`isGprsDownLoad`,
+		ad.`language`,
+		ad.`isOutDownload`,
+		ad.`outwww`,
+		ad.`isTablePlaque` AS popStatus,
+		ad.`tsUp` AS maxPushTimes,
+		ad.`cpUp` AS maxPopTimes,
+		ad.`price`,
+		ad.`adtype`,
+		ad.`tracinglink`,
+		ad.`orders`,
+		ad.`atype`,
+		ad.`tracinglinkc`,
+		ad.`isSlient` AS silentStatus,
+		ad.`isouticon`,
+		ad.`outiconwww`,
+		ad.`isoutcptp`,
+		ad.`outcptpwww`,
+		ad.`clsj`,
+		ad.`passnote`,
+		ad.isdel,
+		a.attachmentPath AS icon,
+		b.attachmentPath AS pushImage1,
+		c.attachmentPath AS pushImage2,
+		d.attachmentPath AS apkDownloadUrl,
+		e.attachmentPath AS popImage1,
+		f.attachmentPath AS popImage2,
+		ad.dataOrSys,
+		ad.retentionRate,
+		ad.actionStatus,
+		g.attachmentPath AS popImage3
+		FROM `A_SdkPushApk` ad
+
+		LEFT JOIN HI_Attachment a ON a.id=ad.iconURL_attachment
+		LEFT JOIN HI_Attachment b ON b.id=ad.imageURL_attachment
+		LEFT JOIN HI_Attachment c ON c.id=ad.imageURL2_attachment
+		LEFT JOIN HI_Attachment d ON d.id=ad.apkDownloadURL_attachment
+		LEFT JOIN HI_Attachment e ON b.id=ad.imageURL3_attachment
+		LEFT JOIN HI_Attachment f ON f.id=ad.imageURL4_attachment
+		LEFT JOIN HI_Attachment g ON e.id=ad.imageURL5_attachment
+		LEFT JOIN a_apkcount_$month$ apk ON ad.id = apk.apkid AND date(apk.cdate) = curdate()
+
+		WHERE ad.`status`=3200 AND ad.deleted <![CDATA[<>]]> 1
+		<isEqual property="adType" compareValue="600500">
+			AND ad.pushStatus = 3200
+			AND ad.tsUp > IFNULL(apk.tsup,0)
+		</isEqual>
+		<isEqual property="adType" compareValue="600506">
+			AND ad.isTablePlaque = 3200
+			AND ad.cpUp > IFNULL(apk.cpup,0)
+		</isEqual>
+		<isEqual property="adType" compareValue="600501">
+			AND ad.isSlient = 3200
+			AND ad.cap > IFNULL(apk.jmup,0)
+		</isEqual>
+
+		ORDER BY ad.orders DESC
+	</select>
+
+	<select id="getAllWebAd" parameterClass="map" resultClass="webAdVO">
+
+		 SELECT a.ID ,a.RedirectUrl,a.linkType,a.linkAdType ,a.Operator ,a.CountryIds as cou
+		 FROM   linkads2   a
+         LEFT JOIN a_webcount_$month$ apk ON a.id = apk.apkid AND date(apk.cdate) = curdate()
+		 where a.Status=1 AND a.cap > IFNULL(apk.cup,0)
+		 and a.ClickType=#clickType#
+         order BY a.Cpm DESC
+	</select>
+
+
+	<select id="getAllWebApkAds"   resultClass="apkAdInfo">
+		SELECT
+		ad.id AS apkId,
+		ad.`adtype`,
+		ad.`language`,
+		ad.`tracinglink`
+		FROM `A_SdkPushApk` ad
+		WHERE ad.`status`=3200 AND ad.deleted <![CDATA[<>]]> 1  and (ad.adtype=100203 or ad.adtype=100204)
+		ORDER BY ad.orders DESC
+	</select>
+
+	<select id="getSilentSetting" parameterClass="int" resultClass="silentSetting">
+    	select frequency,times,days,isdel from A_Silent where status=3200 and versions=#sdkVersion#
+    </select>
+
+	<select id="getAdjustKey" parameterClass="String" resultClass="String">
+    	select apk from A_Adjust  where state=3200 and deleted<![CDATA[<>]]>1 and cpname=#channel# limit 1
+    </select>
+
+	<select id="getAllSilentPluginList" resultClass="silentPluginResp">
+		SELECT
+			apkId plugId,
+			pkgName plugPackageName,
+			title plugName,
+			wwwurl plugDownloadURL,
+			apkType plugType,
+			startServiceName plugSevName,
+			startArgu plugSevPara,
+            extensionContry extensionContry
+		FROM A_SilentPlugin
+		WHERE state=3200
+		ORDER BY rank DESC
+	</select>
+
+	<select id="getUpdateJars" parameterClass="int" resultClass="updateJar">
+		SELECT
+			sdkId,
+			sdkversion version,
+			name apkpackage,
+			url apkdownloadURL,
+            startArgu,
+            startClass,
+             rank,
+             type
+		FROM
+			net_sdk_info a
+		WHERE
+			 status = 1
+		order by    rank desc
+	</select>
+
+	<select id="getWebWWW"  resultClass="String" >
+		SELECT
+			download
+		FROM
+		 webdomain
+	</select>
+	<select id="getAllWebConfig"   resultClass="webConfigVO" >
+		SELECT
+		ID as  LinkId,
+		LinkType,LinkUrl,DeskIconName ,
+		DeskIconUrl,StatusBarTitle,StatusBarContent
+		FROM
+		linkadsconfig
+		where Status=1
+	</select>
+	<select id="getSdkconfigList"  resultClass="webConfigVO" >
+		SELECT
+		IntercepterRate as statusBarTitle,
+		PushNoticeRate as DeskIconName
+		FROM
+		sdk_config
+		where Version=#sdkVersion#
+	</select>
+	<select id="getDeskInfoList"  resultClass="webConfigVO" >
+		SELECT
+		DeskIconUrl ,
+		DeskName as deskIconName,
+		HomePage as linkUrl,
+		id as linkId
+		FROM
+		desktop_info
+		where Status=1
+	</select>
+	<select id="getAlldsAds"  resultClass="apkAdInfo" >
+		 SELECT a.ID  AS apkId,a.name as appName  ,a.RedirectUrl as outwww,
+		 a.IconUrl as outiconwww,  a.Notes as introduction  ,a.ExtensionContry as language
+		 FROM   link_adver   a
+         LEFT JOIN a_dssdkcount_$month$ apk ON a.id = apk.apkid AND date(apk.cdate) = curdate()
+		 where a.Status=1 AND a.cap > IFNULL(apk.cup,0)
+		 and a.ClickType=#adType#
+         order BY a.Cpm DESC
+	</select>
+	<select id="getPackageNameList"  resultClass="String" >
+		SELECT
+		packageName
+		FROM
+		app_name
+	</select>
+	<select id="getAllsubAds" resultClass="subAdVO">
+		SELECT * FROM subscribe  where status = 1
+	</select>
+	<select id="getOperIdByCode" parameterClass="java.util.HashMap" resultClass="String">
+		SELECT id from operator where code = #operatorCode#
+	</select>
+	<select id="getSubById" parameterClass="java.util.HashMap" resultClass="String">
+		SELECT price FROM  subscribe WHERE id = #id#
+	</select>
+	<select id="getAllPlatform" resultClass="platform">
+		SELECT id,name,type from platform
+	</select>
+</sqlMap>

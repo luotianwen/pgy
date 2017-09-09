@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="apkCphcTotalModelSqlMap">
+    <typeAlias alias="apkCphcTotalModelVO" type="com.kkgame.feeop.record.bean.ApkCphcTotalModelVO"/>
+    <select id="getApkCphcTotalModelVOListCount" parameterClass="apkCphcTotalModelVO" resultClass="int">
+        SELECT
+        count(a.sdate)
+        FROM $table$ a ,kok_sdk.a_sdkpushapk b
+        where b.id=a.apkid
+        <isNotEmpty prepend="AND" property="sdate">
+            a.sdate = #sdate#
+        </isNotEmpty>
+
+        <isNotEmpty prepend="AND" property="apkid">
+            a.apkid = #apkid#
+        </isNotEmpty>
+
+
+    </select>
+    <select id="getApkCphcTotalModelVOList" parameterClass="apkCphcTotalModelVO" resultClass="apkCphcTotalModelVO">
+        SELECT
+        a.sdate ,a.apkid ,a.cpid ,a.installtotal ,a.showtotal ,a.realtotal ,a.inputtotal ,a.price ,a.income ,a.cpm
+        ,a.realPercent ,a.inputPercent
+        FROM $table$ a ,kok_sdk.a_sdkpushapk b
+        where b.id=a.apkid
+        <isNotEmpty prepend="AND" property="sdate">
+            a.sdate = #sdate#
+        </isNotEmpty>
+
+        <isNotEmpty prepend="AND" property="apkid">
+            a.apkid = #apkid#
+        </isNotEmpty>
+
+         LIMIT  #page.index#, #page.pageSize#
+    </select>
+
+    <select id="getApkCphcTotalModelVO" parameterClass="apkCphcTotalModelVO" resultClass="apkCphcTotalModelVO">
+		SELECT
+        sdate ,apkid ,version ,cpid ,installtotal ,showtotal ,realtotal ,inputtotal ,price ,income ,cpm ,creator ,realPercent ,inputPercent
+	    
+	        FROM $table$ 
+	        WHERE 
+		        sdate = #sdate#  AND 
+		        apkid = #apkid# 
+	</select>
+	<insert id="create" parameterClass="apkCphcTotalModelVO">
+        INSERT INTO $table$ (
+        	sdate ,
+        	apkid ,
+        	version ,
+        	cpid ,
+        	installtotal ,
+        	showtotal ,
+        	realtotal ,
+        	inputtotal ,
+        	price ,
+        	income ,
+        	cpm ,
+        	creator ,
+        	realPercent ,
+        	inputPercent 
+        ) VALUES (
+        	#sdate# ,
+        	#apkid# ,
+        	#version# ,
+        	#cpid# ,
+        	#installtotal# ,
+        	#showtotal# ,
+        	#realtotal# ,
+        	#inputtotal# ,
+        	#price# ,
+        	#income# ,
+        	#cpm# ,
+        	#creator# ,
+        	#realPercent# ,
+        	#inputPercent# 
+        )
+	</insert>
+	<update id="update" parameterClass="apkCphcTotalModelVO">
+        UPDATE $table$ SET
+	        version = #version# ,
+	        cpid = #cpid# ,
+	        installtotal = #installtotal# ,
+	        showtotal = #showtotal# ,
+	        realtotal = #realtotal# ,
+	        inputtotal = #inputtotal# ,
+	        price = #price# ,
+	        income = #income# ,
+	        cpm = #cpm# ,
+	        creator = #creator# ,
+	        realPercent = #realPercent# ,
+	        inputPercent = #inputPercent# 
+        WHERE 
+	        sdate = #sdate#  AND 
+	        apkid = #apkid# 
+	</update>
+	<update id="updatePrice" parameterClass="apkCphcTotalModelVO">
+		UPDATE $table$ SET price = #price# WHERE sdate = #sdate#  AND apkid = #apkid#
+	</update>
+	 
+</sqlMap>

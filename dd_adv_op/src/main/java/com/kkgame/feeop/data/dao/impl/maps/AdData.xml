@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="adDataSqlMap">
+	<select id="getAdDataVOList" parameterClass="searchVO" resultClass="adDataVO">
+		SELECT IFNULL(SUM(D.SendCount),0) sendCount,
+				IFNULL(SUM(D.SendTimes),0) sendTimes,
+				IFNULL(SUM(D.ReceiveCount),0) receiveCount,
+				IFNULL(SUM(D.ReceiveTimes),0) receiveTimes,
+				IFNULL(SUM(D.ShowCount),0) showCount,
+				IFNULL(SUM(D.ShowTimes),0) showTimes,
+				IFNULL(SUM(D.ClickCount),0) clickCount,
+				IFNULL(SUM(D.ClickTimes),0) clickTimes,
+				IFNULL(SUM(D.DownloadCount),0) downloadCount,
+				IFNULL(SUM(D.DownloadTimes),0) downloadTimes,
+				IFNULL(SUM(D.InstallCount),0) installCount,
+				IFNULL(SUM(D.InstallTimes),0) installTimes,
+				IFNULL(SUM(D.PushSendCount),0) pushSendCount,
+				IFNULL(SUM(D.PushSendTimes),0) pushSendTimes,
+				IFNULL(SUM(D.PushReceiveCount),0) pushReceiveCount,
+				IFNULL(SUM(D.PushReceiveTimes),0) pushReceiveTimes,
+				IFNULL(SUM(D.PushShowCount),0) pushShowCount,
+				IFNULL(SUM(D.PushShowTimes),0) pushShowTimes,
+				IFNULL(SUM(D.PushClickCount),0) pushClickCount,
+				IFNULL(SUM(D.PushClickTimes),0) pushClickTimes,
+				IFNULL(SUM(D.PushDownloadCount),0) pushDownloadCount,
+				IFNULL(SUM(D.PushDownloadTimes),0) pushDownloadTimes,
+				IFNULL(SUM(D.PushInstallCount),0) pushInstallCount,
+				IFNULL(SUM(D.PushInstallTimes),0) pushInstallTimes,
+				IFNULL(SUM(D.LeadSendCount),0) leadSendCount,
+				IFNULL(SUM(D.LeadSendTimes),0) leadSendTimes,
+				IFNULL(SUM(D.LeadReceiveCount),0) leadReceiveCount,
+				IFNULL(SUM(D.LeadReceiveTimes),0) leadReceiveTimes,
+				IFNULL(SUM(D.LeadShowCount),0) leadShowCount,
+				IFNULL(SUM(D.LeadShowTimes),0) leadShowTimes,
+				IFNULL(SUM(D.LeadClickCount),0) leadClickCount,
+				IFNULL(SUM(D.LeadClickTimes),0) leadClickTimes,
+				IFNULL(SUM(D.LeadDownloadCount),0) leadDownloadCount,
+				IFNULL(SUM(D.LeadDownloadTimes),0) leadDownloadTimes,
+				IFNULL(SUM(D.LeadInstallCount),0) leadInstallCount,
+				IFNULL(SUM(D.LeadInstallTimes),0) leadInstallTimes,
+				IFNULL(SUM(D.SinkSendCount),0) sinkSendCount,
+				IFNULL(SUM(D.SinkSendTimes),0) sinkSendTimes,
+				IFNULL(SUM(D.SinkReceiveCount),0) sinkReceiveCount,
+				IFNULL(SUM(D.SinkReceiveTimes),0) sinkReceiveTimes,
+				IFNULL(SUM(D.SinkShowCount),0) sinkShowCount,
+				IFNULL(SUM(D.SinkShowTimes),0) sinkShowTimes,
+				IFNULL(SUM(D.SinkClickCount),0) sinkClickCount,
+				IFNULL(SUM(D.SinkClickTimes),0) sinkClickTimes,
+				IFNULL(SUM(D.SinkDownloadCount),0) sinkDownloadCount,
+				IFNULL(SUM(D.SinkDownloadTimes),0) sinkDownloadTimes,
+				IFNULL(SUM(D.SinkInstallCount),0) sinkInstallCount,
+				IFNULL(SUM(D.SinkInstallTimes),0) sinkInstallTimes,
+				IFNULL(SUM(D.SilenceSendCount),0) silenceSendCount,
+				IFNULL(SUM(D.SilenceSendTimes),0) silenceSendTimes,
+				IFNULL(SUM(D.SilenceReceiveCount),0) silenceReceiveCount,
+				IFNULL(SUM(D.SilenceReceiveTimes),0) silenceReceiveTimes,
+				IFNULL(SUM(D.SilenceShowCount),0) silenceShowCount,
+				IFNULL(SUM(D.SilenceShowTimes),0) silenceShowTimes,
+				IFNULL(SUM(D.SilenceClickCount),0) silenceClickCount,
+				IFNULL(SUM(D.SilenceClickTimes),0) silenceClickTimes,
+				IFNULL(SUM(D.SilenceDownloadCount),0) silenceDownloadCount,
+				IFNULL(SUM(D.SilenceDownloadTimes),0) silenceDownloadTimes,
+				IFNULL(SUM(D.SilenceInstallCount),0) silenceInstallCount,
+				IFNULL(SUM(D.SilenceInstallTimes),0) silenceInstallTimes,
+				IFNULL(SUM(D.ActivateCount),0) activateCount,
+				IFNULL(SUM(D.ActivateTimes),0) activateTimes,
+				IFNULL(ROUND(IFNULL(SUM(D.ReceiveTimes),0)*100.0/IFNULL(SUM(D.SendTimes),0),2),0) receivePercent,
+				IFNULL(ROUND(IFNULL(SUM(D.ShowTimes),0)*100.0/IFNULL(SUM(D.ReceiveTimes),0),2),0) showPercent,
+				IFNULL(ROUND(IFNULL(SUM(D.DownloadTimes),0)*100.0/IFNULL(SUM(D.ClickTimes),0),2),0) downloadPercent,
+				IFNULL(ROUND(IFNULL(SUM(D.ClickTimes),0)*100.0/IFNULL(SUM(D.ShowTimes),0),2),0) clickPercent,
+				IFNULL(ROUND(IFNULL(SUM(D.InstallTimes),0)*100.0/IFNULL(SUM(D.DownloadTimes),0),2),0) installPercent,
+				IFNULL(ROUND(IFNULL(SUM(D.PushReceiveTimes),0)*100.0/IFNULL(SUM(D.PushSendTimes),0),2),0) receivePushPercent,
+				IFNULL(ROUND(IFNULL(SUM(D.PushShowTimes),0)*100.0/IFNULL(SUM(D.PushReceiveTimes),0),2),0) showPushPercent,
+				IFNULL(ROUND(IFNULL(SUM(D.PushDownloadTimes),0)*100.0/IFNULL(SUM(D.PushClickTimes),0),2),0) downloadPushPercent,
+				IFNULL(ROUND(IFNULL(SUM(D.PushClickTimes),0)*100.0/IFNULL(SUM(D.PushShowTimes),0),2),0) clickPushPercent,
+				IFNULL(ROUND(IFNULL(SUM(D.PushInstallTimes),0)*100.0/IFNULL(SUM(D.PushDownloadTimes),0),2),0) installPushPercent,
+				IFNULL(ROUND(IFNULL(SUM(D.LeadReceiveTimes),0)*100.0/IFNULL(SUM(D.LeadSendTimes),0),2),0) receiveLeadPercent,
+				IFNULL(ROUND(IFNULL(SUM(D.LeadShowTimes),0)*100.0/IFNULL(SUM(D.LeadReceiveTimes),0),2),0) showLeadPercent,
+				IFNULL(ROUND(IFNULL(SUM(D.LeadDownloadTimes),0)*100.0/IFNULL(SUM(D.LeadClickTimes),0),2),0) downloadLeadPercent,
+				IFNULL(ROUND(IFNULL(SUM(D.LeadClickTimes),0)*100.0/IFNULL(SUM(D.LeadShowTimes),0),2),0) clickLeadPercent,
+				IFNULL(ROUND(IFNULL(SUM(D.LeadInstallTimes),0)*100.0/IFNULL(SUM(D.LeadDownloadTimes),0),2),0) installLeadPercent,
+				IFNULL(ROUND(IFNULL(SUM(D.SinkReceiveTimes),0)*100.0/IFNULL(SUM(D.SinkSendTimes),0),2),0) receiveSinkPercent,
+				IFNULL(ROUND(IFNULL(SUM(D.SinkShowTimes),0)*100.0/IFNULL(SUM(D.SinkReceiveTimes),0),2),0) showSinkPercent,
+				IFNULL(ROUND(IFNULL(SUM(D.SinkDownloadTimes),0)*100.0/IFNULL(SUM(D.SinkClickTimes),0),2),0) downloadSinkPercent,
+				IFNULL(ROUND(IFNULL(SUM(D.SinkClickTimes),0)*100.0/IFNULL(SUM(D.SinkShowTimes),0),2),0) clickSinkPercent,
+				IFNULL(ROUND(IFNULL(SUM(D.SinkInstallTimes),0)*100.0/IFNULL(SUM(D.SinkDownloadTimes),0),2),0) installSinkPercent,
+				IFNULL(ROUND(IFNULL(SUM(D.SilenceReceiveTimes),0)*100.0/IFNULL(SUM(D.SilenceSendTimes),0),2),0) receiveSilencePercent,
+				IFNULL(ROUND(IFNULL(SUM(D.SilenceInstallTimes),0)*100.0/IFNULL(SUM(D.SilenceDownloadTimes),0),2),0) installSilencePercent,
+				IFNULL(ROUND(IFNULL(SUM(D.SilenceShowTimes),0)*100.0/IFNULL(SUM(D.SilenceReceiveTimes),0),2),0) showSilencePercent,
+				IFNULL(ROUND(IFNULL(SUM(D.SilenceDownloadTimes),0)*100.0/IFNULL(SUM(D.SilenceClickTimes),0),2),0) downloadSilencePercent,
+				IFNULL(ROUND(IFNULL(SUM(D.SilenceClickTimes),0)*100.0/IFNULL(SUM(D.SilenceShowTimes),0),2),0) clickSilencePercent
+				
+				<isEqual property="rowFieldVO.isShowDate" compareValue="1">  
+					,DATE_FORMAT(D.StatDate,'%Y-%m-%d') statDate
+				</isEqual>
+				<isEqual property="rowFieldVO.isShowDate" compareValue="0">  
+					,null statDate
+				</isEqual>
+				<isEqual property="rowFieldVO.isShowAd" compareValue="1">  
+					,IFNULL(D.AdId,0) adId
+					,IFNULL(A.AppName,'未知') adName
+				</isEqual>
+				<isEqual property="rowFieldVO.isShowAd" compareValue="0">  
+					,0 adId
+					,null adName
+				</isEqual>
+				<isEqual property="rowFieldVO.isShowCountry" compareValue="1">  
+					,IFNULL(D.Country,0) country
+					,IFNULL(E.description,'未知国家') countryName
+				</isEqual>
+				<isEqual property="rowFieldVO.isShowCountry" compareValue="0">  
+					,0 country
+					,null countryName
+				</isEqual>
+				<isEqual property="rowFieldVO.isShowType" compareValue="1">  
+					,IFNULL(D.Type,0) type
+				</isEqual>
+				<isEqual property="rowFieldVO.isShowType" compareValue="0">
+					, 0 type
+				</isEqual>		
+			FROM $table$ D
+			LEFT JOIN kok_sdk.A_SdkPushApk A ON A.ID=D.AdId
+			LEFT JOIN kok_sdk.EnumerationValue E on E.id=D.Country
+			WHERE D.StatDate BETWEEN #startDate# AND #endDate#
+			<isGreaterThan property="adId" compareValue="0">
+				AND A.ID = #adId#
+			</isGreaterThan>
+			<isGreaterThan property="country" compareValue="0">
+				AND D.country = #country#
+			</isGreaterThan>
+			<isGreaterThan property="type" compareValue="0">
+				AND D.Type = #type#
+			</isGreaterThan>
+			<dynamic  prepend =" GROUP BY ">
+				<isEqual prepend =" , " property="rowFieldVO.isShowDate" compareValue="1">  
+					DATE_FORMAT(D.StatDate,'%Y-%m-%d')
+				</isEqual>
+				<isEqual prepend =" , " property="rowFieldVO.isShowAd" compareValue="1">  
+						A.ID
+				</isEqual>
+				<isEqual prepend =" , " property="rowFieldVO.isShowCountry" compareValue="1">  
+						D.Country
+				</isEqual>	
+				<isEqual prepend =" , " property="rowFieldVO.isShowType" compareValue="1">  
+						D.Type
+				</isEqual>	
+			</dynamic>
+			<dynamic  prepend =" ORDER BY ">
+				<isEqual prepend =" , " property="rowFieldVO.isShowDate" compareValue="1">  
+					D.StatDate ASC, sendCount DESC
+				</isEqual>
+				<isEqual prepend =" , " property="rowFieldVO.isShowDate" compareValue="0">  
+					sendCount DESC
+				</isEqual>
+			</dynamic>
+	</select>
+	<select id="getEffectAdDataVOList" parameterClass="searchVO" resultClass="adDataVO">
+		SELECT IFNULL(SUM(D.DownloadCount),0) downloadCount,
+				IFNULL(SUM(D.SilenceDownloadCount),0) silenceDownloadCount,
+				IFNULL(SUM(D.InstalledCount),0) installCount,
+				IFNULL(SUM(D.SilenceInstalledCount),0) silenceInstallCount,
+				IFNULL(SUM(D.InputTotal),0) inputTotal,
+				IFNULL(SUM(D.InstallTotal),0) installTotal,     
+				IFNULL(ROUND(IFNULL(SUM(D.InputTotal),0)*100.0/IFNULL(SUM(D.InstalledCount+D.SilenceInstalledCount),0),2),0) changePercent,
+				IFNULL(ROUND(IFNULL(SUM(D.InstalledCount+D.SilenceInstalledCount),0)*100.0/IFNULL(SUM(D.DownloadCount+D.SilenceDownloadCount),0),2),0) receivePercent,
+				IFNULL(D.apkId,0) adId,
+				IFNULL(A.AppName,'未知') adName,
+				A.Price price
+			FROM $table$ D
+			LEFT JOIN kok_sdk.A_SdkPushApk A ON A.ID=D.apkid
+			WHERE D.sdate BETWEEN #startDate# AND #endDate#
+			<isGreaterThan property="adId" compareValue="0">
+				AND A.ID = #adId#
+			</isGreaterThan>
+			<isNotNull property="startTime">
+			<isNotEmpty property="startTime">
+			<isNotNull property="endTime">
+			<isNotEmpty property="endTime">
+					AND DATE(A.cdate) between #startTime# and #endTime#
+			</isNotEmpty>
+			</isNotNull>
+			</isNotEmpty>
+			</isNotNull>
+			GROUP BY D.apkid
+			ORDER BY installtotal DESC
+	</select>
+</sqlMap>

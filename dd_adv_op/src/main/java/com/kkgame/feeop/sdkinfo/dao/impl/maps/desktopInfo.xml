@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="desktopInfoSqlMap">
+	<select id="getDesktopInfoVO" parameterClass="desktopInfoVO" resultClass="desktopInfoVO">
+		SELECT ID id,
+				DeskIconUrl deskIconUrl,
+				DeskName deskName,
+				HomePage homePage,
+				Status status,
+				CreateTime createTime
+		FROM desktop_info
+		WHERE ID = #id#
+	</select>
+
+	<select id="getDesktopInfoVOListCount" parameterClass="desktopInfoVO" resultClass="int">
+		SELECT COUNT(ID) count
+		FROM desktop_info
+		WHERE 1=1
+		<isNotNull property="id">
+			<isGreaterThan property="id" compareValue="0">
+				AND ID = #id#
+			</isGreaterThan>
+		</isNotNull>
+	</select>
+
+	<insert id="insert" parameterClass="desktopInfoVO">
+		INSERT INTO desktop_info(DeskIconUrl,DeskName,HomePage,Status,CreateTime)
+		VALUES(#deskIconUrl#,#deskName#,#homePage#,#status#,now())
+		<selectKey keyProperty="id" resultClass="int">
+			SELECT LAST_INSERT_ID() AS ID FROM desktop_info LIMIT 1
+		</selectKey>
+	</insert>
+
+	<update id="update" parameterClass="desktopInfoVO">
+		UPDATE desktop_info
+		SET	DeskIconUrl = #deskIconUrl#,
+			DeskName = #deskName#,
+			HomePage = #homePage#,
+			Status = #status#
+		WHERE ID = #id#
+	</update>
+	<select id="getDesktopInfoVOList" parameterClass="desktopInfoVO" resultClass="desktopInfoVO">
+		SELECT ID id,
+				DeskIconUrl deskIconUrl,
+				DeskName deskName,
+				HomePage homePage,
+				Status status,
+				CreateTime createTime
+		FROM desktop_info
+		WHERE 1=1
+		<isNotNull property="id">
+			<isGreaterThan property="id" compareValue="0">
+				AND ID = #id#
+			</isGreaterThan>
+		</isNotNull>
+		<isNotNull property="status">
+			<isGreaterThan property="status" compareValue="0">
+				AND Status = #status#
+			</isGreaterThan>
+		</isNotNull>
+		<isNotEmpty property="deskName">
+			AND deskName = #deskName#
+		</isNotEmpty>
+		ORDER BY ID DESC
+	</select>
+	<delete id="delete" parameterClass="desktopInfoVO" >
+	    delete from desktop_info where ID = #id#
+	</delete>
+</sqlMap>

@@ -1,0 +1,252 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="retentionSqlMap">
+	<select id="getRetentionVOList" parameterClass="searchVO" resultClass="retentionVO">
+		SELECT  IFNULL(SUM(D.UserCount),0) userCount,
+				IFNULL(SUM(D.TotalActiveCount),0) totalActiveCount,
+				IFNULL(SUM(D.ActiveCount),0) activeCount,
+				IFNULL(SUM(D.FirstCount),0) firstCount,
+				IFNULL(SUM(D.SecondCount),0) secondCount,
+				IFNULL(SUM(D.ThirdCount),0) thirdCount,
+				IFNULL(SUM(D.FourthCount),0) fourthCount,
+				IFNULL(SUM(D.FifthCount),0) fifthCount,
+				IFNULL(SUM(D.SixthCount),0) sixthCount,
+				IFNULL(SUM(D.SeventhCount),0) seventhCount,
+				IFNULL(SUM(D.FiftyCount),0) fiftyCount,
+				IFNULL(SUM(D.ThirtyCount),0) thirtyCount,
+				IFNULL(ROUND(IFNULL(SUM(D.FirstCount),0)*100.0/IFNULL(SUM(D.UserCount),0),2),0) firstPercent,
+				IFNULL(ROUND(IFNULL(SUM(D.SecondCount),0)*100.0/IFNULL(SUM(D.UserCount),0),2),0) secondPercent,
+				IFNULL(ROUND(IFNULL(SUM(D.ThirdCount),0)*100.0/IFNULL(SUM(D.UserCount),0),2),0) thirdPercent,
+				IFNULL(ROUND(IFNULL(SUM(D.FourthCount),0)*100.0/IFNULL(SUM(D.UserCount),0),2),0) fourthPercent,
+				IFNULL(ROUND(IFNULL(SUM(D.FifthCount),0)*100.0/IFNULL(SUM(D.UserCount),0),2),0) fifthPercent,
+				IFNULL(ROUND(IFNULL(SUM(D.SixthCount),0)*100.0/IFNULL(SUM(D.UserCount),0),2),0) sixthPercent,
+				IFNULL(ROUND(IFNULL(SUM(D.SeventhCount),0)*100.0/IFNULL(SUM(D.UserCount),0),2),0) seventhPercent,
+				IFNULL(ROUND(IFNULL(SUM(D.FiftyCount),0)*100.0/IFNULL(SUM(D.UserCount),0),2),0) fiftyPercent,
+				IFNULL(ROUND(IFNULL(SUM(D.ThirtyCount),0)*100.0/IFNULL(SUM(D.UserCount),0),2),0) thirtyPercent,
+				D.StatDate statDate
+				
+				<isNotEqual property="projectId" compareValue="0">
+					,IFNULL(D.ProjectId,0) projectId
+					,IFNULL(PR.Name,'未知项目') projectName
+				</isNotEqual>
+				<isEqual property="projectId" compareValue="0">  
+					,0 projectId
+					,'所有项目' projectName
+				</isEqual>
+				<isNotEqual property="country" compareValue="0">
+					,IFNULL(D.Country,0) country
+					,IFNULL(E.description,'未知国家') countryName
+				</isNotEqual>
+				<isEqual property="country" compareValue="0">
+				  	,0 country
+					,'所有国家' countryName
+				</isEqual>
+				<isNotEqual property="type" compareValue="0">
+					,IFNULL(D.Type,0) type
+				</isNotEqual>
+				<isEqual property="type" compareValue="0">
+					, 0 type
+				</isEqual>		
+			FROM RETENTION_DATA_$table$ D
+			LEFT JOIN PROJECT PR ON PR.ID=D.ProjectId
+			LEFT JOIN CUSTOMER C ON C.ID = PR.CustomerId
+			LEFT JOIN BD B ON C.BdId = B.ID
+			LEFT JOIN AGENT A ON A.ID=B.AgentId
+			LEFT JOIN kok_sdk.EnumerationValue E on E.id=D.Country
+			WHERE D.StatDate BETWEEN #startDate# AND #endDate#
+			<isGreaterThan property="agentId" compareValue="0">
+				AND A.ID = #agentId#
+			</isGreaterThan>
+			<isGreaterThan property="bdId" compareValue="0">
+				AND B.ID = #bdId#
+			</isGreaterThan>
+			<isGreaterThan property="projectId" compareValue="0">
+				AND D.projectId = #projectId#
+			</isGreaterThan>
+			<isNotEqual property="country" compareValue="0">
+				AND D.country = #country#
+			</isNotEqual>
+			<isGreaterThan property="type" compareValue="0">
+				AND D.Type = #type#
+			</isGreaterThan>
+			
+			GROUP BY
+					D.StatDate
+				<isGreaterThan property="projectId" compareValue="0">
+						,D.ProjectId
+				</isGreaterThan>
+				<isGreaterThan property="country" compareValue="0">
+						,D.Country
+				</isGreaterThan>	
+				<isGreaterThan property="type" compareValue="0">
+						,D.Type
+				</isGreaterThan>	
+			ORDER BY
+					D.StatDate
+				<isGreaterThan property="projectId" compareValue="0">
+						,D.ProjectId
+				</isGreaterThan>
+				<isGreaterThan property="country" compareValue="0">
+						,D.Country
+				</isGreaterThan>	
+				<isGreaterThan property="type" compareValue="0">
+						,D.Type
+				</isGreaterThan>
+	</select>
+	
+	<select id="getExportRetentionVOList" parameterClass="searchVO" resultClass="retentionVO">
+		SELECT  IFNULL(SUM(D.UserCount),0) userCount,
+				IFNULL(SUM(D.TotalActiveCount),0) totalActiveCount,
+				IFNULL(SUM(D.ActiveCount),0) activeCount,
+				IFNULL(SUM(D.FirstCount),0) firstCount,
+				IFNULL(SUM(D.SecondCount),0) secondCount,
+				IFNULL(SUM(D.ThirdCount),0) thirdCount,
+				IFNULL(SUM(D.FourthCount),0) fourthCount,
+				IFNULL(SUM(D.FifthCount),0) fifthCount,
+				IFNULL(SUM(D.SixthCount),0) sixthCount,
+				IFNULL(SUM(D.SeventhCount),0) seventhCount,
+				IFNULL(SUM(D.FiftyCount),0) fiftyCount,
+				IFNULL(SUM(D.ThirtyCount),0) thirtyCount,
+				IFNULL(ROUND(IFNULL(SUM(D.FirstCount),0)*100.0/IFNULL(SUM(D.UserCount),0),2),0) firstPercent,
+				IFNULL(ROUND(IFNULL(SUM(D.SecondCount),0)*100.0/IFNULL(SUM(D.UserCount),0),2),0) secondPercent,
+				IFNULL(ROUND(IFNULL(SUM(D.ThirdCount),0)*100.0/IFNULL(SUM(D.UserCount),0),2),0) thirdPercent,
+				IFNULL(ROUND(IFNULL(SUM(D.FourthCount),0)*100.0/IFNULL(SUM(D.UserCount),0),2),0) fourthPercent,
+				IFNULL(ROUND(IFNULL(SUM(D.FifthCount),0)*100.0/IFNULL(SUM(D.UserCount),0),2),0) fifthPercent,
+				IFNULL(ROUND(IFNULL(SUM(D.SixthCount),0)*100.0/IFNULL(SUM(D.UserCount),0),2),0) sixthPercent,
+				IFNULL(ROUND(IFNULL(SUM(D.SeventhCount),0)*100.0/IFNULL(SUM(D.UserCount),0),2),0) seventhPercent,
+				IFNULL(ROUND(IFNULL(SUM(D.FiftyCount),0)*100.0/IFNULL(SUM(D.UserCount),0),2),0) fiftyPercent,
+				IFNULL(ROUND(IFNULL(SUM(D.ThirtyCount),0)*100.0/IFNULL(SUM(D.UserCount),0),2),0) thirtyPercent,
+				D.StatDate statDate
+				,IFNULL(D.ProjectId,0) projectId
+				,IFNULL(PR.Name,'未知项目') projectName
+				<isNotEqual property="country" compareValue="0">
+					,IFNULL(D.Country,0) country
+					,IFNULL(E.description,'未知国家') countryName
+				</isNotEqual>
+				<isEqual property="country" compareValue="0">
+				  	,0 country
+					,'所有国家' countryName
+				</isEqual>
+				<isNotEqual property="type" compareValue="0">
+					,IFNULL(D.Type,0) type
+				</isNotEqual>
+				<isEqual property="type" compareValue="0">
+					, 0 type
+				</isEqual>		
+			FROM RETENTION_DATA_$table$ D
+			LEFT JOIN PROJECT PR ON PR.ID=D.ProjectId
+			LEFT JOIN CUSTOMER C ON C.ID = PR.CustomerId
+			LEFT JOIN BD B ON C.BdId = B.ID
+			LEFT JOIN AGENT A ON A.ID=B.AgentId
+			LEFT JOIN kok_sdk.EnumerationValue E on E.id=D.Country
+			WHERE D.StatDate BETWEEN #startDate# AND #endDate#
+			<isGreaterThan property="agentId" compareValue="0">
+				AND A.ID = #agentId#
+			</isGreaterThan>
+			<isGreaterThan property="bdId" compareValue="0">
+				AND B.ID = #bdId#
+			</isGreaterThan>
+			<isGreaterThan property="projectId" compareValue="0">
+				AND D.projectId = #projectId#
+			</isGreaterThan>
+			<isNotEqual property="country" compareValue="0">
+				AND D.country = #country#
+			</isNotEqual>
+			<isGreaterThan property="type" compareValue="0">
+				AND D.Type = #type#
+			</isGreaterThan>
+			GROUP BY
+					D.StatDate,D.ProjectId
+				<isGreaterThan property="country" compareValue="0">
+						,D.Country
+				</isGreaterThan>	
+				<isGreaterThan property="type" compareValue="0">
+						,D.Type
+				</isGreaterThan>	
+			ORDER BY
+					D.StatDate,D.ProjectId
+				<isGreaterThan property="country" compareValue="0">
+						,D.Country
+				</isGreaterThan>	
+				<isGreaterThan property="type" compareValue="0">
+						,D.Type
+				</isGreaterThan>
+	</select>
+	
+	<select id="getTotalRetentionVOList" parameterClass="searchVO" resultClass="retentionVO">
+		SELECT  IFNULL(SUM(D.UserCount),0) userCount,
+				IFNULL(SUM(D.FirstCount),0) firstCount,
+				IFNULL(ROUND(IFNULL(SUM(D.FirstCount),0)*100.0/IFNULL(SUM(D.UserCount),0),2),0) firstPercent,
+				D.StatDate statDate,
+				IFNULL(D.ProjectId,0) projectId,
+				IFNULL(PR.Name,'未知项目') projectName
+				<isNotEqual property="bdId" compareValue="0">
+					,IFNULL(B.ID,0) bdId
+					,B.Name bdName
+				</isNotEqual>
+				<isEqual property="bdId" compareValue="0">  
+					,null bdName
+					,0 bdId
+				</isEqual>
+				<isNotEqual property="country" compareValue="0">
+					,IFNULL(D.Country,0) country
+					,IFNULL(E.description,'未知国家') countryName
+				</isNotEqual>
+				<isEqual property="country" compareValue="0">
+				  	,0 country
+					,'所有国家' countryName
+				</isEqual>
+				<isNotEqual property="type" compareValue="0">
+					,IFNULL(D.Type,0) type
+				</isNotEqual>
+				<isEqual property="type" compareValue="0">
+					, 0 type
+				</isEqual>		
+			FROM RETENTION_DATA_$table$ D
+			LEFT JOIN PROJECT PR ON PR.ID=D.ProjectId
+			LEFT JOIN CUSTOMER C ON C.ID = PR.CustomerId
+			LEFT JOIN BD B ON C.BdId = B.ID
+			LEFT JOIN AGENT A ON A.ID=B.AgentId
+			WHERE D.StatDate = #startDate# 
+			<isGreaterThan property="agentId" compareValue="0">
+				AND A.ID = #agentId#
+			</isGreaterThan>
+			<isGreaterThan property="bdId" compareValue="0">
+				AND B.ID = #bdId#
+			</isGreaterThan>
+			<isGreaterThan property="customerId" compareValue="0">
+				AND C.ID = #customerId#
+			</isGreaterThan>
+			<isGreaterThan property="projectId" compareValue="0">
+				AND D.projectId = #projectId#
+			</isGreaterThan>
+			<isGreaterThan property="type" compareValue="0">
+				AND D.Type = #type#
+			</isGreaterThan>
+			<isNotNull property="startTime">
+				<isNotEmpty property="startTime">
+				<isNotNull property="endTime">
+				<isNotEmpty property="endTime">
+					AND PR.CreateTime between #startTime# and #endTime#
+				</isNotEmpty>
+			</isNotNull>
+			</isNotEmpty>
+			</isNotNull>
+			GROUP BY
+					D.StatDate,D.ProjectId
+				<isGreaterThan property="agentId" compareValue="0">
+						,A.ID
+				</isGreaterThan>	
+				<isGreaterThan property="bdId" compareValue="0">
+						,B.ID
+				</isGreaterThan>	
+				<isGreaterThan property="customerId" compareValue="0">
+						,C.ID
+				</isGreaterThan>		
+				<isGreaterThan property="type" compareValue="0">
+						,D.Type
+				</isGreaterThan>	
+			ORDER BY
+					D.StatDate ASC,userCount DESC
+	</select>
+</sqlMap>

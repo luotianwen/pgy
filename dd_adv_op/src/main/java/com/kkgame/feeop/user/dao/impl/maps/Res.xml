@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="resSqlMap">
+	<select id="getResByParent" parameterClass="int" resultClass="resVO">
+		SELECT ID id,
+				ResName resName,
+				ResDesc resDesc,
+				ParentId parentId
+		FROM RES
+		WHERE ParentId = #id#
+	</select>
+	<select id="getRes" parameterClass="resVO" resultClass="resVO">
+		SELECT ID id,
+				ResName resName,
+				ResDesc resDesc,
+				ParentId parentId
+		FROM RES
+		WHERE ID = #id#
+	</select>
+	<insert id="create" parameterClass="resVO">
+		INSERT INTO RES (ResName,ResDesc,ParentId) VALUES(#resName#,#resDesc#,#parentId#)
+	</insert>
+	<update id="update" parameterClass="resVO">
+		UPDATE RES SET ResName = #resName#,ResDesc=#resDesc# WHERE ID = #id#
+	</update>
+	<delete id="delete" parameterClass="resVO">
+		DELETE FROM RES WHERE ID = #id# OR ParentId = #id#
+	</delete>
+	<select id="getResByRole" parameterClass="int" resultClass="resVO">
+		SELECT  R.ID id,
+				R.ResName resName,
+				R.ResDesc resDesc
+		FROM RES R, ROLE_RES RR, ROLE RO 
+		WHERE R.ID = RR.ResId 
+		AND RR.RoleId = RO.ID 
+		AND RO.ID = #id#
+	</select>
+</sqlMap>

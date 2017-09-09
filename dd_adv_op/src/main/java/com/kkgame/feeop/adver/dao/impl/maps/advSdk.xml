@@ -1,0 +1,340 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="advSdkSqlMap">
+    <select id="getAdvSdkVOCountryListCount" parameterClass="advSdkVO" resultClass="int">
+        SELECT COUNT(a.id) count
+        from (
+        SELECT a.id
+        from EnumerationValue a,A_SdkPushApk b
+        where a.enumeration=8200400 and b.status=3200 and (b.deleted is null or b.deleted=0) and
+        FIND_IN_SET(a.id,b.language)
+        <isNotNull property="id">
+            <isGreaterThan property="id" compareValue="-1">
+                AND b.ID = #id#
+            </isGreaterThan>
+        </isNotNull>
+
+        <isNotNull property="cpid">
+            <isGreaterThan property="cpid" compareValue="-2">
+                AND a.id = #cpid#
+            </isGreaterThan>
+        </isNotNull>
+
+        <isNotNull property="pushStatus">
+            <isGreaterThan property="pushStatus" compareValue="-1">
+                AND b.pushStatus = #pushStatus#
+            </isGreaterThan>
+        </isNotNull>
+        <isNotNull property="isTablePlaque">
+            <isGreaterThan property="isTablePlaque" compareValue="-1">
+                AND b.isTablePlaque = #isTablePlaque#
+            </isGreaterThan>
+        </isNotNull>
+        <isNotNull property="isSlient">
+            <isGreaterThan property="isSlient" compareValue="-1">
+                AND b.isSlient = #isSlient#
+            </isGreaterThan>
+        </isNotNull>
+        GROUP BY a.id
+        )as a
+    </select>
+    <select id="getAdvSdkVOCountryList" parameterClass="advSdkVO" resultClass="advSdkVO">
+
+        select a.description as countryName ,count(a.id)as cpid ,
+        sum(CASE when b.isTablePlaque=3200 then 1 else 0 end )as cpUp , sum(CASE when b.pushStatus=3200 then 1 else 0
+        end )as tsUp
+        , sum(CASE when b.isSlient=3200 then 1 else 0 end )as cap
+        from EnumerationValue a,A_SdkPushApk b
+        where a.enumeration=8200400 and b.status=3200 and (b.deleted is null or b.deleted=0) and
+        FIND_IN_SET(a.id,b.language)
+
+        <isNotNull property="id">
+            <isGreaterThan property="id" compareValue="-1">
+                AND b.ID = #id#
+            </isGreaterThan>
+        </isNotNull>
+
+        <isNotNull property="cpid">
+            <isGreaterThan property="cpid" compareValue="-2">
+                AND a.id = #cpid#
+            </isGreaterThan>
+        </isNotNull>
+
+        <isNotNull property="pushStatus">
+            <isGreaterThan property="pushStatus" compareValue="-1">
+                AND b.pushStatus = #pushStatus#
+            </isGreaterThan>
+        </isNotNull>
+        <isNotNull property="isTablePlaque">
+            <isGreaterThan property="isTablePlaque" compareValue="-1">
+                AND b.isTablePlaque = #isTablePlaque#
+            </isGreaterThan>
+        </isNotNull>
+        <isNotNull property="isSlient">
+            <isGreaterThan property="isSlient" compareValue="-1">
+                AND b.isSlient = #isSlient#
+            </isGreaterThan>
+        </isNotNull>
+        GROUP BY a.id order by cpid
+        <![CDATA[ LIMIT  #page.index#, #page.pageSize# ]]>
+    </select>
+
+    <select id="getAdvSdkVOListCount" parameterClass="advSdkVO" resultClass="int">
+        SELECT COUNT(ID) count
+        FROM A_SdkPushApk
+        WHERE 1=1
+        <isNotNull property="id">
+            <isGreaterThan property="id" compareValue="0">
+                AND ID = #id#
+            </isGreaterThan>
+        </isNotNull>
+        <isNotNull property="appName">
+            <isNotEmpty property="appName">
+                AND appName like concat('%',#appName#,'%')
+            </isNotEmpty>
+        </isNotNull>
+        <isNotNull property="deleted">
+            <isGreaterThan property="deleted" compareValue="-1">
+                AND deleted = #deleted#
+            </isGreaterThan>
+        </isNotNull>
+        <isNotNull property="pushStatus">
+            <isGreaterThan property="pushStatus" compareValue="-1">
+                AND pushStatus = #pushStatus#
+            </isGreaterThan>
+        </isNotNull>
+        <isNotNull property="isTablePlaque">
+            <isGreaterThan property="isTablePlaque" compareValue="-1">
+                AND isTablePlaque = #isTablePlaque#
+            </isGreaterThan>
+        </isNotNull>
+        <isNotNull property="isSlient">
+            <isGreaterThan property="isSlient" compareValue="-1">
+                AND isSlient = #isSlient#
+            </isGreaterThan>
+        </isNotNull>
+        <isNotNull property="status">
+            <isGreaterThan property="status" compareValue="-1">
+                AND Status = #status#
+            </isGreaterThan>
+        </isNotNull>
+        <isNotNull>
+            <isGreaterThan property="advLinkmanId" compareValue="0">
+                AND swmc = #advLinkmanId#
+            </isGreaterThan>
+        </isNotNull>
+    </select>
+    <select id="getAdvSdkVOList" parameterClass="advSdkVO" resultClass="advSdkVO">
+        SELECT ID id,
+        version,appName,pushText,sizes,introduction,apkPackageName,deleted,
+        pushStatus,status,isNotification,isInterface,isGprsDownLoad,language,userType,sdate,
+        isOutDownload,outwww,isTablePlaque,price,
+        IFNULL(cpname,0) cpname,cpid,isCpoy,adtype,tracinglink,orders,
+        jhl,IFNULL(atype,10600500)atype,cdate,tracinglinkc,isSlient,isouticon,
+        outiconwww,isoutcptp,outcptpwww,isDel,apkStatus,tsUp,cpUp,clsj,ifnull(dalyTime,0) dalyTime,
+        dataOrSys,retentionRate,actionStatus,cpConversionRate,silenceCpm,IFNULL(swmc ,0) advLinkmanId
+        FROM A_SdkPushApk
+        WHERE 1=1
+        <isNotNull property="id">
+            <isGreaterThan property="id" compareValue="0">
+                AND ID = #id#
+            </isGreaterThan>
+        </isNotNull>
+        <isNotNull property="appName">
+            <isNotEmpty property="appName">
+                AND appName like concat('%',#appName#,'%')
+            </isNotEmpty>
+        </isNotNull>
+        <isNotNull property="deleted">
+            <isGreaterThan property="deleted" compareValue="-1">
+                AND deleted = #deleted#
+            </isGreaterThan>
+        </isNotNull>
+        <isNotNull property="pushStatus">
+            <isGreaterThan property="pushStatus" compareValue="-1">
+                AND pushStatus = #pushStatus#
+            </isGreaterThan>
+        </isNotNull>
+        <isNotNull property="isTablePlaque">
+            <isGreaterThan property="isTablePlaque" compareValue="-1">
+                AND isTablePlaque = #isTablePlaque#
+            </isGreaterThan>
+        </isNotNull>
+        <isNotNull property="isSlient">
+            <isGreaterThan property="isSlient" compareValue="-1">
+                AND isSlient = #isSlient#
+            </isGreaterThan>
+        </isNotNull>
+        <isNotNull property="status">
+            <isGreaterThan property="status" compareValue="-1">
+                AND Status = #status#
+            </isGreaterThan>
+        </isNotNull>
+        <isNotNull>
+            <isGreaterThan property="advLinkmanId" compareValue="0">
+                AND swmc = #advLinkmanId#
+            </isGreaterThan>
+        </isNotNull>
+        ORDER BY id DESC
+        <![CDATA[ LIMIT  #page.index#, #page.pageSize# ]]>
+    </select>
+    <select id="getAdvSdkVO" parameterClass="advSdkVO" resultClass="advSdkVO">
+		SELECT ID id,
+				version,appName,pushText,sizes,introduction,apkPackageName,deleted,
+			pushStatus,status,isNotification,isInterface,isGprsDownLoad,language,userType,sdate,
+			isOutDownload,outwww,isTablePlaque,price,ifnull(cpname,0) cpname,cpid,isCpoy,adtype,tracinglink,orders,
+			jhl,atype,cdate,tracinglinkc,isSlient,isouticon,
+			outiconwww,isoutcptp,outcptpwww,isDel,apkStatus,tsUp,cpUp,clsj,ifnull(dalyTime,0) dalyTime,
+			dataOrSys,retentionRate,actionStatus,cpConversionRate,silenceCpm,cap,passnote,IFNULL(swmc ,0) advLinkmanId
+		FROM A_SdkPushApk
+		WHERE ID = #id#	
+	</select>
+    <insert id="insert" parameterClass="advSdkVO">
+        INSERT INTO A_SdkPushApk(version,appName,pushText,sizes,introduction,
+        apkPackageName,pushStatus,status,isNotification,isInterface,
+        isGprsDownLoad,language,userType,sdate,isOutDownload,
+        outwww,isTablePlaque,price, cpname,cpid,
+        isCpoy,adtype,tracinglink,orders,jhl,
+        atype,cdate,tracinglinkc,isSlient,isouticon,
+        outiconwww,isoutcptp,outcptpwww,isDel,apkStatus,
+        tsUp,cpUp,clsj,deleted,creator,dalyTime,dataOrSys,retentionRate,actionStatus,cpConversionRate,silenceCpm,passnote,cap,swmc)
+        VALUES(#version#,#appName#,#pushText#,#sizes#,#introduction#,#apkPackageName#,
+        #pushStatus#,#status#,#isNotification#,#isInterface#,#isGprsDownLoad#,#language#,
+        #userType#,now(),#isOutDownload#,#outwww#,#isTablePlaque#,#price#,#cpname#,#cpid#,
+        #isCpoy#,#adtype#,#tracinglink#,#orders#,#jhl#,#atype#,now(),#tracinglinkc#,
+        #isSlient#,#isouticon#,#outiconwww#,#isoutcptp#,#outcptpwww#,#isDel#,#apkStatus#,#tsUp#,#cpUp#,
+        #clsj#,0,1,#dalyTime#,#dataOrSys#,#retentionRate#,#actionStatus#,#cpConversionRate#,#silenceCpm#,#passnote#,#cap#,#advLinkmanId#)
+        <selectKey keyProperty="id" resultClass="int">
+            SELECT LAST_INSERT_ID() AS ID FROM A_SdkPushApk LIMIT 1
+        </selectKey>
+    </insert>
+    <update id="update" parameterClass="advSdkVO">
+		UPDATE A_SdkPushApk 
+		SET	version = #version#,
+			appName=#appName#,
+			pushText=#pushText#,
+			sizes=#sizes#,
+			introduction=#introduction#,
+			apkPackageName=#apkPackageName#,
+			pushStatus=#pushStatus#,
+			status=#status#,
+			isNotification=#isNotification#,
+			isInterface=#isInterface#,
+			isGprsDownLoad=#isGprsDownLoad#,
+			language=#language#,
+			isOutDownload=#isOutDownload#,
+			outwww=#outwww#,
+			isTablePlaque=#isTablePlaque#,
+			price=#price#,
+			cpname=#cpname#,
+			silenceCpm=#silenceCpm#,
+			cpid=#cpid#,
+			cpConversionRate=#cpConversionRate#,
+			isCpoy=#isCpoy#,
+			adtype=#adtype#,
+			tracinglink=#tracinglink#,
+			orders=#orders#,
+			jhl=#jhl#,
+			atype=#atype#,
+			tracinglinkc=#tracinglinkc#,
+			isSlient=#isSlient#,
+			isouticon=#isouticon#,
+			outiconwww=#outiconwww#,
+			isoutcptp=#isoutcptp#,
+			outcptpwww=#outcptpwww#,
+			isDel=#isDel#,
+			apkStatus=#apkStatus#,
+			tsUp=#tsUp#,
+			cpUp=#cpUp#,
+			clsj=#clsj#,
+			dalyTime=#dalyTime#,
+			dataOrSys=#dataOrSys#,
+			retentionRate=#retentionRate#,
+			actionStatus=#actionStatus# ,
+			passnote=#passnote#,
+			cap=#cap#,
+			swmc=#advLinkmanId#
+		WHERE ID = #id#
+	</update>
+    <insert id="cope"     parameterClass="advSdkVO">
+        INSERT INTO A_SdkPushApk (  version, appName, pushText, sizes, introduction, iconURL_attachment, imageURL_attachment, imageURL2_attachment, apkDownloadURL_attachment, apkOutDownloadURL, apkPackageName, pushStatus, status, isNotification, isInterface, isGprsDownLoad, creator, deleted, dalyTime, language, dls, kfz, userType, sdate, isOutDownload, outwww, isTablePlaque, imageURL3_attachment, imageURL4_attachment, imageURL5_attachment, passnote, apkStatus, tsUp, cpUp, price, cpname, cpid, isCpoy, swmc, adtype, tracinglink, orders, jhl, cap, atype, osverions, fdate, operator, durl, cdate, tracinglinkc, isSlient, isouticon, outiconwww, isoutcptp, outcptpwww, clsj, isdel, dataOrSys, retentionRate, actionStatus, silenceCpm, cpConversionRate)
+        select version, appName, pushText, sizes, introduction, iconURL_attachment, imageURL_attachment, imageURL2_attachment, apkDownloadURL_attachment, apkOutDownloadURL, apkPackageName, pushStatus, status, isNotification, isInterface, isGprsDownLoad, creator, deleted, dalyTime, language, dls, kfz, userType, sdate, isOutDownload, outwww, isTablePlaque, imageURL3_attachment, imageURL4_attachment, imageURL5_attachment, passnote, apkStatus, tsUp, cpUp, price, cpname, cpid, isCpoy, swmc, adtype, tracinglink, orders, jhl, cap, atype, osverions, fdate, operator, durl, cdate, tracinglinkc, isSlient, isouticon, outiconwww, isoutcptp, outcptpwww, clsj, isdel, dataOrSys, retentionRate, actionStatus, silenceCpm, cpConversionRate
+            from   A_SdkPushApk WHERE ID = #id#
+    </insert>
+    <update id="updateUrl" parameterClass="advSdkVO">
+        UPDATE A_SdkPushApk
+        SET
+        <isEqual property="fileType" compareValue="1">
+            isOutDownload=3200,
+            outwww=#url#
+        </isEqual>
+        <isEqual property="fileType" compareValue="2">
+            isouticon=3200,
+            outiconwww=#url#
+        </isEqual>
+        <isEqual property="fileType" compareValue="3">
+            isoutcptp=3200,
+            outcptpwww=#url#
+        </isEqual>
+        WHERE ID = #id#
+    </update>
+    <update id="updateDelete" parameterClass="advSdkVO">
+		UPDATE A_SdkPushApk SET status=#status#
+		WHERE ID = #id#
+	</update>
+    <select id="getAllAdvSdkVOList" parameterClass="advSdkVO" resultClass="advSdkVO">
+        SELECT ID id,
+        version,appName,pushText,sizes,introduction,apkPackageName,deleted,
+        pushStatus,status,isNotification,isInterface,isGprsDownLoad,language,userType,sdate,
+        isOutDownload,outwww,isTablePlaque,price,IFNULL(cpname,0) cpname,cpid,isCpoy,adtype,tracinglink,orders,
+        jhl,atype,cdate,tracinglinkc,isSlient,isouticon,outiconwww,
+        isoutcptp,outcptpwww,isDel,apkStatus,tsUp,cpUp,clsj,ifnull(dalyTime,0) dalyTime,
+        dataOrSys,retentionRate,actionStatus,cpConversionRate,silenceCpm,IFNULL(swmc ,0) advLinkmanId
+        FROM A_SdkPushApk
+        WHERE 1=1
+        <isNotNull property="id">
+            <isGreaterThan property="id" compareValue="0">
+                AND ID = #id#
+            </isGreaterThan>
+        </isNotNull>
+        <isNotNull property="appName">
+            <isNotEmpty property="appName">
+                AND appName like concat('%',#appName#,'%')
+            </isNotEmpty>
+        </isNotNull>
+        <isNotNull property="deleted">
+            <isGreaterThan property="deleted" compareValue="-1">
+                AND deleted = #deleted#
+            </isGreaterThan>
+        </isNotNull>
+        <isNotNull property="status">
+            <isGreaterThan property="status" compareValue="0">
+                AND Status = #status#
+            </isGreaterThan>
+        </isNotNull>
+        ORDER BY ID DESC
+    </select>
+    <update id="batchAlter" parameterClass="advSdkVO">
+        UPDATE A_SdkPushApk SET
+        /*【1-上线，2-推送，3-线下，4-插屏，5-所有】*/
+        <isEqual property="type" compareValue="1">
+            status = #isOpen#
+        </isEqual>
+        <isEqual property="type" compareValue="2">
+            pushStatus = #isOpen#
+        </isEqual>
+        <isEqual property="type" compareValue="3">
+            isSlient = #isOpen#
+        </isEqual>
+        <isEqual property="type" compareValue="4">
+            isTablePlaque = #isOpen#
+        </isEqual>
+        <isEqual property="type" compareValue="5">
+            status = #isOpen#, pushStatus = #isOpen#, isSlient = #isOpen#, isTablePlaque = #isOpen#
+        </isEqual>
+        WHERE ID IN
+        <iterate property="idList" open="(" close=")" conjunction=",">
+            #idList[]#
+        </iterate>
+    </update>
+</sqlMap>
